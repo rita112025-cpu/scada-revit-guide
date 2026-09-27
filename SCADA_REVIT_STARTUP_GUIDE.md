@@ -108,13 +108,15 @@ Insert → Link → Link CAD
 - 不要把所有來源檔案（建築、結構、機電）全部直接匯入塞進同一個模型檔，這樣會讓檔案肥大、無法個別更新、也無法用 Reload 抓對方最新版。
 - 不要自己重畫建築模型，除非真的完全沒有來源檔可用。
 
-**Link Revit 與 Import CAD 的差異**：
-| | Link Revit | Import CAD |
-|---|---|---|
-| 檔案關係 | 保持獨立檔案，隨時可 Reload 更新 | 幾何被吃進目前檔案，變成本檔物件 |
-| 更新方式 | Manage Links → Reload | 需要重新 Import 或手動更新 |
-| 檔案大小影響 | 較小（只是參照） | 會直接增加本檔大小 |
-| 適用情境 | 建築／結構／機電背景模型 | 只有 CAD 圖、沒有 Revit 模型時的暫時作法 |
+**Link Revit ／ Link CAD ／ Import CAD 的差異**：三者都是「把外部檔案放進目前模型」，差別在於是否保持獨立、能否更新。CAD 圖也應該優先 **Link CAD**，不是只能 Import——Import 只在真的需要把 CAD 幾何變成本檔物件（例如要在其上描圖建模）時才用。
+
+| | Link Revit | Link CAD | Import CAD |
+|---|---|---|---|
+| 來源檔案類型 | .rvt | .dwg／.dxf 等 | .dwg／.dxf 等 |
+| 檔案關係 | 保持獨立檔案，隨時可 Reload 更新 | 保持獨立檔案，隨時可 Reload 更新 | 幾何被吃進目前檔案，變成本檔物件 |
+| 更新方式 | Manage Links → Reload | Manage Links → Reload | 需要重新 Import 或手動更新 |
+| 檔案大小影響 | 較小（只是參照） | 較小（只是參照） | 會直接增加本檔大小 |
+| 適用情境 | 建築／結構／機電背景模型 | 只有 CAD 圖、沒有 Revit 模型時的**優先**做法 | CAD 圖需要被當成本檔物件處理時的暫時作法（少用） |
 
 **Reload / Manage Links 用途**：對方模型改版後，透過 `Insert → Manage Links` 選取該連結按 `Reload`，就能抓到最新版本，不用重新 Link。
 
@@ -260,7 +262,7 @@ Cut Plane            = +1200 mm
 Top                  = +3000 mm
 ```
 
-因為 Tray 在 +2700 mm，但 Cut Plane 只設到 +1200 mm，Tray 高於切割面，平面視圖就看不到這條 Tray——即使 Top 設到 +3000 mm 也一樣，因為 Cut Plane 才是決定「這個高度以上的東西算不算被切到、要不要顯示」的關鍵設定之一（實際顯示邏輯還牽涉 Category 的 View Range 是否使用 Cut Plane 判斷，**需於 Revit 2027 實機確認細部行為**）。
+Tray 在 +2700 mm，落在 View Range 的垂直範圍之外（超出 Cut Plane +1200 mm）。**若 Tray 在視圖的垂直範圍外，先檢查 Top／Cut Plane／Bottom 這三個值有沒有涵蓋到 Tray 的 Elevation**，這是排查的第一步，不是絕對規則——Cable Tray 實際的 projection/cut 顯示行為，還牽涉 Category 本身的顯示設定、View Discipline 等因素，不同類別的判斷邏輯不完全相同，**具體顯示結果需於 Revit 2027 實機確認**，這裡不當成放諸所有類別皆準的通則。
 
 **排查順序建議**：Cable Tray 平面看不到時，**先檢查 View Range，再懷疑模型是不是沒建好**。
 
@@ -415,6 +417,12 @@ Manage → Settings → Shared Parameters（共用參數，可跨專案重複使
 - `Status`
 - `Remark`
 
+**Project Parameter 與 Shared Parameter 的差異**：兩者都可以出現在 Schedule 中被統計、也都可以用於 Filter——**「能不能被 Schedule 讀到」不是兩者的主要區別**。實際差異在於：
+- **Project Parameter**：只存在於目前這個專案檔案裡，無法直接被其他專案重複使用，也無法被某些需要「共享 GUID」的情境使用（例如做成 Tag 標籤、跨檔案的族群共用參數、或未來要做資料交換／匯入匯出對應時）。
+- **Shared Parameter**：定義存放在獨立的共用參數文字檔（.txt）中，可以跨專案重複套用同一組參數定義，且擁有固定的 GUID，可用於 Tag、跨檔案資料比對、以及第五節「AutoCAD Router 與 Revit 欄位對應」這類未來銜接情境。
+
+建議：**若這組參數未來可能被其他專案重複使用、或需要跟外部資料（CSV／Router）對應，優先用 Shared Parameter**；只是本專案內部暫時統計用，Project Parameter 也可以。
+
 **權限提醒**：Shared Parameters 需要一個共用參數文字檔（.txt）作為來源檔。這個檔案**存在自己有寫入權限的路徑即可**（例如自己的 Documents、OneDrive，或專案共用資料夾中自己本來就能寫入的位置），不需要系統管理員權限，也不要嘗試存到 `C:\Program Files` 或 Windows 系統目錄。若不確定專案共用資料夾是否有寫入權限，標記【需確認權限】並先詢問專案負責人。
 
 **這些參數不是為了好看，主要用途**：
@@ -425,7 +433,7 @@ Manage → Settings → Shared Parameters（共用參數，可跨專案重複使
 - 查詢與篩選
 - 後續銜接自動化流程（見「五、AutoCAD Router 與 Revit 欄位對應」）
 
-**常見錯誤**：用 Project Parameter 而非 Shared Parameter，導致這些參數無法被 Schedule 的某些統計方式讀取，或無法跨專案重複使用。是否使用 Shared Parameter，實際限制**需於 Revit 2027 實機確認**。
+**常見錯誤**：誤以為 Project Parameter 完全不能出現在 Schedule 裡而堅持全部改用 Shared Parameter，或反過來完全不考慮 Shared Parameter，導致日後要跨專案沿用、或跟外部資料對應時才發現參數無法共用，需要重建。實際上兩者在 Schedule／Filter 中的可用性細節，**需於 Revit 2027 實機確認**。
 
 **完成驗收條件**：至少建立 `Route_ID` 與 `Status` 兩個參數，並能在 Properties 面板中對單一 Tray 元件填寫數值。
 

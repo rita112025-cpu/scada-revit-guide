@@ -65,7 +65,7 @@
         <span class="badge badge-suggest">建議</span>
         <span class="badge badge-policy">視公司流程而定</span>
       </div>
-      <p class="perm-banner">🔒 <strong>權限前提</strong>：假設使用者是公司電腦、僅一般使用者權限（無系統管理員權限）。全部必要流程只用 Revit 原生功能，不需要 UAC 提權、不需要安裝任何軟體。詳見<a href="#permissions">「六、公司電腦權限限制」</a>。</p>
+      <p class="perm-banner">🔒 <strong>權限前提</strong>：假設使用者是公司電腦、僅一般使用者權限（無系統管理員權限）。全部必要流程只用 Revit 原生功能，不需要 UAC 提權、不需要修改系統設定，也不依賴 pyRevit、Dynamo、Navisworks Manage 等第三方工具（這些工具本身仍可能需要安裝與 IT 核准，只是不在必要流程之內）。詳見<a href="#permissions">「六、公司電腦權限限制」</a>。</p>
     </header>
 
     <section id="start" class="section">
@@ -123,15 +123,18 @@
           <p><strong>目的</strong>：SCADA Cable Tray 必須以建築、結構模型為背景，才能判斷路由、避開梁柱、抓對高程。</p>
           <p><strong>操作位置</strong>：<code>Insert → Link → Link Revit</code>；CAD 圖用 <code>Insert → Link → Link CAD</code></p>
           <p><strong>設定方式</strong>：確認為最新版檔案；Positioning 建議 <code>Auto - By Shared Coordinates</code>；Link 後用 <code>Insert → Manage Links</code> 確認狀態為 Loaded。</p>
+          <p class="note">三者都是「把外部檔案放進目前模型」，差別在於是否保持獨立、能否更新。CAD 圖也應優先 <strong>Link CAD</strong>，不是只能 Import——Import 只在真的需要把 CAD 幾何變成本檔物件時才用。</p>
           <table class="compare">
-            <thead><tr><th></th><th>Link Revit</th><th>Import CAD</th></tr></thead>
+            <thead><tr><th></th><th>Link Revit</th><th>Link CAD</th><th>Import CAD</th></tr></thead>
             <tbody>
-              <tr><td>檔案關係</td><td>獨立檔案，可 Reload</td><td>幾何被吃進本檔</td></tr>
-              <tr><td>更新方式</td><td>Manage Links → Reload</td><td>需重新 Import</td></tr>
-              <tr><td>檔案大小</td><td>較小</td><td>直接增加本檔大小</td></tr>
+              <tr><td>來源類型</td><td>.rvt</td><td>.dwg／.dxf</td><td>.dwg／.dxf</td></tr>
+              <tr><td>檔案關係</td><td>獨立檔案，可 Reload</td><td>獨立檔案，可 Reload</td><td>幾何被吃進本檔</td></tr>
+              <tr><td>更新方式</td><td>Manage Links → Reload</td><td>Manage Links → Reload</td><td>需重新 Import</td></tr>
+              <tr><td>檔案大小</td><td>較小</td><td>較小</td><td>直接增加本檔大小</td></tr>
+              <tr><td>適用情境</td><td>建築／結構／機電背景模型</td><td>只有 CAD 圖時的<strong>優先</strong>做法</td><td>需當本檔物件處理時（少用）</td></tr>
             </tbody>
           </table>
-          <p><strong>SCADA 注意事項</strong>：優先 Link，不要 Import；不要把所有來源檔案塞進同一模型；不要自己重畫建築模型，除非真的沒有來源。</p>
+          <p><strong>SCADA 注意事項</strong>：優先 Link（Revit 或 CAD 皆同），不要 Import；不要把所有來源檔案塞進同一模型；不要自己重畫建築模型，除非真的沒有來源。</p>
           <p><strong>常見錯誤</strong>：Positioning 選錯導致座標對不上；Import CAD 沒放獨立 Workset 難以單獨關閉。</p>
           <p class="verdict"><strong>驗收條件</strong>：Manage Links 中所有連結皆為 Loaded，平面圖可見建築牆柱與結構梁柱。</p>
         </div>
@@ -197,9 +200,9 @@
           <div class="example-box">
             <p>FFL = 0　Cable Tray Elevation = +2700 mm</p>
             <p>Cut Plane = +1200 mm　Top = +3000 mm</p>
-            <p class="warn">→ Tray 高於 Cut Plane，平面看不到，即使 Top 已設到 +3000 mm。</p>
+            <p class="warn">→ Tray 落在 View Range 垂直範圍外（超出 Cut Plane +1200 mm）。</p>
           </div>
-          <p class="note">實際顯示邏輯還牽涉 Category 是否使用 Cut Plane 判斷，需於 Revit 2027 實機確認細部行為。</p>
+          <p class="note"><strong>若 Tray 在視圖垂直範圍外，先檢查 Top／Cut Plane／Bottom 是否涵蓋 Tray 的 Elevation</strong>——這是排查第一步，不是絕對規則。Cable Tray 實際的 projection/cut 顯示行為還牽涉 Category 設定、View Discipline 等因素，不同類別判斷邏輯不完全相同，具體顯示結果需於 Revit 2027 實機確認。</p>
           <p><strong>排查順序</strong>：平面看不到時，先檢查 View Range，再懷疑模型壞掉。</p>
           <p class="verdict"><strong>驗收條件</strong>：Top 明確高於 Tray Elevation，平面視圖能正常看到該 Tray。</p>
         </div>
@@ -268,7 +271,7 @@
           <p><strong>操作位置</strong>：<code>Manage → Settings → Shared Parameters</code>（建議優先於 Project Parameters）</p>
           <p><strong>建議參數</strong>：<code>SCADA_System</code>、<code>Route_ID</code>、<code>From</code>、<code>To</code>、<code>Area</code>、<code>Level</code>、<code>Drawing_No</code>、<code>Status</code>、<code>Remark</code></p>
           <p><strong>用途</strong>：Filter、Schedule、QA、BOQ、查詢、後續自動化（見第五節）。</p>
-          <p class="note">Project Parameter 是否會影響 Schedule 讀取，需於 Revit 2027 實機確認。</p>
+          <p class="note"><strong>Project Parameter 與 Shared Parameter 的差異</strong>：兩者都可出現在 Schedule 中、都可用於 Filter——「能不能被 Schedule 讀到」不是主要區別。差異在於 Project Parameter 只存在於本專案，無法跨專案重複使用；Shared Parameter 有固定 GUID，可跨專案套用、可用於 Tag、也是未來跟外部資料（見第五節）對應的基礎。若參數未來可能跨專案沿用或對接外部資料，優先用 Shared Parameter；純本案內部統計，Project Parameter 也可以。實際在 Schedule／Filter 中的可用性細節需於 Revit 2027 實機確認。</p>
           <p class="warn">🔒 <strong>權限提醒</strong>：共用參數檔（.txt）存在自己有寫入權限的路徑即可（如自己的 Documents、OneDrive），不需要系統管理員權限，不要存到 <code>Program Files</code> 或系統目錄。不確定共用資料夾權限時標記【需確認權限】並詢問專案負責人。</p>
           <p class="verdict"><strong>驗收條件</strong>：至少建立 Route_ID 與 Status，並能於 Properties 填寫數值。</p>
         </div>
