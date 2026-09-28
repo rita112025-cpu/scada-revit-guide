@@ -1,74 +1,276 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="light" data-font="standard">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA / Cable Tray 專用 Revit 起手式指南</title>
 <meta name="description" content="新建或接手 Revit MEP／SCADA 專案後，正式繪製 Cable Tray 之前該做哪些設定與檢查的實務指南。">
-<link rel="stylesheet" href="css/style.css">
+<style>
+:root{
+  --bg: #FFFEFB;
+  --bg-card: #FFFFFF;
+  --bg-sidebar: #FAFAF9;
+  --bg-muted: #F5F5F4;
+  --text: #1C1917;
+  --text-muted: #57534E;
+  --text-faint: #A8A29E;
+  --border: #E7E5E4;
+  --border-strong: #D6D3D1;
+  --accent: #FF5A1F;
+  --accent-soft: #FFF1EB;
+  --code-bg: #F5F5F4;
+  --verdict-bg: #F0FDF4;
+  --verdict-border: #BBF7D0;
+  --warn-bg: #FEF3C7;
+  --warn-border: #FDE68A;
+  --note-bg: #EFF6FF;
+  --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  --radius: 24px;
+  --radius-sm: 14px;
+}
+[data-theme="dark"]{
+  --bg: #0A0A0B;
+  --bg-card: #18181B;
+  --bg-sidebar: #121214;
+  --bg-muted: #27272A;
+  --text: #FAFAF9;
+  --text-muted: #A1A1AA;
+  --text-faint: #71717A;
+  --border: #27272A;
+  --border-strong: #3F3F46;
+  --accent-soft: #281410;
+  --code-bg: #27272A;
+  --verdict-bg: #0F1E13;
+  --verdict-border: #1A3A23;
+  --warn-bg: #241D0A;
+  --warn-border: #3D2F0D;
+  --note-bg: #0E172A;
+  --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size:20px;
+  line-height:1.9;
+  letter-spacing:0.02em;
+  transition: background .25s, color .25s;
+}
+html[data-font="small"] body{font-size:18px}
+html[data-font="standard"] body{font-size:20px}
+html[data-font="large"] body{font-size:22px}
+html[data-font="xlarge"] body{font-size:24px}
+
+
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:Consolas,"Cascadia Mono",monospace; background:var(--code-bg); padding:2px 8px; border-radius:6px; font-size:.9em}
+pre{background:var(--code-bg); padding:16px; border-radius:12px; overflow:auto; font-size:16px; border:1px solid var(--border)}
+/* progress */
+#progress{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:100; transition:width .1s}
+/* layout */
+.layout{display:flex; min-height:100vh}
+#sidebar{
+  width:340px; flex-shrink:0; background:var(--bg-sidebar); border-right:1px solid var(--border);
+  position:sticky; top:0; height:100vh; overflow:auto; padding:24px 16px; z-index:50;
+  transition: background .25s, border-color .25s;
+}
+.sidebar-header{margin-bottom:20px}
+.sidebar-title{font-size:26px; font-weight:900; line-height:1.15; margin:0}
+.sidebar-version{font-size:13px; color:var(--text-muted); margin-top:6px; letter-spacing:.08em}
+#tocSearch{
+  width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card); color:var(--text);
+  font-size:15px; margin:12px 0 16px;
+}
+.toc{list-style:none; padding:0; margin:0}
+.toc li{margin:2px 0}
+.toc a{display:block; padding:10px 12px; border-radius:10px; color:var(--text-muted); font-size:17px; line-height:1.5; border-left:3px solid transparent}
+.toc a:hover{background:var(--bg-card); color:var(--text); text-decoration:none}
+.toc a.active{background:var(--bg-card); color:var(--text); border-left-color:var(--accent); font-weight:700; box-shadow:var(--shadow)}
+.toc-group{font-size:14px; font-weight:700; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em; padding:16px 12px 6px}
+.toc ol{list-style:none; padding-left:8px}
+.toc-warn a{color:#D97706}
+[data-theme="dark"] .toc-warn a{color:#FBBF24}
+.sidebar-footer{margin-top:24px; padding-top:16px; border-top:1px solid var(--border); font-size:14px}
+/* main */
+#main{flex:1; min-width:0}
+.content{max-width:1020px; margin:0 auto; padding:48px 40px 120px}
+.page-header{margin-bottom:32px}
+.page-header h1{font-size:56px; font-weight:900; line-height:1.12; letter-spacing:-.02em; margin:0 0 16px}
+.lede{font-size:22px; color:var(--text-muted); line-height:1.7; margin:0 0 18px}
+.badge-row{display:flex; gap:8px; flex-wrap:wrap; margin:12px 0}
+.badge{font-size:13px; font-weight:700; padding:4px 10px; border-radius:999px; border:1px solid var(--border)}
+.badge-must{background:var(--accent); color:white; border-color:var(--accent)}
+.badge-suggest{background:var(--bg-card); color:var(--text)}
+.badge-policy{background:var(--bg-muted); color:var(--text-muted)}
+.perm-banner{background:var(--note-bg); border:1px solid var(--border); padding:14px 18px; border-radius:14px; font-size:16px; margin-top:16px}
+.toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin:18px 0 28px}
+.toolbar-left{display:flex; gap:8px}
+.btn{border:1px solid var(--border); background:var(--bg-card); color:var(--text); padding:8px 14px; border-radius:999px; font-size:14px; font-weight:600; cursor:pointer}
+.btn:hover{border-color:var(--border-strong)}
+.btn.active{background:var(--text); color:var(--bg)}
+.btn-accent{background:var(--accent); color:white; border-color:var(--accent)}
+/* bento grid */
+.bento{ display:grid; grid-template-columns:repeat(12,1fr); gap:12px; margin:24px 0 40px}
+.b-card{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:20px; 
+  transition: transform .15s, border-color .15s, box-shadow .15s, background .25s;
+  position:relative; overflow:hidden;
+}
+.b-card:hover{transform:translateY(-2px); border-color:var(--border-strong); box-shadow:var(--shadow)}
+.b-card.orange:hover{border-color:var(--accent)}
+.b-card .k{font-size:12px; font-weight:800; letter-spacing:.1em; color:var(--text-faint); text-transform:uppercase; margin-bottom:8px}
+.b-card .big{font-size:40px; font-weight:900; line-height:1; margin:6px 0}
+.b-card .num{font-size:56px; font-weight:900; color:var(--border-strong); line-height:1}
+[data-theme="dark"] .b-card .num{color:#3F3F46}
+.b-card h3{font-size:20px; font-weight:800; margin:8px 0 6px}
+.b-card p, .b-card li{font-size:15px; line-height:1.6; color:var(--text-muted)}
+.b-span-8{grid-column:span 8}
+.b-span-4{grid-column:span 4}
+.b-span-6{grid-column:span 6}
+.b-span-3{grid-column:span 3}
+.b-span-12{grid-column:span 12}
+.b-span-2{grid-column:span 2}
+@media(max-width:1100px){ .b-span-8,.b-span-4,.b-span-6,.b-span-3{grid-column:span 6} .b-span-2{grid-column:span 3} }
+@media(max-width:640px){ .bento{grid-template-columns:repeat(6,1fr)} .b-span-8,.b-span-4,.b-span-6,.b-span-3,.b-span-12{grid-column:span 6} .b-span-2{grid-column:span 3} }
+
+/* sections - card */
+.section{scroll-margin-top:90px; margin-bottom:48px}
+.section h2{font-size:38px; font-weight:800; line-height:1.2; margin:96px 0 18px}
+.section h2 .eyebrow{display:block; font-size:12px; font-weight:800; letter-spacing:.12em; color:var(--accent); margin-bottom:8px; text-transform:uppercase}
+.step-card{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:36px; margin-bottom:20px;
+  box-shadow:var(--shadow); transition:background .25s, border-color .25s;
+}
+.step-top{display:flex; gap:16px; align-items:flex-start; margin-bottom:16px; flex-wrap:wrap}
+.step-no{font-size:56px; font-weight:900; color:var(--border-strong); line-height:.9; min-width:72px}
+.step-title{font-size:26px; font-weight:800; line-height:1.25; flex:1; min-width:240px}
+.step-body p{margin:12px 0}
+.verdict{background:var(--verdict-bg); border:1px solid var(--verdict-border); padding:14px 16px; border-radius:12px; margin-top:16px; font-size:16px}
+.warn{background:var(--warn-bg); border:1px solid var(--warn-border); padding:12px 16px; border-radius:12px; margin:14px 0; font-size:16px}
+.note{background:var(--note-bg); border:1px solid var(--border); padding:12px 16px; border-radius:12px; margin:14px 0; font-size:16px}
+.example-box{background:var(--bg-muted); border:1px dashed var(--border-strong); padding:14px 16px; border-radius:12px; margin:14px 0; font-family:Consolas,"Cascadia Mono",monospace; font-size:15px}
+table.compare, table.mapping-table{width:100%; border-collapse:collapse; margin:14px 0; font-size:16px; background:var(--bg-card); border-radius:12px; overflow:hidden; border:1px solid var(--border)}
+table.compare th, table.mapping-table th{background:var(--bg-muted); text-align:left; padding:10px 12px; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint)}
+table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid var(--border); vertical-align:top}
+.pipeline{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:16px 0}
+.pipeline span{background:var(--bg-card); border:1px solid var(--border); padding:6px 12px; border-radius:999px; font-size:14px}
+.pipeline .arrow{background:transparent; border:none; padding:0; color:var(--text-faint)}
+.checklist{list-style:none; padding:0; margin:0}
+.checklist li{border:1px solid var(--border); background:var(--bg-card); border-radius:14px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; transition:all .15s}
+.checklist li:hover{border-color:var(--border-strong)}
+.checklist input[type="checkbox"]{width:28px; height:28px; flex-shrink:0; accent-color:var(--accent)}
+.checklist li.done{opacity:.6; text-decoration:line-through; background:var(--bg-muted)}
+.checklist-toolbar{display:flex; justify-content:space-between; align-items:center; margin:12px 0}
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media(max-width:800px){ .two-col{grid-template-columns:1fr} .content{padding:28px 18px 100px} .page-header h1{font-size:38px} #sidebar{position:fixed; left:0; top:0; transform:translateX(-100%); transition:transform .25s; width:86%; max-width:360px; height:100dvh} #sidebar.open{transform:translateX(0)} .scrim{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:40; display:none} .scrim.open{display:block} }
+.nav-toggle{position:fixed; left:16px; bottom:20px; z-index:60; width:52px; height:52px; border-radius:999px; background:var(--text); color:var(--bg); border:none; display:none; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+@media(max-width:800px){ .nav-toggle{display:flex} }
+</style>
 </head>
 <body>
-
-<button id="navToggle" class="nav-toggle" aria-label="開啟/關閉目錄" aria-expanded="false">
-  <span></span><span></span><span></span>
-</button>
-
+<div id="progress"></div>
+<button id="navToggle" class="nav-toggle" aria-label="開啟目錄">☰</button>
 <div class="layout">
-
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-      <p class="sidebar-title">SCADA Revit<br>起手式指南</p>
-      <p class="sidebar-version">Revit 2027 適用</p>
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <p class="sidebar-title">SCADA Revit<br>起手式指南</p>
+    <p class="sidebar-version">Revit 2027 適用</p>
+    <input id="tocSearch" placeholder="搜尋章節 / Step…" />
+    <div class="toolbar-left" style="margin-bottom:8px">
+      <button class="btn" id="fontMinus">A-</button>
+      <button class="btn active" id="fontStd">標準</button>
+      <button class="btn" id="fontPlus">A+</button>
+      <button class="btn" id="themeToggle">🌙 暗版</button>
     </div>
-    <ol class="toc">
-      <li><a href="#start">0. 新建 or 接手判斷</a></li>
-      <li class="toc-group">一、標準起手式流程
-        <ol>
-          <li><a href="#step1">Step 1　Project Units</a></li>
-          <li><a href="#step2">Step 2　Link 模型</a></li>
-          <li><a href="#step3">Step 3　Shared Coordinates</a></li>
-          <li><a href="#step4">Step 4　Level / Grid</a></li>
-          <li><a href="#step5">Step 5　Working Views</a></li>
-          <li><a href="#step6">Step 6　View Range</a></li>
-          <li><a href="#step7">Step 7　View Template</a></li>
-          <li><a href="#step8">Step 8　View Filters</a></li>
-          <li><a href="#step9">Step 9　Cable Tray Types</a></li>
-          <li><a href="#step10">Step 10　SCADA 參數</a></li>
-          <li><a href="#step11">Step 11　Cable Tray Schedule</a></li>
-          <li><a href="#step12">Step 12　3D Coordination View</a></li>
-          <li><a href="#step13">Step 13　QA View</a></li>
-          <li><a href="#step14">Step 14　Browser Organization</a></li>
-          <li><a href="#step15">Step 15　Worksharing</a></li>
-        </ol>
-      </li>
-      <li><a href="#quick10">二、起手 10 步快速版</a></li>
-      <li><a href="#checklist">三、畫 Tray 前 Checklist</a></li>
-      <li><a href="#trouble" class="toc-warn">四、常見問題排查</a></li>
-      <li><a href="#mapping">五、Router ↔ Revit 欄位對應</a></li>
-      <li><a href="#permissions" class="toc-warn">六、公司電腦權限限制</a></li>
-      <li><a href="#verify">七、待實機驗證清單</a></li>
-    </ol>
-    <div class="sidebar-footer">
-      <a href="SCADA_REVIT_STARTUP_GUIDE.md">完整 Markdown 版 →</a>
-    </div>
-  </nav>
+  </div>
+  <ol class="toc" id="toc">
+    <li><a href="#start">0. 新建 or 接手判斷</a></li>
+    <li class="toc-group">一、標準起手式流程</li>
+    <li><a href="#step1">Step 1　Project Units</a></li>
+    <li><a href="#step2">Step 2　Link 模型</a></li>
+    <li><a href="#step3">Step 3　Shared Coordinates</a></li>
+    <li><a href="#step4">Step 4　Level / Grid</a></li>
+    <li><a href="#step5">Step 5　Working Views</a></li>
+    <li><a href="#step6">Step 6　View Range</a></li>
+    <li><a href="#step7">Step 7　View Template</a></li>
+    <li><a href="#step8">Step 8　View Filters</a></li>
+    <li><a href="#step9">Step 9　Cable Tray Types</a></li>
+    <li><a href="#step10">Step 10　SCADA 參數</a></li>
+    <li><a href="#step11">Step 11　Cable Tray Schedule</a></li>
+    <li><a href="#step12">Step 12　3D Coordination View</a></li>
+    <li><a href="#step13">Step 13　QA View</a></li>
+    <li><a href="#step14">Step 14　Browser Organization</a></li>
+    <li><a href="#step15">Step 15　Worksharing</a></li>
+    <li><a href="#quick10">二、起手 10 步快速版</a></li>
+    <li><a href="#checklist">三、畫 Tray 前 Checklist</a></li>
+    <li><a href="#trouble">四、常見問題排查</a></li>
+    <li><a href="#mapping">五、Router ↔ Revit 欄位對應</a></li>
+    <li><a href="#permissions">六、公司電腦權限限制</a></li>
+    <li><a href="#verify">七、待實機驗證清單</a></li>
+  </ol>
+  <div class="sidebar-footer">
+    <a href="SCADA_REVIT_STARTUP_GUIDE.md">完整 Markdown 版 →</a><br>
+    <span style="color:var(--text-faint); font-size:12px">技術內容以正式文件為準</span>
+  </div>
+</nav>
+<div class="scrim" id="scrim"></div>
+<div id="main">
+<main class="content">
+<header class="page-header">
+<h1>SCADA / Cable Tray 專用 Revit 起手式指南</h1>
+<p class="lede">新建或接手 Revit MEP／SCADA 專案後，<strong>正式繪製 Cable Tray、Conduit、SCADA 設備之前</strong>，應該先做哪些設定與檢查。每一步都說明「去哪裡按、要檢查什麼、完成標準是什麼」。</p>
+<div class="badge-row">
+<span class="badge badge-must">必做</span>
+<span class="badge badge-suggest">建議</span>
+<span class="badge badge-policy">視公司流程而定</span>
+</div>
+<p class="perm-banner">🔒 <strong>權限前提</strong>：假設使用者是公司電腦、僅一般使用者權限（無系統管理員權限）。全部必要流程只用 Revit 原生功能，不需要 UAC 提權、不需要修改系統設定，也不依賴 pyRevit、Dynamo、Navisworks Manage 等第三方工具（這些工具本身仍可能需要安裝與 IT 核准，只是不在必要流程之內）。詳見<a href="#permissions">「六、公司電腦權限限制」</a>。</p>
+<div class="toolbar">
+<div class="toolbar-left">
+<span style="font-size:13px; color:var(--text-faint)">大字好讀 · 導覽方便 · 瀏覽優先</span>
+</div>
+</div>
+<!-- BENTO NAV -->
+<div class="bento">
+<div class="b-card b-span-8 orange">
+<div class="k">開始前判斷</div>
+<h3>0. 新建 or 接手判斷</h3>
+<p>不要一開啟 Revit 就畫 Tray。先判斷情境，兩種要檢查的東西完全不同。</p>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px">
+<div style="background:var(--bg-muted); padding:12px; border-radius:12px; font-size:14px"><strong>A. 新建</strong><br>Template、公司標準樣板、既有標準複製、Worksharing 判斷</div>
+<div style="background:var(--bg-muted); padding:12px; border-radius:12px; font-size:14px"><strong>B. 接手</strong><br>Link、Level、Grid、Shared Coordinates、View Template、Filter、Tray Type… 逐項檢查</div>
+</div>
+<div style="margin-top:12px"><a href="#start" class="btn btn-accent">前往判斷 →</a></div>
+</div>
+<div class="b-card b-span-4">
+<div class="k">專案資訊</div>
+<div class="big">15</div>
+<p>標準起手 Steps</p>
+<div style="margin-top:12px; font-size:13px; color:var(--text-faint)">Revit 2027 適用<br>免管理員權限<br>適用於公司管控電腦或一般使用者權限環境</div>
+</div>
+<div class="b-card b-span-2 orange"><div class="num">01</div><div class="k">必做</div><h3>Project Units</h3><a href="#step1">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">02</div><div class="k">必做</div><h3>Link 模型</h3><a href="#step2">查看 →</a></div>
+<div class="b-card b-span-2 orange"><div class="num">03</div><div class="k">必做</div><h3>Shared Coordinates</h3><p style="font-size:12px">先確認既有座標與 BIM 流程，Acquire/Publish 視流程而定</p><a href="#step3">查看 →</a></div>
+<div class="b-card b-span-3"><div class="num">04</div><div class="k">必做</div><h3>Level / Grid</h3><a href="#step4">查看 →</a></div>
+<div class="b-card b-span-3"><div class="num">05</div><div class="k">必做</div><h3>Working Views</h3><a href="#step5">查看 →</a></div>
+<div class="b-card b-span-3"><div class="num">06</div><div class="k">必做</div><h3>View Range</h3><p style="font-size:12px">Top / Cut / Bottom 是否涵蓋 Tray Elevation，Category 影響顯示需 2027 實機確認</p><a href="#step6">查看 →</a></div>
+<div class="b-card b-span-3"><div class="num">07</div><div class="k">建議</div><h3>View Template</h3><a href="#step7">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">08</div><div class="k">建議</div><h3>View Filters</h3><a href="#step8">查看 →</a></div>
+<div class="b-card b-span-2 orange"><div class="num">09</div><div class="k">必做</div><h3>Tray Types</h3><a href="#step9">查看 →</a></div>
+<div class="b-card b-span-4 orange"><div class="num">10</div><div class="k">視公司流程而定</div><h3>SCADA 參數</h3><p>SCADA_System / Route_ID / From / To / Area / Level / Drawing_No / Status / Remark。Project 與 Shared 都可用於 Schedule/Filter，Shared 重點是 GUID、跨專案共用、Tag、外部對應</p><a href="#step10">查看 →</a></div>
+<div class="b-card b-span-3"><div class="num">11</div><div class="k">建議</div><h3>Schedule</h3><a href="#step11">查看 →</a></div>
+<div class="b-card b-span-3"><div class="num">12</div><div class="k">必做(協調)</div><h3>3D Coordination</h3><a href="#step12">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">13</div><div class="k">建議</div><h3>QA View</h3><a href="#step13">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">14</div><div class="k">建議</div><h3>Browser Organization</h3><a href="#step14">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">15</div><div class="k">視流程而定</div><h3>Worksharing</h3><a href="#step15">查看 →</a></div>
+</div>
+</header>
+<section id="start" class="section">
 
-  <div class="scrim" id="scrim"></div>
-
-  <main class="content">
-
-    <header class="page-header">
-      <h1>SCADA / Cable Tray 專用 Revit 起手式指南</h1>
-      <p class="lede">新建或接手 Revit MEP／SCADA 專案後，<strong>正式繪製 Cable Tray、Conduit、SCADA 設備之前</strong>，應該先做哪些設定與檢查。每一步都說明「去哪裡按、要檢查什麼、完成標準是什麼」。</p>
-      <div class="badge-row">
-        <span class="badge badge-must">必做</span>
-        <span class="badge badge-suggest">建議</span>
-        <span class="badge badge-policy">視公司流程而定</span>
-      </div>
-      <p class="perm-banner">🔒 <strong>權限前提</strong>：假設使用者是公司電腦、僅一般使用者權限（無系統管理員權限）。全部必要流程只用 Revit 原生功能，不需要 UAC 提權、不需要修改系統設定，也不依賴 pyRevit、Dynamo、Navisworks Manage 等第三方工具（這些工具本身仍可能需要安裝與 IT 核准，只是不在必要流程之內）。詳見<a href="#permissions">「六、公司電腦權限限制」</a>。</p>
-    </header>
-
-    <section id="start" class="section">
       <h2>0. 開始前先判斷：新建專案，還是接手專案？</h2>
       <p>不要一開啟 Revit 就開始畫 Tray。先判斷自己是哪一種情境。</p>
 
@@ -100,26 +302,17 @@
           <p class="note">任何一項看起來怪怪的（模型對不齊、標高對不上），先跟專案負責人確認，<strong>不要自己猜著先畫</strong>。</p>
         </div>
       </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-divider">一、標準起手式主流程</h2>
-
-      <details id="step1" class="step" open>
-        <summary><span class="step-no">Step 1</span> 確認 Project Units <span class="badge badge-must">必做</span></summary>
-        <div class="step-body">
+    
+</section>
+<section id="step1" class="section"><div class="step-card"><div class="step-top"><div class="step-no">01</div><div class="step-title"><span class="step-no">Step 1</span> 確認 Project Units <span class="badge badge-must">必做</span></div></div><div class="step-body">
           <p><strong>目的</strong>：Cable Tray／Conduit 的寬度、高度、標高、偏移量、彎曲半徑全部依賴單位設定，單位錯，所有尺寸都可能錯。</p>
           <p><strong>操作位置</strong>：<code>Manage → Settings → Project Units</code>（快捷鍵 <code>UN</code>）</p>
           <p><strong>設定方式</strong>：Length = Millimeters；Area = Square Meters；Angle = Decimal Degrees。</p>
           <p><strong>SCADA 注意事項</strong>：Width、Height、Elevation、Offset、Bend Radius、Conduit Size 都直接讀這裡的單位設定。</p>
           <p><strong>常見錯誤</strong>：誤用英制樣板（Feet and Inches）；只改 Length 沒注意 Angle 單位。</p>
           <p class="verdict"><strong>驗收條件</strong>：建立一段 300 mm 寬 Cable Tray，Properties 顯示尺寸與畫面量測一致。</p>
-        </div>
-      </details>
-
-      <details id="step2" class="step">
-        <summary><span class="step-no">Step 2</span> 檢查或 Link 建築／結構／機電模型 <span class="badge badge-must">必做</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step2" class="section"><div class="step-card"><div class="step-top"><div class="step-no">02</div><div class="step-title"><span class="step-no">Step 2</span> 檢查或 Link 建築／結構／機電模型 <span class="badge badge-must">必做</span></div></div><div class="step-body">
           <p><strong>目的</strong>：SCADA Cable Tray 必須以建築、結構模型為背景，才能判斷路由、避開梁柱、抓對高程。</p>
           <p><strong>操作位置</strong>：<code>Insert → Link → Link Revit</code>；CAD 圖用 <code>Insert → Link → Link CAD</code></p>
           <p><strong>設定方式</strong>：確認為最新版檔案；Positioning 建議 <code>Auto - By Shared Coordinates</code>；Link 後用 <code>Insert → Manage Links</code> 確認狀態為 Loaded。</p>
@@ -137,12 +330,8 @@
           <p><strong>SCADA 注意事項</strong>：優先 Link（Revit 或 CAD 皆同），不要 Import；不要把所有來源檔案塞進同一模型；不要自己重畫建築模型，除非真的沒有來源。</p>
           <p><strong>常見錯誤</strong>：Positioning 選錯導致座標對不上；Import CAD 沒放獨立 Workset 難以單獨關閉。</p>
           <p class="verdict"><strong>驗收條件</strong>：Manage Links 中所有連結皆為 Loaded，平面圖可見建築牆柱與結構梁柱。</p>
-        </div>
-      </details>
-
-      <details id="step3" class="step">
-        <summary><span class="step-no">Step 3</span> 確認 Shared Coordinates / Position <span class="badge badge-must">必做</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step3" class="section"><div class="step-card"><div class="step-top"><div class="step-no">03</div><div class="step-title"><span class="step-no">Step 3</span> 確認 Shared Coordinates / Position <span class="badge badge-must">必做</span></div></div><div class="step-body">
           <p><strong>目的</strong>：畫 Tray 前先確認模型「真的對齊」，不是看起來對。</p>
           <p><strong>檢查樓層</strong>：1F、典型樓層、屋頂層、地下層。</p>
           <p><strong>觀察重點</strong>：建築柱位、電梯、樓梯、機房、豎井、外牆線是否對得上。</p>
@@ -155,12 +344,8 @@
           </dl>
           <p><strong>常見錯誤</strong>：只看 3D 視圖覺得「有對到」就開始畫；忽略地下層／屋頂層最容易對不齊。</p>
           <p class="verdict"><strong>驗收條件</strong>：至少 3 個樓層的柱網、電梯、豎井位置與其他 Link 模型疊合誤差在可接受範圍（容許值視公司 BIM 標準）。</p>
-        </div>
-      </details>
-
-      <details id="step4" class="step">
-        <summary><span class="step-no">Step 4</span> 確認 Level 與 Grid <span class="badge badge-must">必做</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step4" class="section"><div class="step-card"><div class="step-top"><div class="step-no">04</div><div class="step-title"><span class="step-no">Step 4</span> 確認 Level 與 Grid <span class="badge badge-must">必做</span></div></div><div class="step-body">
           <p><strong>目的</strong>：Cable Tray 高程完全依賴 Level + Offset／Elevation，Level 錯，整條 Tray 樓層歸屬就錯。</p>
           <p>Link 模型中的 Level <strong>不等於</strong>自己模型的 Level，即使同名也是獨立元素。</p>
           <p><strong>Copy/Monitor</strong>（<code>Collaborate → Copy/Monitor → Select Link</code>）：適合 Levels、Grids。需要跨團隊持續協調標高／軸網時使用。</p>
@@ -170,12 +355,8 @@
           </div>
           <p><strong>常見錯誤</strong>：誤把 Link 模型的 Level 當自己的 Level 設 View Range；FFL 與樓板厚度混淆；未做 Copy/Monitor 導致標高變更沒同步。</p>
           <p class="verdict"><strong>驗收條件</strong>：Level 名稱、數量、標高與建築模型一致或有清楚對應。</p>
-        </div>
-      </details>
-
-      <details id="step5" class="step">
-        <summary><span class="step-no">Step 5</span> 建立 SCADA Working Views <span class="badge badge-must">必做</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step5" class="section"><div class="step-card"><div class="step-top"><div class="step-no">05</div><div class="step-title"><span class="step-no">Step 5</span> 建立 SCADA Working Views <span class="badge badge-must">必做</span></div></div><div class="step-body">
           <p><strong>目的</strong>：不要在同一張視圖從草稿畫到出圖，管理會失控。</p>
           <p><strong>建議建立</strong>：<code>WIP_SCADA_1F</code>、<code>WIP_SCADA_2F</code>、<code>WIP_SCADA_3F</code>、<code>COORD_SCADA_1F</code>、<code>{3D}_SCADA_COORD</code></p>
           <table class="compare">
@@ -188,12 +369,8 @@
           </table>
           <p><strong>操作方式</strong>：複製既有平面視圖 → 右鍵 <code>Duplicate View → Duplicate</code> → 重新命名。</p>
           <p class="verdict"><strong>驗收條件</strong>：至少一組 WIP、一組 COORD、一組 3D 協調視圖，命名清楚可辨。</p>
-        </div>
-      </details>
-
-      <details id="step6" class="step">
-        <summary><span class="step-no">Step 6</span> 設定 View Range <span class="badge badge-must">必做</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step6" class="section"><div class="step-card"><div class="step-top"><div class="step-no">06</div><div class="step-title"><span class="step-no">Step 6</span> 設定 View Range <span class="badge badge-must">必做</span></div></div><div class="step-body">
           <p><strong>目的</strong>：Cable Tray 最常見狀況是「有畫但平面看不到」，九成是 View Range 沒設對。</p>
           <p><strong>操作位置</strong>：平面視圖空白處 → Properties → <code>View Range → Edit…</code></p>
           <p><strong>四個關鍵值</strong>：Top（最高裁切面）、Cut Plane（水平切割面）、Bottom（最低裁切面）、View Depth（延伸深度）。</p>
@@ -205,12 +382,8 @@
           <p class="note"><strong>若 Tray 在視圖垂直範圍外，先檢查 Top／Cut Plane／Bottom 是否涵蓋 Tray 的 Elevation</strong>——這是排查第一步，不是絕對規則。Cable Tray 實際的 projection/cut 顯示行為還牽涉 Category 設定、View Discipline 等因素，不同類別判斷邏輯不完全相同，具體顯示結果需於 Revit 2027 實機確認。</p>
           <p><strong>排查順序</strong>：平面看不到時，先檢查 View Range，再懷疑模型壞掉。</p>
           <p class="verdict"><strong>驗收條件</strong>：Top 明確高於 Tray Elevation，平面視圖能正常看到該 Tray。</p>
-        </div>
-      </details>
-
-      <details id="step7" class="step">
-        <summary><span class="step-no">Step 7</span> 建立 SCADA View Template <span class="badge badge-suggest">建議</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step7" class="section"><div class="step-card"><div class="step-top"><div class="step-no">07</div><div class="step-title"><span class="step-no">Step 7</span> 建立 SCADA View Template <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
           <p><strong>目的</strong>：固定「這張視圖該顯示什麼」，套用到多張視圖，標準一致。</p>
           <p><strong>操作位置</strong>：<code>View → Graphics → View Templates → Create Template from Current View…</code></p>
           <p><strong>建議建立</strong>：<code>VT_SCADA_ROUTING</code>（日常路由）、<code>VT_SCADA_COORD</code>（跨系統協調）</p>
@@ -228,24 +401,16 @@
           </table>
           <p class="warn"><strong>不要把 Temporary Hide/Isolate 當 View Template 用</strong>——只是暫時性操作，未必保留，不能取代正式設定。</p>
           <p class="verdict"><strong>驗收條件</strong>：建立至少一個 View Template 並套用，畫面顯示符合建議設定。</p>
-        </div>
-      </details>
-
-      <details id="step8" class="step">
-        <summary><span class="step-no">Step 8</span> 建立 View Filters <span class="badge badge-suggest">建議</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step8" class="section"><div class="step-card"><div class="step-top"><div class="step-no">08</div><div class="step-title"><span class="step-no">Step 8</span> 建立 View Filters <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
           <p><strong>目的</strong>：用參數自動決定顏色／線型，比手動 Override 更適合長期、多人專案。</p>
           <p><strong>操作位置</strong>：<code>View → Graphics → Filters</code></p>
           <p><strong>建議建立</strong>：<code>FILTER_SCADA_TRAY</code>、<code>FILTER_SCADA_CONDUIT</code>、<code>FILTER_EXISTING</code>、<code>FILTER_NEW</code></p>
           <p><strong>過濾依據</strong>：System、Comments、Type、Route_ID、Discipline、Status（見 Step 10）。</p>
           <p><strong>常見錯誤</strong>：Filter 條件對應的參數，物件實際上沒填值，導致 Filter「看起來沒作用」。</p>
           <p class="verdict"><strong>驗收條件</strong>：套用 Filter 後，改變物件對應參數值，畫面顏色自動跟著變化。</p>
-        </div>
-      </details>
-
-      <details id="step9" class="step">
-        <summary><span class="step-no">Step 9</span> 建立 Cable Tray Types <span class="badge badge-must">必做</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step9" class="section"><div class="step-card"><div class="step-top"><div class="step-no">09</div><div class="step-title"><span class="step-no">Step 9</span> 建立 Cable Tray Types <span class="badge badge-must">必做</span></div></div><div class="step-body">
           <p><strong>目的</strong>：大量路由前先確認各種 Fitting 都能正常產生。</p>
           <p><strong>操作位置</strong>：<code>Systems → Cable Tray → Edit Type → Duplicate</code></p>
           <p><strong>命名範例</strong>：<code>SCADA_LADDER_300x100</code>、<code>SCADA_LADDER_600x100</code></p>
@@ -262,71 +427,45 @@
           </ul>
           <p>每一項檢查：能否生成、尺寸是否正確、接頭是否正確、高程是否正確、Width 是否相容。</p>
           <p class="verdict"><strong>驗收條件</strong>：上述 7 項全部實測過，皆正常生成、尺寸正確、高程正確銜接。</p>
-        </div>
-      </details>
-
-      <details id="step10" class="step">
-        <summary><span class="step-no">Step 10</span> 建立 SCADA 專用參數 <span class="badge badge-policy">視公司流程而定</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step10" class="section"><div class="step-card"><div class="step-top"><div class="step-no">10</div><div class="step-title"><span class="step-no">Step 10</span> 建立 SCADA 專用參數 <span class="badge badge-policy">視公司流程而定</span></div></div><div class="step-body">
           <p><strong>操作位置</strong>：<code>Manage → Settings → Shared Parameters</code>（建議優先於 Project Parameters）</p>
           <p><strong>建議參數</strong>：<code>SCADA_System</code>、<code>Route_ID</code>、<code>From</code>、<code>To</code>、<code>Area</code>、<code>Level</code>、<code>Drawing_No</code>、<code>Status</code>、<code>Remark</code></p>
           <p><strong>用途</strong>：Filter、Schedule、QA、BOQ、查詢、後續自動化（見第五節）。</p>
           <p class="note"><strong>Project Parameter 與 Shared Parameter 的差異</strong>：兩者都可出現在 Schedule 中、都可用於 Filter——「能不能被 Schedule 讀到」不是主要區別。差異在於 Project Parameter 只存在於本專案，無法跨專案重複使用；Shared Parameter 有固定 GUID，可跨專案套用、可用於 Tag、也是未來跟外部資料（見第五節）對應的基礎。若參數未來可能跨專案沿用或對接外部資料，優先用 Shared Parameter；純本案內部統計，Project Parameter 也可以。實際在 Schedule／Filter 中的可用性細節需於 Revit 2027 實機確認。</p>
           <p class="warn">🔒 <strong>權限提醒</strong>：共用參數檔（.txt）存在自己有寫入權限的路徑即可（如自己的 Documents、OneDrive），不需要系統管理員權限，不要存到 <code>Program Files</code> 或系統目錄。不確定共用資料夾權限時標記【需確認權限】並詢問專案負責人。</p>
           <p class="verdict"><strong>驗收條件</strong>：至少建立 Route_ID 與 Status，並能於 Properties 填寫數值。</p>
-        </div>
-      </details>
-
-      <details id="step11" class="step">
-        <summary><span class="step-no">Step 11</span> 建立 Cable Tray Schedule <span class="badge badge-suggest">建議</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step11" class="section"><div class="step-card"><div class="step-top"><div class="step-no">11</div><div class="step-title"><span class="step-no">Step 11</span> 建立 Cable Tray Schedule <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
           <p><strong>操作位置</strong>：<code>View → Create → Schedules → Schedule/Quantities</code> → Category: Cable Trays</p>
           <p><strong>建議欄位</strong>：Type、Width、Height、Level、Length、Elevation、Route_ID、From、To、Status</p>
           <p class="warn"><strong>Schedule 數量不等於最終 BOQ 一定正確</strong>，仍要確認：重複建模、Fitting 是否計入、分段方式、單位、長度規則。</p>
           <p class="verdict"><strong>驗收條件</strong>：Schedule 正確列出所有 Cable Tray，欄位資料與模型一致。</p>
-        </div>
-      </details>
-
-      <details id="step12" class="step">
-        <summary><span class="step-no">Step 12</span> 建立 3D Coordination View <span class="badge badge-must">必做（多專業協調）</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step12" class="section"><div class="step-card"><div class="step-top"><div class="step-no">12</div><div class="step-title"><span class="step-no">Step 12</span> 建立 3D Coordination View <span class="badge badge-must">必做（多專業協調）</span></div></div><div class="step-body">
           <p><strong>建議建立</strong>：<code>{3D}_SCADA_COORD</code>，只保留 Architecture、Structure、Cable Tray、Conduit、Electrical Equipment、SCADA Equipment。</p>
           <p><strong>操作方式</strong>：開 3D 視圖 → <code>View → Section Box</code> 勾選 → 拖曳邊界縮小檢查範圍。</p>
           <p><strong>主要檢查</strong>：穿梁、穿牆、穿樓板、撞風管、撞消防、撞其他 Tray、空間不足、維修空間不足。</p>
           <p class="verdict"><strong>驗收條件</strong>：能用 Section Box 縮小範圍檢查局部區域，只顯示必要類別。</p>
-        </div>
-      </details>
-
-      <details id="step13" class="step">
-        <summary><span class="step-no">Step 13</span> 建立 QA View <span class="badge badge-suggest">建議</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step13" class="section"><div class="step-card"><div class="step-top"><div class="step-no">13</div><div class="step-title"><span class="step-no">Step 13</span> 建立 QA View <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
           <p><strong>建議建立</strong>：<code>QA_SCADA</code> — 建築淡化、結構突出、Cable Tray／Conduit 高對比、設備可見。</p>
           <p class="warn">不要用正式出圖 View 做問題檢查。</p>
           <p class="verdict"><strong>驗收條件</strong>：QA_SCADA 視圖存在，顯示設定與 SHEET 視圖不同。</p>
-        </div>
-      </details>
-
-      <details id="step14" class="step">
-        <summary><span class="step-no">Step 14</span> Browser Organization <span class="badge badge-suggest">建議</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step14" class="section"><div class="step-card"><div class="step-top"><div class="step-no">14</div><div class="step-title"><span class="step-no">Step 14</span> Browser Organization <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
           <p><strong>操作位置</strong>：Project Browser 右鍵 → <code>Browser Organization…</code></p>
           <p><strong>整理依據</strong>：Discipline → Purpose（WIP／COORD／SHEET／QA）→ Level</p>
           <p class="verdict"><strong>驗收條件</strong>：視圖依 Discipline／Purpose 分類清楚可辨。</p>
-        </div>
-      </details>
-
-      <details id="step15" class="step">
-        <summary><span class="step-no">Step 15</span> Worksharing / Worksets <span class="badge badge-policy">視公司流程而定</span></summary>
-        <div class="step-body">
+        </div></div></section>
+<section id="step15" class="section"><div class="step-card"><div class="step-top"><div class="step-no">15</div><div class="step-title"><span class="step-no">Step 15</span> Worksharing / Worksets <span class="badge badge-policy">視公司流程而定</span></div></div><div class="step-body">
           <p>只有多人協作專案才需要啟用。</p>
           <p><strong>操作位置</strong>：<code>Collaborate → Worksharing</code>；同步用 <code>Synchronize with Central</code>；抓更新用 <code>Reload Latest</code>。</p>
           <p class="warn">若公司已有既有 Central Model，不要重新建立，加入專案應開啟中央檔並 Create New Local。</p>
           <p class="verdict"><strong>驗收條件</strong>：多人協作下能完成一次 Synchronize with Central，未跳出未預期衝突警告。</p>
-        </div>
-      </details>
-    </section>
+        </div></div></section>
+<section id="quick10" class="section">
 
-    <section id="quick10" class="section">
       <h2>二、SCADA Revit 起手 10 步（快速版）</h2>
       <p>適合列印或放桌面提醒，熟悉流程後的懶人版。</p>
       <ol class="quick10-list">
@@ -341,9 +480,10 @@
         <li>測 Cable Tray Fitting</li>
         <li>再正式 Routing</li>
       </ol>
-    </section>
+    
+</section>
+<section id="checklist" class="section">
 
-    <section id="checklist" class="section">
       <h2>三、正式畫 Tray 前 Checklist</h2>
       <p>開始大量路由之前，逐項勾選確認。勾選狀態會自動保存在這台裝置的瀏覽器中。</p>
       <div class="checklist-toolbar">
@@ -369,9 +509,10 @@
         <li><label><input type="checkbox" data-key="schedule"> Schedule 可讀取 Tray（欄位資料正確顯示）</label></li>
         <li><label><input type="checkbox" data-key="elevation-confirmed"> 正式路由高程已確認（與設計圖或設備需求核對過）</label></li>
       </ul>
-    </section>
+    
+</section>
+<section id="trouble" class="section">
 
-    <section id="trouble" class="section trouble-section">
       <h2>四、最常發生的問題</h2>
 
       <details class="trouble-item" open>
@@ -417,9 +558,10 @@
           <p>常見原因：沒命名、沒 View Template、沒 Filter、沒 Browser Organization、沒分流 WIP／COORD／SHEET。</p>
         </div>
       </details>
-    </section>
+    
+</section>
+<section id="mapping" class="section">
 
-    <section id="mapping" class="section">
       <h2>五、AutoCAD Router 與 Revit 欄位對應</h2>
       <p class="note"><strong>資料架構建議</strong>：以下為欄位對應的架構建議，<strong>不代表目前已完成自動同步功能</strong>，實際銜接需另行開發匯入／匯出流程。</p>
       <table class="mapping-table">
@@ -445,9 +587,10 @@
         <span>BOQ</span>
       </div>
       <p class="note">上圖為未來可能的銜接路徑示意，非目前已實作功能。</p>
-    </section>
+    
+</section>
+<section id="permissions" class="section">
 
-    <section id="permissions" class="section perm-section">
       <h2>六、公司電腦權限限制（硬性規則）</h2>
       <p>適用情境：公司 Windows 電腦，使用者帳號<strong>沒有系統管理員權限</strong>。本節是整份指南的硬性前提——所有「必做」與「建議」流程都已依此限制設計，不需要提權即可完成。</p>
 
@@ -504,9 +647,10 @@
         </tbody>
       </table>
       <p class="verdict"><strong>結論</strong>：Step 1～15 全部可用一般使用者權限完成，不需要安裝 pyRevit、Dynamo、Navisworks Manage 或任何第三方外掛。</p>
-    </section>
+    
+</section>
+<section id="verify" class="section">
 
-    <section id="verify" class="section">
       <h2>七、仍需 Revit 2027 實機驗證的項目清單</h2>
       <ol>
         <li>Step 0-A：新建專案時 Revit 2027 內建樣板的實際名稱。</li>
@@ -515,15 +659,143 @@
         <li>問題 3：Routing Preferences／Fitting 設定的實際選單路徑。</li>
       </ol>
       <p>在完成上述驗證前，本文件屬於「可直接照做的操作指南」，但這 4 個細節建議由實際操作 Revit 2027 的人員補充確認。</p>
-    </section>
+    
+</section>
 
-    <footer class="page-footer">
-      <p>完整內容另見 <a href="SCADA_REVIT_STARTUP_GUIDE.md">SCADA_REVIT_STARTUP_GUIDE.md</a>。</p>
-    </footer>
-
-  </main>
+<footer style="margin-top:80px; padding-top:24px; border-top:1px solid var(--border); color:var(--text-faint); font-size:13px">
+<p>完整內容以 <a href="SCADA_REVIT_STARTUP_GUIDE.md">SCADA_REVIT_STARTUP_GUIDE.md</a> 為準。</p>
+</footer>
+</main>
 </div>
+</div>
+</div>
+<script>
+// Theme + Font + Storage + TOC + Search + Progress + Drawer + Checklist
+(function(){
+  const html = document.documentElement;
+  const LS_THEME = 'scada-theme';
+  const LS_FONT = 'scada-font';
+  const LS_CHECK = 'scada-checklist';
 
-<script src="js/app.js"></script>
+  // Theme
+  function applyTheme(t){
+    html.setAttribute('data-theme', t);
+    localStorage.setItem(LS_THEME, t);
+    const btn = document.getElementById('themeToggle');
+    if(btn) btn.textContent = t==='dark' ? '☀️ 亮版' : '🌙 暗版';
+  }
+  const savedTheme = localStorage.getItem(LS_THEME);
+  if(savedTheme){ applyTheme(savedTheme); }
+  else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){ applyTheme('dark'); }
+
+  document.getElementById('themeToggle').addEventListener('click', ()=>{
+    const cur = html.getAttribute('data-theme');
+    applyTheme(cur==='dark' ? 'light' : 'dark');
+  });
+
+  // Font
+  function applyFont(f){
+    html.setAttribute('data-font', f);
+    localStorage.setItem(LS_FONT, f);
+    document.querySelectorAll('#fontMinus,#fontStd,#fontPlus').forEach(b=>b.classList.remove('active'));
+    const map = {small:'fontMinus', standard:'fontStd', large:'fontStd', xlarge:'fontPlus'};
+    // Actually map correctly
+    if(f==='small') document.getElementById('fontMinus').classList.add('active');
+    else if(f==='standard') document.getElementById('fontStd').classList.add('active');
+    else if(f==='large') document.getElementById('fontPlus').classList.add('active');
+    else if(f==='xlarge') document.getElementById('fontPlus').classList.add('active');
+    // refine: A- = small (18px), 標準=standard (20px), A+ cycles large->xlarge
+  }
+  const savedFont = localStorage.getItem(LS_FONT);
+  if(savedFont) applyFont(savedFont);
+  document.getElementById('fontMinus').addEventListener('click', ()=>applyFont('small'));
+  document.getElementById('fontStd').addEventListener('click', ()=>applyFont('standard'));
+  document.getElementById('fontPlus').addEventListener('click', ()=>{
+    const cur = html.getAttribute('data-font');
+    if(cur==='standard' || cur==='small') applyFont('large');
+    else if(cur==='large') applyFont('xlarge');
+    else applyFont('standard');
+  });
+
+  // Search
+  const search = document.getElementById('tocSearch');
+  const tocLinks = Array.from(document.querySelectorAll('#toc a'));
+  search.addEventListener('input', ()=>{
+    const q = search.value.toLowerCase().trim();
+    tocLinks.forEach(a=>{
+      const txt = a.textContent.toLowerCase();
+      a.parentElement.style.display = (!q || txt.includes(q)) ? '' : 'none';
+    });
+  });
+
+  // Progress
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', ()=>{
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    progress.style.width = scrolled + '%';
+  });
+
+  // TOC highlight
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(a=>a.classList.remove('active'));
+        const active = document.querySelector('#toc a[href="#'+id+'"]');
+        if(active) active.classList.add('active');
+      }
+    });
+  }, {rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('section[id]').forEach(s=>observer.observe(s));
+
+  // Drawer
+  const sidebar = document.getElementById('sidebar');
+  const scrim = document.getElementById('scrim');
+  const toggle = document.getElementById('navToggle');
+  function openDrawer(){ sidebar.classList.add('open'); scrim.classList.add('open'); }
+  function closeDrawer(){ sidebar.classList.remove('open'); scrim.classList.remove('open'); }
+  toggle.addEventListener('click', openDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  tocLinks.forEach(a=>a.addEventListener('click', ()=>{ if(window.innerWidth<=800) closeDrawer(); }));
+
+  // Checklist localStorage 17 items
+  const checklist = document.getElementById('checklist');
+  if(checklist){
+    const boxes = checklist.querySelectorAll('input[type="checkbox"]');
+    const progressEl = document.getElementById('checklistProgress');
+    function loadCheck(){
+      try{
+        const data = JSON.parse(localStorage.getItem(LS_CHECK) || '{}');
+        boxes.forEach(b=>{
+          const key = b.getAttribute('data-key');
+          if(data[key]) b.checked = true;
+          b.closest('li').classList.toggle('done', b.checked);
+        });
+      }catch(e){}
+      updateProgress();
+    }
+    function saveCheck(){
+      const data = {};
+      boxes.forEach(b=>{ data[b.getAttribute('data-key')] = b.checked; });
+      localStorage.setItem(LS_CHECK, JSON.stringify(data));
+      updateProgress();
+    }
+    function updateProgress(){
+      const total = boxes.length;
+      const done = Array.from(boxes).filter(b=>b.checked).length;
+      if(progressEl) progressEl.textContent = done + ' / ' + total;
+      boxes.forEach(b=>b.closest('li').classList.toggle('done', b.checked));
+    }
+    boxes.forEach(b=>b.addEventListener('change', saveCheck));
+    const resetBtn = document.getElementById('resetChecklist');
+    if(resetBtn) resetBtn.addEventListener('click', ()=>{
+      boxes.forEach(b=>b.checked=false);
+      saveCheck();
+    });
+    loadCheck();
+  }
+})();
+</script>
 </body>
 </html>
