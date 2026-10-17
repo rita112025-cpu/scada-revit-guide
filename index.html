@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="SCADA 電纜橋架系統的 Revit 2025.5 繁體中文建模指南：BIM 觀念、介面、起手設定、電纜架、電管尺寸、管路設定、吊架與標籤。">
+<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -245,11 +245,12 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
   </div>
   <ol class="toc" id="toc">
     <li><a href="#start">0. 新建或接手判斷</a></li>
-    <li class="toc-group">觀念與介面</li>
-    <li><a href="#bim" data-keywords="LOD 生命週期 樣板 數量 干涉 Navisworks 誤解 竣工 維護">BIM 觀念</a></li>
-    <li><a href="#ui" data-keywords="頁籤 功能區 性質 專案瀏覽器 視圖控制列 快速存取 狀態列 選項列">Revit 介面</a></li>
+    <li class="toc-group">Revit 操作 · 觀念</li>
+    <li><a href="#bim" data-keywords="BIM 觀念與流程 LOD 生命週期 樣板 數量 干涉 Navisworks 誤解 竣工 維護 BMP 建置計畫書 迷思">BIM 觀念</a></li>
+    <li><a href="#ui" data-keywords="Revit 介面與檔案基本觀念 頁籤 功能區 性質 專案瀏覽器 視圖控制列 快速存取 狀態列 選項列 rvt rte rfa rft 族群 族 類型參數 實例參數 內建 系統族群 可載入 連結 匯入 釘選 釘住">Revit 介面</a></li>
+    <li><a href="#template" data-keywords="專案樣板與起始設定 樣板 Mechanical Electrical Plumbing Systems MetricCHT 專案單位 樓層 視圖範圍 建築設計樣板 物件型式">專案樣板</a></li>
     <li><a href="#mep-org" data-keywords="給水 排水 消防 空調 弱電 送風 回風 外氣 排氣 冰水">機電系統分工</a></li>
-    <li class="toc-group">一、標準起手式</li>
+    <li class="toc-group">Revit 操作 · 起手式</li>
     <li><a href="#step1">Step 1　專案單位</a></li>
     <li><a href="#step2">Step 2　連結模型</a></li>
     <li><a href="#step3">Step 3　共用座標</a></li>
@@ -268,17 +269,33 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#step15">Step 15　工作共用</a></li>
     <li><a href="#quick10">二、起手 10 步</a></li>
     <li><a href="#checklist">三、建模檢查清單</a></li>
-    <li class="toc-group">實作教材 2026-10-16</li>
+    <li class="toc-group">Revit 操作 · 電纜架實作</li>
     <li><a href="#draw">四、電纜架繪製</a></li>
     <li><a href="#hanger">五、梯型吊架</a></li>
     <li><a href="#hanger-code">五、吊架間距法規</a></li>
     <li><a href="#trouble">六、放了看不到</a></li>
     <li><a href="#vg-locked">六、VG 被樣板鎖住</a></li>
     <li><a href="#tags">七、電纜架標籤</a></li>
-    <li class="toc-group">機電延伸</li>
+    <li class="toc-group">Revit 操作 · 管路、族群與出圖</li>
     <li><a href="#conduit-size" data-keywords="EMT 電管 標稱尺寸 內徑 外徑 CNS 薄鋼管 RNC 彎曲半徑">電管尺寸</a></li>
-    <li><a href="#pipe-setup" data-keywords="佈線偏好 管區段 給水 排水 PVC 廠牌 斜度 配件 管系統">管路設定</a></li>
-    <li><a href="#mep-model" data-keywords="灑水 配電盤 迴路 插座 燈具 風管 電氣設定 衛浴 軟風管">機電建模重點</a></li>
+    <li><a href="#pipe-setup" data-keywords="配管系統設定 佈線偏好 管區段 給水 排水 PVC 斜度 配件 管系統 圖形取代 材料 細緻 粗略 粗糙 SP WP VP CW HW 存水彎 清潔口">管路設定</a></li>
+    <li><a href="#pipe-draw" data-keywords="管段繪製技巧 立管 斜T 空白鍵 建立類似 佈線解決方案 佈線解法 衛工 衛浴 對齊 排水 套用 線架構 線框">管段繪製技巧</a></li>
+    <li><a href="#family" data-keywords="族群製作 族群樣板 參考平面 參考線 掃掠 連接件 管接點 斜T 標籤 類型目錄 載入族群">族群製作</a></li>
+    <li><a href="#sheets" data-keywords="圖紙與出圖 圖紙出圖 圖框 視圖樣板 明細表 定點高程 修訂 圖紙">圖紙與出圖</a></li>
+    <li><a href="#arch-model" data-keywords="建築建模基礎 網格 結構柱 結構梁 樓板 牆 門窗 樓梯 屋頂 地形 彩現 篩選">建築建模基礎</a></li>
+    <li><a href="#mep-model" data-keywords="灑水 配電盤 迴路 插座 燈具 風管 電氣設定 衛浴 衛工 軟風管">機電建模重點</a></li>
+    <li class="toc-group">機電實務與品管</li>
+    <li><a href="#materials" data-keywords="機電管材、線材與設備 管材 線材 EMT RSG HDPE PVC XLPE 匯流排 CAT6 光纖 CNS GIP">管材與線材</a></li>
+    <li><a href="#electrical" data-keywords="電氣與緊急供電 接地 斷路器 配電盤 發電機 UPS 變壓器 漏電 電表">電氣與緊急供電</a></li>
+    <li><a href="#elv" data-keywords="弱電與中央監控 弱電 CCTV 中央監控 電信 同軸 高架地板 SCADA 監視">弱電與中央監控</a></li>
+    <li><a href="#plumbing-qc" data-keywords="給排水衛生 給排水 試壓 建築技術規則 自來水 下水道 蓄水池 馬桶">給排水衛生</a></li>
+    <li><a href="#fire" data-keywords="消防 防火區劃 撒水 灑水 火警 偵煙 防火門 填塞 廣播">消防</a></li>
+    <li><a href="#hvac" data-keywords="空調 冰水 VRF 風管 TAB 冷媒 等效圓管 保溫">空調</a></li>
+    <li><a href="#elevator" data-keywords="電梯 機坑 無機房 緊急電源 機房">電梯</a></li>
+    <li><a href="#mep-iface" data-keywords="建築與機電介面整合 介面整合 配電室 管道間 天花板 預埋 吊掛 淨高">介面整合</a></li>
+    <li><a href="#review" data-keywords="設計圖說審查 審查 圖說 適法 綠建築 預算 機水電">設計圖說審查</a></li>
+    <li><a href="#defects" data-keywords="常見施工缺失 缺失 套圖 分電箱 碰撞 開門 預留">常見施工缺失</a></li>
+    <li><a href="#site-terms" data-keywords="工地用語對照 台語 天端 閥 不鏽鋼 預留 樑 樓板 洩水 錨定 天花板 矽利康 公分">工地用語對照</a></li>
     <li class="toc-group">資料與限制</li>
     <li><a href="#mapping">八、路由欄位對應</a></li>
     <li><a href="#permissions">九、公司電腦權限</a></li>
@@ -294,7 +311,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <main class="content">
 <header class="page-header">
 <h1>SCADA 電纜架<br>Revit 入門指南</h1>
-<p class="lede">SCADA 電纜橋架系統。介面是 <strong>Revit 2025.5 繁體中文</strong>。正式畫電纜架（Cable Tray）、電管（Conduit）之前先把單位、連結、樓層、視圖設對；再依 2026-10-16 實作教材畫橋架、放吊架、上色、貼標籤。功能名稱第一次寫成「中文（English）」。</p>
+<p class="lede">SCADA 電纜橋架與機電。介面是 <strong>Revit 2025.5 繁體中文</strong>。正式畫電纜架（Cable Tray）、電管（Conduit）之前先把單位、連結、樓層、視圖設對；再依 2026-10-16 實作教材畫橋架、放吊架、上色、貼標籤。後段是樣板、族群、出圖，以及電氣、弱電、給排水、消防、空調的實務與品管。功能名稱第一次寫成「中文（English）」。</p>
 <div class="badge-row">
 <span class="badge badge-must">必做</span>
 <span class="badge badge-suggest">建議</span>
@@ -302,7 +319,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </div>
 <p class="perm-banner">權限前提：公司電腦、一般使用者權限。必要流程只用 Revit 原生功能，不需要系統管理員、也不依賴 pyRevit、Dynamo、Navisworks Manage。詳見<a href="#permissions">「九、公司電腦權限」</a>。</p>
 <div class="note">教材對照：一、繪製 → <a href="#draw">第四節</a>；二、吊架 → <a href="#hanger">第五節</a>；三、看不到 → <a href="#trouble">第六節</a>；四、可見性被鎖住 → <a href="#vg-locked">VG 灰色</a>；五、間距 → <a href="#hanger-code">法規</a>；六、篩選上色 → <a href="#step8">Step 8</a>；七、標籤 → <a href="#tags">第七節</a>。和舊步驟重複的地方已合併，點法以教材為準。</div>
-<div class="note">補充觀念與機電：<a href="#bim">BIM 觀念</a>、<a href="#ui">Revit 介面</a>、<a href="#mep-org">機電系統分工</a>、<a href="#tray-types">電纜架型式</a>、<a href="#conduit-size">電管尺寸</a>、<a href="#pipe-setup">管路設定</a>、<a href="#mep-model">機電建模重點</a>。既有步驟都保留。</div>
+<div class="note">補充觀念與機電：<a href="#bim">BIM 觀念</a>、<a href="#ui">Revit 介面</a>、<a href="#template">專案樣板</a>、<a href="#mep-org">機電系統分工</a>、<a href="#tray-types">電纜架型式</a>、<a href="#conduit-size">電管尺寸</a>、<a href="#pipe-setup">管路設定</a>、<a href="#pipe-draw">管段繪製</a>、<a href="#family">族群製作</a>、<a href="#sheets">圖紙出圖</a>、<a href="#arch-model">建築建模</a>、<a href="#mep-model">機電建模重點</a>。既有步驟都保留。</div>
+<div class="note">機電實務與品管：<a href="#materials">管材與線材</a>、<a href="#electrical">電氣與緊急供電</a>、<a href="#elv">弱電與中央監控</a>、<a href="#plumbing-qc">給排水</a>、<a href="#fire">消防</a>、<a href="#hvac">空調</a>、<a href="#elevator">電梯</a>、<a href="#mep-iface">介面整合</a>、<a href="#review">設計圖說審查</a>、<a href="#defects">常見施工缺失</a>、<a href="#site-terms">工地用語</a>。</div>
 <div class="bento">
 <div class="b-card b-span-8 orange">
 <div class="k">開始前</div>
@@ -317,7 +335,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="b-card b-span-4">
 <div class="k">這份指南</div>
 <div class="big">15</div>
-<p>起手步驟，加上繪製、吊架、標籤、電管與管路</p>
+<p>起手步驟，加上繪製、吊架、標籤、管路、族群與機電品管</p>
 <div style="margin-top:12px; font-size:13px; color:var(--text-faint)">Revit 2025.5 繁體中文<br>免管理員權限<br>教材日期 2026-10-16</div>
 </div>
 <div class="b-card b-span-3 orange"><div class="num">04</div><div class="k">實作</div><h3>電纜架繪製</h3><p>從連結建築畫到橋架</p><a href="#draw">查看 →</a></div>
@@ -378,7 +396,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 
 <section id="bim" class="section">
 <h2><span class="eyebrow">觀念</span>BIM 觀念</h2>
-<p>BIM（Building Information Modeling，建築資訊模型）是一套把建築、結構、機電放在同一個模型裡協調的作業方式。Revit 負責建模；多人、多軟體要一起看衝突時，常再轉成 Navisworks。軟體買得到，樣板、族、參數和檢討順序才決定這個案子能不能用。</p>
+<p>BIM（Building Information Modeling，建築資訊模型）不是一套軟體，而是把建築、結構、機電放在同一個模型裡協調的作業方式，用來減少錯誤、縮短工期、降低成本，並把資料留到營運維護。Revit 負責建模；碰撞、算量、營運常常還要別的軟體，沒有單一軟體能從設計一路通到維護。軟體買得到，樣板、族群（Family）、參數和檢討順序才決定這個案子能不能用。本站較早章節若寫「族」，指的就是族群。</p>
 <div class="flow">
 <div class="card">
 <h3>傳統出圖</h3>
@@ -397,7 +415,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </ol>
 </div>
 </div>
-<p>機電進場前，建築和結構要先當骨幹。常見順序：空間分類 → 一次放一個系統 → 做干涉檢查 → 鋼梁套管回饋給結構 → 定哪個系統優先 → 再調路徑。電纜架、電管、水管搶同一條梁下淨高時，就是這一段。</p>
+<p>機電進場前，建築和結構要先當骨幹。常見順序：空間分類 → 建立結構模型 → 決定系統優先順序 → 管線衝突檢討 → 回饋結構與建築（例如鋼梁套管）→ 再調路徑。電纜架、電管、水管搶同一條梁下淨高時，就是這一段。一次只放一個系統，改完再放下一個，比五個系統一起拉清楚。</p>
 <h3>要先講清楚的五件事</h3>
 <ul>
 <li><strong>值不值得</strong>：先能減少現場改、縮短協調，再談模型漂不漂亮。</li>
@@ -412,15 +430,22 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <table class="compare">
 <thead><tr><th>等級</th><th>模型裡有什麼</th><th>常用在</th><th>常由誰建</th></tr></thead>
 <tbody>
-<tr><td>LOD 100</td><td>量體、大致面積</td><td>概念</td><td>設計端</td></tr>
-<tr><td>LOD 200</td><td>系統別、大約尺寸、大約位置</td><td>初步設計</td><td>設計端</td></tr>
-<tr><td>LOD 300</td><td>準確尺寸、位置、數量，可做干涉</td><td>細部設計、機電整合</td><td>設計端為主</td></tr>
-<tr><td>LOD 400</td><td>再加上安裝方式、加工與施作所需資訊</td><td>施工檢討</td><td>施工端為主</td></tr>
-<tr><td>LOD 500</td><td>照現場修正後的尺寸、位置、系統</td><td>竣工、維護</td><td>施工端</td></tr>
+<tr><td>LOD 100</td><td>量體</td><td>規劃</td><td>設計端</td></tr>
+<tr><td>LOD 200</td><td>大略數量、尺寸、位置</td><td>初步設計</td><td>設計端</td></tr>
+<tr><td>LOD 300</td><td>準確數量與尺寸，可做土建與機電整合</td><td>細部設計</td><td>設計端為主</td></tr>
+<tr><td>LOD 400</td><td>安裝與施作方法，機電與裝修整合</td><td>施工模型</td><td>施工端為主</td></tr>
+<tr><td>LOD 500</td><td>實際數量與位置，加上維護資訊</td><td>竣工模型</td><td>施工端</td></tr>
 </tbody>
 </table>
 </div>
 <h3>容易想錯的地方</h3>
+<p>下面四句在實務上都不成立。建模的人也要帶法規和現場經驗，不然模型不能拿來檢討。</p>
+<ul>
+<li>3D 建模可以和 2D 設計同時做完。</li>
+<li>3D 可以直接轉成施工圖。</li>
+<li>建築模型和機電模型會一起完成。</li>
+<li>模型裡的數量可以直接拿去驗收。</li>
+</ul>
 <ul>
 <li>3D 要先建，才切得出 2D。沒畫的管、沒放的設備，圖和明細表都不會自己長出來。全部建成細緻實體，檔案會變大，出圖仍要靠視圖樣板和圖例。</li>
 <li>建築模型還沒穩定時，機電先畫，柱位一改路徑就全部重接。</li>
@@ -428,6 +453,17 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>同一外型、不同尺寸的設備，用尺寸參數做一個族。公開族庫裡很多是美規，台灣管徑與配件要換成自己的規格表，見<a href="#conduit-size">電管尺寸</a>與<a href="#pipe-setup">管路設定</a>。</li>
 <li>明細表只統計模型裡有的東西。損耗、沒畫的暗管、現場沒照模型做的改道，都要另外算。暗管若只示意，就不要把它當精確數量。</li>
 <li>2D 圖例為了印得清楚，常常比實品大。閥件一放大就擠在一起，出圖前用該張視圖的比例看一次。</li>
+</ul>
+<h3>BIM 建置計畫書（BMP）</h3>
+<p>開工前先寫 BIM 建置計畫書（BIM Execution Plan，簡稱 BMP）。至少要講清楚這幾項，否則每個專業交出來的模型對不起來：</p>
+<ul>
+<li><strong>技術規格</strong>：用哪些軟體、模型怎麼拆、座標和單位誰說了算。</li>
+<li><strong>施工階段模型</strong>：構件要有材料名稱；管線尺寸規格要和實際施工相符；穿外牆的部分要建出來。</li>
+<li><strong>圖面檢討</strong>：誰主持、多久一次、衝突怎麼登錄。</li>
+<li><strong>檔案輸出</strong>：交換格式、命名、放在哪裡。</li>
+<li><strong>模型交付</strong>：排水、電力、消防等分項各交什麼。</li>
+<li><strong>碰撞分析報告</strong>：查哪些系統、容許間距、報告長什麼樣子。</li>
+<li><strong>設計變更</strong>：改了模型之後，圖和明細表誰負責回寫。</li>
 </ul>
 <h3>樣板裡先準備什麼</h3>
 <p>專案樣板（.rte）建議先放好：各系統的顏色與材料、平面／立面／3D 的視圖樣板、明細表欄位、常用族（電纜架、配電盤、燈具、衛浴、管配件）。材料顏色會跟著模型進 Navisworks，協調時才分得出系統。樣板存到自己可寫的資料夾，不要寫進 Revit 安裝目錄，見<a href="#permissions">第九節</a>。</p>
@@ -474,6 +510,64 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <dd>最底下一列。連結的建築、CAD 底圖、釘選元件預設常常點不到，要先打開對應的選取開關，才能對齊或移動。</dd>
 </dl>
 <p class="note">畫管或電纜架時，頁籤正下方還會出現選項列（Options Bar）：寬度、高度、直徑、中間高程、斜度。電纜架的中間高程、水管的斜度都在這裡改，不在性質面板的同一個欄位。</p>
+<h3>四種檔案</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>副檔名</th><th>是什麼</th><th>拿來做</th></tr></thead>
+<tbody>
+<tr><td><code>.rvt</code></td><td>專案（Project）</td><td>這一案的模型。日常存檔就是它</td></tr>
+<tr><td><code>.rte</code></td><td>專案樣板（Project Template）</td><td>新專案的起點。單位、系統、視圖樣板放這裡。見<a href="#template">專案樣板</a></td></tr>
+<tr><td><code>.rfa</code></td><td>族群（Family）</td><td>門、設備、標籤、吊架。用插入 → 載入族群（Load Family）放進專案</td></tr>
+<tr><td><code>.rft</code></td><td>族群樣板（Family Template）</td><td>做新族群時選的樣板，例如公制門、公制通用模型</td></tr>
+</tbody>
+</table>
+</div>
+<p>2025 繁中介面與說明文件用「族群」。本站較早步驟若寫「族」「載入族」「族類型」，指的是同一件事：族群、載入族群、族群類型（Family Types）。</p>
+<h3>三種族群</h3>
+<ul>
+<li><strong>系統族群（System Family）</strong>：牆、樓板、管、風管、電纜架。軟體預先定義，不能存成外部 .rfa，只能在專案裡複製類型。</li>
+<li><strong>可載入族群（Loadable Family）</strong>：門窗、衛工裝置、配電盤、標籤。在 .rfa 裡做好，再載入專案。最常自己改的是這一種。</li>
+<li><strong>內建族群（In-Place Family）</strong>：只活在這個專案，不能拿到別的檔用。留給極少見、不會重複的特殊元件。能做成可載入族群就不要用內建。</li>
+</ul>
+<h3>類型參數與實例參數</h3>
+<p>類型參數（Type Parameter）一改，這個類型的每一個實體都跟著變，例如某一號電纜架的預設配件。實例參數（Instance Parameter）只改你選到的那一個，例如這一段的偏移、備註。不確定時先看性質面板：在「編輯類型」裡面的是類型參數，直接露在性質面板上的多半是實例參數。</p>
+<h3>連結與匯入</h3>
+<p>連結（Link）像外部參考，原檔更新後可以重新載入。匯入（Import）像把圖吃進這個檔，之後不會跟著原檔走。建築、結構、CAD 底圖用連結，連上之後用釘選（Pin）固定。對照表在 <a href="#step2">Step 2</a>。</p>
+</section>
+
+<section id="template" class="section">
+<h2><span class="eyebrow">樣板</span>專案樣板與起始設定</h2>
+<p>樣板決定新檔一打開就有哪些單位、系統、視圖和圖紙。SCADA 電纜架案用電氣樣板；公司有指定的 .rte 就用公司的，見<a href="#start">第 0 節</a>。沒有公司樣板時，用傳遞專案標準從舊案子帶類型與篩選，不要每次從空白重做。</p>
+<h3>MEP 內建樣板</h3>
+<p>繁中公制內容通常有四份起點。開啟專案對話框裡看得到的中文名稱如下；英文檔名常含 Mechanical、Electrical、Plumbing、Systems 與 Metric，是否多一段語系標記，以對話框為準，不要猜安裝目錄。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>開啟時選</th><th>適合</th></tr></thead>
+<tbody>
+<tr><td>機械樣板</td><td>空調、風管、冰水</td></tr>
+<tr><td>電氣樣板</td><td>動力、照明、電纜架、電管。本站 SCADA 案用這個</td></tr>
+<tr><td>配管樣板</td><td>給排水、衛生</td></tr>
+<tr><td>系統樣板（協調）</td><td>多個專業放在同一個檔裡協調</td></tr>
+</tbody>
+</table>
+</div>
+<h3>公開樣板裡通常先統一什麼</h3>
+<p>公開的建築設計樣板，目的是讓不同單位出圖長得一樣。手冊裡會先定這些，再談建模：</p>
+<ul>
+<li>專案資訊、專案參數、專案單位</li>
+<li>起始視圖與標高環境</li>
+<li>尺寸標註、文字、線型與線寬</li>
+<li>物件型式（Object Styles）</li>
+<li>視圖樣板、圖紙、明細表</li>
+</ul>
+<p>出圖標準的做法見<a href="#sheets">圖紙與出圖</a>。視圖樣板的點法見 <a href="#step7">Step 7</a>。</p>
+<h3>新檔先做的三件事</h3>
+<ol>
+<li><strong>單位</strong>：管理 → 專案單位（Project Units），長度設公釐。完整設定與驗收見 <a href="#step1">Step 1</a>。</li>
+<li><strong>樓層</strong>：建築 → 樓層（Level）拉出標高，再到專案瀏覽器把名稱改成和建築一致，例如 1F。電纜架高程掛在樓層上，見 <a href="#step4">Step 4</a>。</li>
+<li><strong>看得到</strong>：平面的視圖範圍（View Range）要把切割平面拉過要看的管和橋架。見 <a href="#step6">Step 6</a>。</li>
+</ol>
+<p class="verdict"><strong>驗收</strong>：新檔的長度是公釐，樓層名稱和建築對得起來，工作平面的切割平面高於這一層的橋架。</p>
 </section>
 
 <section id="mep-org" class="section">
@@ -498,7 +592,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </tbody>
 </table>
 </div>
-<p>顏色設在系統類型的圖形取代和材料上。視圖裡還要依系統篩選時，用 <a href="#step8">Step 8</a>，品類記得勾管、管配件、管附件，或電纜架與電管。</p>
+<p>顏色設在系統類型的圖形取代和材料上。視圖裡還要依系統篩選時，用 <a href="#step8">Step 8</a>，品類記得勾管、管配件、管附件，或電纜架與電管。各系統的法規、試壓、品管與介面，見側欄「機電實務與品管」。</p>
 </section>
 
 <section id="step1" class="section"><div class="step-card"><div class="step-top"><div class="step-no">01</div><div class="step-title">確認專案單位 <span class="badge badge-must">必做</span></div></div><div class="step-body">
@@ -1003,9 +1097,18 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li><strong>載入配件族</strong>：彎頭、三通、接頭、異徑管決定外型。插入 → 載入族，載入廠商提供的 .rfa。還沒有廠商族時，先用 Revit 內建配件。配件若靠查找表（Lookup Table）變尺寸，CSV 要跟族放在一起；查找表的安裝目錄不要去改，見<a href="#permissions">第九節</a>。</li>
 <li><strong>建管類型</strong>：系統 → 管（快捷鍵 <code>PI</code>）→ 編輯類型 → 複製。名稱寫用途加材質加廠牌，例如 <code>排水管_PVC_廠牌A</code>、<code>給水管_不鏽鋼_廠牌A</code>。識別資料（Identity Data）填「製造商」「模型」，明細表才看得到廠牌。</li>
 <li><strong>佈線偏好</strong>：同一個類型性質視窗 → 佈線偏好 → 編輯。管區段選第 1 步的區段。彎頭、優先接頭類型、T 形接頭、交叉、轉接頭選第 2 步的配件。之後畫管，轉彎和分歧會自動用這些配件。</li>
-<li><strong>用管系統類型分用途</strong>：專案瀏覽器 → 族 → 管系統，複製家用冷水、家用熱水或衛生設備系統，改成給水、排水、消防。顏色與縮寫設在這裡。簡寫對照見<a href="#mep-org">機電系統分工</a>。視圖上色用篩選，見 <a href="#step8">Step 8</a>。</li>
+<li><strong>用管系統類型分用途</strong>：專案瀏覽器 → 族群 → 管系統（有的畫面寫配管系統），複製家用冷水、家用熱水或衛生設備系統再更名，不要改掉樣板原本那一份。給排水常用 SP 污水、WP 廢水、VP 通氣、CW 冷水、HW 熱水。顏色與縮寫設在這裡。簡寫對照見<a href="#mep-org">機電系統分工</a>。視圖上色用篩選，見 <a href="#step8">Step 8</a>。</li>
 </ol>
-<p>每一種管（給水不鏽鋼、排水 PVC、灑水）重複第 1 到第 4 步，各建一個管類型。設完之後另存為自己的樣板（.rte），下一案不用重做。也可以在專案瀏覽器對管類型按右鍵「複製到剪貼簿」，到樣板檔貼上。</p>
+<h3>系統顏色怎麼設</h3>
+<p>編輯該系統類型，做兩件事：圖形取代（Graphic Overrides）改線色；材料（Material）新建同名材質，著色（Shading）用同一個顏色。建議：CW 藍、HW 紅、SP 橘、WP 紫、VP 青。視圖篩選的顏色可以再覆蓋這一層，所以出圖視圖要確認最後看到的是哪一條規則。</p>
+<p>詳細等級（Detail Level）設成細緻（Fine）才看得到雙線。粗略（Coarse；講義若寫「粗糙」就是這個）時管是單線。表面色要搭配視覺型式為塗彩或一致色彩。</p>
+<h3>一種系統一個管類型</h3>
+<p>複製管類型時，名稱寫材質加系統，例如 <code>PVC-SP</code>。這是材質與系統的簡寫，不是廠牌，也不要寫成某一家的商品名。佈線偏好裡指定：</p>
+<ul>
+<li>區段與大小：新建該材質的管段，填材料、規格、尺寸表。</li>
+<li>配件：彎頭、T 接頭、斜 T、大小頭（轉接頭）、存水彎、清潔口、樓板接頭。對話框列名以畫面為準，常見是彎頭、優先接頭類型、T 形接頭、交叉、轉接頭。</li>
+</ul>
+<p>每一種管（給水不鏽鋼、排水 PVC、灑水）重複管區段、配件、管類型、佈線偏好，各建一個管類型。設完之後另存為自己的樣板（.rte），下一案不用重做。也可以在專案瀏覽器對管類型按右鍵「複製到剪貼簿」，到樣板檔貼上。</p>
 <div class="warn">材料建議新建，不要直接複製舊材料再改顏色，否則著色有時改不動。系統顏色要在詳細等級為細緻、視覺型式為塗彩時才看得清楚；粗略時管是單線。</div>
 <h3>畫的時候會用到的點法</h3>
 <ul>
@@ -1014,14 +1117,125 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li><strong>斜管上開斜 T</strong>：從管往高點方向拉，按一下空白鍵再點下一點。空白鍵在這裡是繼承高程和尺寸。高差很大又沒按，配件可能生不出來。不順時改到剖面，用「建立類似」沿著管畫。</li>
 <li><strong>兩管相接</strong>：修改 → 修剪/延伸（Trim/Extend，快捷鍵 <code>TR</code>）。「建立類似」的連接方法可選「加入垂直」（中間多一個彎頭）或「變更斜度」（拉成一直線）。選兩段以上的管，關聯頁籤會出現佈線解決方案（Routing Solutions），挑一種再按完成。</li>
 <li><strong>換配件</strong>：彎頭上的加號可換成 T。性質勾「限制至佈線偏好」，才會用類型裡指定的那一個。開放端要清潔口時，選配件後用加蓋開放端（Cap Open Ends），再把清潔口拖到看得到的位置。拖接頭有時會把元件拆開，之後管子移動，清潔口不一定跟著走。</li>
-<li><strong>從設備接出來</strong>：衛浴裝置、機械設備上的接頭按右鍵 → 繪製管。比對著管線位置猜，較不容易接錯系統。</li>
+<li><strong>從設備接出來</strong>：衛浴裝置、機械設備上的接頭按右鍵 → 繪製管。比對著管線位置猜，較不容易接錯系統。2025 說明文件的品類名是衛工裝置（Plumbing Fixtures），和這裡的衛浴裝置是同一個。</li>
+<li>立管、斜 T、配件控點、排水對 CAD 的完整畫法見<a href="#pipe-draw">管段繪製技巧</a>。</li>
 </ul>
 <p class="verdict"><strong>驗收</strong>：畫一段該類型的管，轉彎自動出現指定配件；性質面板的系統類型、製造商與模型填得進去；換一個標準的管徑時，清單裡有你新建的尺寸。</p>
 </section>
 
+<section id="pipe-draw" class="section">
+<h2><span class="eyebrow">管路</span>管段繪製技巧</h2>
+<p>管類型和佈線偏好先在<a href="#pipe-setup">管路設定</a>做好。這一節是畫的時候會卡住的幾種接法。指令在系統 → 衛工與配管 → 管（Pipe），快捷鍵 <code>PI</code>。</p>
+<h3>立管</h3>
+<ol>
+<li>選項列先填起點高程，在平面點一下位置。</li>
+<li>把終點高程改成要到的高度。</li>
+<li>「套用」按兩次，游標回到繪圖區，立管才生成。</li>
+</ol>
+<p>只改高程、沒按套用，平面上往往還是一個點。</p>
+<h3>斜管上開斜 T</h3>
+<ol>
+<li>選到既有管 → 建立類似（Create Similar；有的畫面寫「建立類似的」）。</li>
+<li>點在管邊，往高的那一端、大約 45° 拉出去。</li>
+<li>按一下空白鍵再點第二點。空白鍵在這裡是繼承高程和管徑。</li>
+</ol>
+<p class="warn">高差很大又沒按空白鍵，配件常常生不出來。不順就先在平面畫一條 45° 的參考，改到剖面視圖，用建立類似沿著管畫帶仰角的斜 T。</p>
+<h3>配件上的控點</h3>
+<ul>
+<li>彎頭上的「＋」可以把彎頭換成 T。</li>
+<li>迴轉、翻轉符號用來轉配件方向，比整段重畫快。</li>
+<li>性質勾「限制至佈線偏好」時，換上去的才是類型裡指定的那一個配件。</li>
+</ul>
+<h3>兩段管怎麼接</h3>
+<ul>
+<li>修改 → 修剪/延伸（Trim/Extend，快捷鍵 <code>TR</code>）。</li>
+<li>建立類似的連接方法：「加入垂直」會在中間多一個彎頭；「變更斜度」是拉成一直線對接。</li>
+<li>選兩段以上的管，修改頁籤會出現佈線解決方案（Routing Solutions；講義若寫「佈線解法」就是這個）。挑一種再按完成。</li>
+</ul>
+<h3>衛工裝置</h3>
+<ol>
+<li>插入 → 載入族群（Load Family），載入臉盆、馬桶。</li>
+<li>系統 → 衛工裝置（Plumbing Fixtures；本站較早章節寫衛浴裝置）放置。空白鍵旋轉。</li>
+<li>設備接點按右鍵 → 繪製管。不要對著圖面猜接點。</li>
+</ol>
+<h3>依 CAD 畫排水</h3>
+<ol>
+<li>插入 → 連結 CAD，勾「僅目前視圖」，用對齊（Align，快捷鍵 <code>AL</code>）對到柱或牆，再釘選。用連結，不要用匯入，見 <a href="#step2">Step 2</a>。</li>
+<li>視覺型式改成線框（Wireframe；講義若寫「線架構」就是這個），底圖才不會被樓板蓋住。</li>
+<li>到剖面畫馬桶排水與污水水平管。水平管要設坡度，斜度開在選項列。</li>
+</ol>
+<p class="verdict"><strong>驗收</strong>：一段立管、一處斜 T、一處兩管相接都接得上指定配件；衛工裝置是從接點拉管，系統類型不是猜的。</p>
+</section>
+
+<section id="family" class="section">
+<h2><span class="eyebrow">族群</span>族群製作</h2>
+<p>能用現成可載入族群就不要重做。要自己做時，先選對族群樣板（.rft），再定品類。品類選錯，以後載入專案不會出現在對的指令底下，標籤和明細表也對不上。</p>
+<h3>樣板怎麼選</h3>
+<ul>
+<li>門：公制門。</li>
+<li>要貼在牆面、樓板或天花板上：公制面型通用模型。</li>
+<li>一時判斷不了：公制通用模型，進編輯器後再設族群品類與參數（Family Category and Parameters）。</li>
+</ul>
+<h3>參考與原點</h3>
+<p>參考平面（Reference Plane）用來鎖尺寸，參數標在參考平面之間，幾何再鎖到參考平面上。參考線（Reference Line）多半用來做角度。原點不對時，改參考平面的「定義原點」，載進專案才不會偏一截。</p>
+<h3>管配件（以斜 T 為例）</h3>
+<ol>
+<li>依型錄做 CSV 尺寸表。欄位例：標稱直徑、角度、外徑、承口長度、中心到端距離、厚度。這是尺寸表，不是某一家的商品檔名。</li>
+<li>用掃掠（Sweep）做承口和直管段。外形要挖掉的地方用空心掃掠。</li>
+<li>放管連接件（Pipe Connector；講義有時寫管接點）。系統分類、流向、直徑要綁到參數，否則接到專案裡的管會配不上系統。</li>
+</ol>
+<p>查找表要和 .rfa 放在一起。不要去改安裝目錄裡的查找表，見<a href="#permissions">第九節</a>。</p>
+<h3>標籤族群</h3>
+<p>上行管、下行管可以各做一個標籤族群，或在同一個標籤裡用可見性切換。電纜架標籤的載入與問號處理見<a href="#tags">第七節</a>。</p>
+<h3>族群庫可以按用途分資料夾</h3>
+<p>只記類別，不記某一包庫的路徑：給水、排水、消防水另件、泡沫、消防箱、燈具、空調、衛工裝置；電氣設備、動力、照明、緊急照明、開關、插座、廣播喇叭、弱電、感知器、火警、電信與資訊插座、撒水頭、污排水、氣體、專用設備。載入時仍走插入 → 載入族群。</p>
+<p class="verdict"><strong>驗收</strong>：族群品類正確，載入後出現在預期的指令裡；改一個尺寸參數，幾何和連接件一起變。</p>
+</section>
+
+<section id="sheets" class="section">
+<h2><span class="eyebrow">出圖</span>圖紙與出圖</h2>
+<p>出圖視圖不要拿來試畫。工作視圖、協調視圖、出圖視圖分開，見 <a href="#step5">Step 5</a>。</p>
+<h3>圖框上要有的欄位</h3>
+<ul>
+<li>單位名稱與標誌、專案名稱</li>
+<li>製圖依據、相關人員</li>
+<li>圖紙名稱、圖紙號碼、發布日期、比例</li>
+</ul>
+<p>這些字綁專案資訊（Project Information）或圖紙上的標籤，不要每一張手動打。實際單位名稱用本案自己的，公開教材不寫特定機構。</p>
+<h3>從設定到出圖的順序</h3>
+<ol>
+<li>文字設定：字型、大小先在樣板裡定好。</li>
+<li>圖紙修訂明細表（Revision Schedule）：改版紀錄放圖框，不要寫在圖面上。</li>
+<li>新建出圖用的視圖，和草稿視圖分開。</li>
+<li>視圖篩選（Filters）與視圖樣板（View Templates）：這一張要看哪些系統、什麼顏色，鎖在樣板裡。見 Step 7、<a href="#step8">Step 8</a>。</li>
+<li>管徑標籤：標註 → 依品類建立標籤。</li>
+<li>定點高程（Spot Elevation）：排水與橋架要標底部高程時用這個，可選相對於樓層。</li>
+<li>需要的剖面、3D 視圖做好，再拖進圖紙。</li>
+<li>填專案資訊，最後出圖。</li>
+</ol>
+<h3>明細表</h3>
+<p>視圖 → 明細表/數量（Schedule/Quantities）。管配件至少放族群與類型、系統類型、大小、數量；排序後取消「列出每個執行個體」，才是匯總。電纜架明細表見 <a href="#step11">Step 11</a>。</p>
+<p class="verdict"><strong>驗收</strong>：圖紙標題來自專案資訊與圖紙參數；同一張視圖樣板套到另一張平面，顏色和可見性一致。</p>
+</section>
+
+<section id="arch-model" class="section">
+<h2><span class="eyebrow">建築</span>建築建模基礎</h2>
+<p>機電要會看建築模型，才知道梁、板、牆、門窗會不會擋管。自己練習建築順序時照下面走；正式案的建築通常是連結進來的，不要在機電檔裡重畫一套，見 <a href="#step2">Step 2</a>。</p>
+<ol>
+<li>專案單位、樓層。見 <a href="#step1">Step 1</a>、<a href="#step4">Step 4</a>。</li>
+<li>網格（Grid）。</li>
+<li>結構柱：載入族群、編輯類型、複製出這一案的斷面。</li>
+<li>結構梁。</li>
+<li>結構樓板：畫完輪廓要按「完成編輯模式」。</li>
+<li>牆、門窗、樓梯、屋頂、地形。</li>
+<li>需要表現時再放相機（Camera）與彩現（Rendering）。協調衝突不必彩現。</li>
+</ol>
+<p>框選了一堆東西、只想留某一種品類時，用修改頁籤的篩選（Filter）。這和視圖裡用來上色的篩選（Filters，見 <a href="#step8">Step 8</a>）不是同一個對話框：一個是暫時挑選取，一個是視圖規則。</p>
+</section>
+
 <section id="mep-model" class="section">
 <h2><span class="eyebrow">延伸</span>機電建模重點</h2>
-<p>這一節把給排水、消防、電氣、空調裡，和電纜架案會碰到的動作收成重點。連結、視圖範圍、篩選、干涉、明細表的做法已寫在起手式，這裡只補系統本身。練習檔裡的視圖名稱與盤名不要照抄，用自己專案的樓層平面和設備名稱。</p>
+<p>這一節把給排水、消防、電氣、空調裡，和電纜架案會碰到的動作收成重點。連結、視圖範圍、篩選、干涉、明細表的做法已寫在起手式，這裡只補系統本身。法規、試壓、品管與介面見側欄「機電實務與品管」，不在這裡重講。練習檔裡的視圖名稱與盤名不要照抄，用自己專案的樓層平面和設備名稱。</p>
 <h3>給排水</h3>
 <ol>
 <li>給排水專案用給排水樣板新建。電氣專案仍用電氣樣板，水管是連結進來的背景時不必改樣板。</li>
@@ -1050,6 +1264,249 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <h3>空調</h3>
 <p>新建空調模型用機械樣板。風管系統從供氣複製成送風 SA、外氣 OA，從回氣複製成 RA，從排氣複製成 EA，顏色分開。放置用系統 → 機械設備（Mechanical Equipment）、風口（Air Terminal）。右鍵風管接頭 → 繪製風管（Duct）；軟管接頭 → 繪製軟風管（Flex Duct）。本站不展開風管配件。協調電纜架時，把風管留在 3D 協調視圖裡一起做干涉檢查即可，見 <a href="#step12">Step 12</a>。</p>
 <p class="note">給排水、電氣、空調的底圖仍用插入 → 連結 CAD，勾「僅目前視圖」，對齊後釘選。用連結，更新才跟得上。差異表見 Step 2。</p>
+</section>
+
+<section id="materials" class="section">
+<h2><span class="eyebrow">品管</span>管材、線材與設備</h2>
+<p>模型裡的管類型名稱要和現場用的材質一致，明細表才對得上採購。下面是常見分類，不是指定廠牌。尺寸與壓力等級以該案圖說和 CNS 為準。電管怎麼把尺寸加進 Revit，見<a href="#conduit-size">電管尺寸</a>；水管見<a href="#pipe-setup">管路設定</a>。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>系統</th><th>常見管材</th></tr></thead>
+<tbody>
+<tr><td>電氣、弱電、消防電</td><td>PVC E 管、EMT、RSG、戶外 HDPE。電氣另有電纜架、線槽</td></tr>
+<tr><td>給水</td><td>PVC W 管、不鏽鋼管、銅管</td></tr>
+<tr><td>排水</td><td>PVC A／B／O 管、鑄鐵管</td></tr>
+<tr><td>消防水</td><td>GIP，依壓力選 CNS 6445 或 CNS 4626；另有不鏽鋼管</td></tr>
+<tr><td>空調水</td><td>PVC B、GIP、不鏽鋼、銅管</td></tr>
+</tbody>
+</table>
+</div>
+<h3>線材</h3>
+<ul>
+<li><strong>電力</strong>：PVC 電線與電纜、XLPE、匯流排。</li>
+<li><strong>控制</strong>：控制線。SCADA 的控制迴路走這一類，和動力電纜分開。</li>
+<li><strong>訊號</strong>：CAT6、光纖、電信電纜、同軸。</li>
+</ul>
+<p>線材要符合 CNS。配線完成後依《用戶用電設備裝置規則》做接地、絕緣與耐壓測試。測試報告是現場的事，模型負責把路徑、管徑和系統分對。</p>
+</section>
+
+<section id="electrical" class="section">
+<h2><span class="eyebrow">品管</span>電氣與緊急供電</h2>
+<p>迴路、配電盤、電管怎麼在 Revit 裡接，見<a href="#mep-model">機電建模重點</a>。這一節是送審和現場會查的項目。</p>
+<h3>品管要盯的設備</h3>
+<p>接地、電線電纜、電表箱、斷路器、漏電斷路器、配電盤、分電箱、開關插座與接線盒、照明、發電機、過電流電驛。模型裡至少要放得進正確的房間、留得出檢修距離，並掛在對的系統。</p>
+<h3>變壓器環境</h3>
+<p>模鑄式與油浸式常見條件：周圍溫度 40℃ 以下、海拔 1000 m 以下。外箱防護：屋內約 IP00–IP20，屋外約 IP23 或 IP33。超出這個範圍要在圖說另訂，不要沿用預設規格。</p>
+<h3>和土建有關的施工要領</h3>
+<ul>
+<li>穿外牆的配管要做止水。</li>
+<li>管路穿樑、樓板、柱、牆，位置要先和結構核對，避免現場開孔。</li>
+<li>配電箱四周的混凝土要澆得實，箱體太寬會灌不進去，見<a href="#defects">常見施工缺失</a>。</li>
+<li>機房、電信室的位置、門寬、通風要在建築圖就留好，見<a href="#mep-iface">介面整合</a>。</li>
+</ul>
+<h3>緊急供電</h3>
+<ul>
+<li><strong>柴油發電機</strong>：引擎、控制盤、消音箱、排煙淨化、自動充電機。排風路徑要獨立，不要和一般空調混用。</li>
+<li><strong>不斷電系統（UPS）</strong>：離線式、在線式，依負載性質選。緊急照明、消防、監控、資料設備要在圖上分得開由誰供電。</li>
+</ul>
+<p>緊急電梯的電源見<a href="#elevator">電梯</a>。</p>
+</section>
+
+<section id="elv" class="section">
+<h2><span class="eyebrow">SCADA</span>弱電與中央監控</h2>
+<p>本站的電纜架主線就落在這裡：中央監控和 SCADA 的路由，不要和動力電纜架混在同一個系統類型裡。</p>
+<h3>範圍</h3>
+<p>電信、共同天線、電視對講、中央監視（CCTV）、中央監控、網路，以及其他弱電。每一類在 Revit 用自己的系統類型和篩選顏色，見 <a href="#step8">Step 8</a>、<a href="#step9">Step 9</a>。</p>
+<h3>配管注意</h3>
+<ul>
+<li>電信線路和其他管線保持安全距離。距離以該案圖說與相關規則為準，模型裡用干涉檢查先抓明顯貼在一起的地方，見 <a href="#step12">Step 12</a>。</li>
+<li>同軸電纜的配管，管內斷面積宜為電纜斷面積的 4 倍以上。</li>
+<li>配管長度超過 25 m，設中繼箱。</li>
+</ul>
+<h3>機房</h3>
+<p>中央監控室、電話機房建議做高架地板，配線才走得進去，並且要有空調。模型裡把進入機房的橋架路徑留出來，不要在門口斷掉。</p>
+<p class="verdict"><strong>驗收</strong>：弱電電纜架和電力電纜架是不同類型、不同篩選顏色；3D 協調視圖看得到監控室的進線路徑。</p>
+</section>
+
+<section id="plumbing-qc" class="section">
+<h2><span class="eyebrow">品管</span>給排水衛生</h2>
+<p>管怎麼畫見<a href="#pipe-setup">管路設定</a>與<a href="#pipe-draw">管段繪製技巧</a>。設備與立管見<a href="#mep-model">機電建模重點</a>。這裡是法規、試壓和審圖時會被退的點。</p>
+<h3>常引用的規定</h3>
+<ul>
+<li>《建築技術規則》建築設備編</li>
+<li>《自來水法》與用戶用水設備標準</li>
+<li>《下水道法》與用戶排水設備標準</li>
+<li>相關 CNS：鑄鐵管、延性鑄鐵管、鋼管壓力等級等</li>
+</ul>
+<p>條文以公布版本為準。模型與圖說的管徑、坡度、通氣要對得上這些規定，而不是只對得上 Revit 預設。</p>
+<h3>施工與試驗</h3>
+<ul>
+<li>管路安裝、保溫、泵浦、衛生器具，圖上要標得出位置與檢修空間。</li>
+<li>給水試壓常見約 0.6–0.8 MPa、穩壓約 20–30 分鐘，壓降不得超出該案規定，接頭不得滲漏。數字以契約與圖說為準。</li>
+<li>排水做通水試驗或灌水試驗。</li>
+</ul>
+<h3>審圖容易退的地方</h3>
+<ul>
+<li>馬桶排水口不要落在樑上方。</li>
+<li>蹲式馬桶處，地板墊高 25 cm 以上。</li>
+<li>雨水系統和廢水系統不要接在一起。</li>
+<li>蓄水池、污廢水池、消防水池、水塔要標容量和人孔位置。</li>
+</ul>
+</section>
+
+<section id="fire" class="section">
+<h2><span class="eyebrow">品管</span>消防</h2>
+<p>灑水頭與配管在 Revit 裡的放法見<a href="#mep-model">機電建模重點</a>。這一節是觀念和介面上要一起看的東西。</p>
+<h3>兩種防火</h3>
+<ul>
+<li><strong>被動式</strong>：防火區劃、防火時效、耐燃等級。靠構造把火擋在區劃裡。</li>
+<li><strong>主動式</strong>：警報、滅火、排煙、廣播。靠設備動作。</li>
+</ul>
+<p>法定消防安全設備和非法定（業主要求）要在圖說分開，避免把業主追加的系統當成法定數量。</p>
+<h3>區劃上的構造</h3>
+<p>防火牆、防火樓板、防火門窗、防火捲門、防火閘門、防火玻璃。防火門不得上鎖、不得裝門止，單扇面積一般不大於 3 m²。模型裡的門若畫成上鎖或開不出來，審圖和現場都會出問題。</p>
+<h3>設備</h3>
+<p>火警自動警報、手動報警、緊急廣播、瓦斯漏氣警報；逃生與避難設備；滅火設備（消防栓、撒水、泡沫等）。警報和廣播走電，見<a href="#elv">弱電</a>與<a href="#electrical">電氣</a>；水系統走管。</p>
+<ul>
+<li>垂直管道間要設偵煙探測器。</li>
+<li>管線穿越防火區劃要做防火填塞。3D 裡先把貫穿點標出來，才不會完工才發現沒留。</li>
+</ul>
+</section>
+
+<section id="hvac" class="section">
+<h2><span class="eyebrow">品管</span>空調</h2>
+<p>風管系統在 Revit 裡從供氣、回氣、排氣複製，見<a href="#mep-model">機電建模重點</a>。和電纜架搶梁下淨高時，放進 <a href="#step12">Step 12</a> 的協調視圖一起做干涉。</p>
+<h3>水側</h3>
+<ul>
+<li>開放迴路和密閉迴路不要混用同一套膨脹與補水。</li>
+<li>一次與二次冰水循環、儲冰式系統，泵浦和分流點要在系統圖上看得懂，模型裡的設備名稱跟系統圖一致。</li>
+<li>變冷媒流量（VRF）和分離式冷氣的冷媒配管，路徑、立管位置、室外機平台要先和建築對過。</li>
+<li>保溫與保冷厚度依管徑和流體溫度計算，數值以該案規範為準，不要只套一個全域厚度。</li>
+<li>碳鋼管的接合方式（焊接、溝槽、螺紋）寫在管類型或備註裡，明細表才分得開。</li>
+</ul>
+<h3>氣側</h3>
+<ul>
+<li>矩形風管、圓形風管的規格分開建類型。</li>
+<li>矩形要能換算等效圓管，並控制縱橫比。太扁的風管壓損大，也比較容易和橋架搶高度。</li>
+<li>風速和壓損要在設計允許範圍內。模型先把尺寸和路徑建對，計算書另附。</li>
+</ul>
+<h3>試車、調整與平衡</h3>
+<p>試車、調整與平衡（Testing, Adjusting, and Balancing，TAB）是完工前把風量、水量調到設計值。模型若沒有風口編號、設計風量和系統名稱，現場無法對表。這些欄位用專案參數或共用參數，做法同 <a href="#step10">Step 10</a>。</p>
+</section>
+
+<section id="elevator" class="section">
+<h2><span class="eyebrow">介面</span>電梯</h2>
+<h3>怎麼分類</h3>
+<ul>
+<li><strong>用途</strong>：載人、載貨、病床、汽車、送菜。</li>
+<li><strong>速度</strong>：低速、中速、高速，依行程與建築種類。</li>
+<li><strong>機房</strong>：有機房、無機房。無機房的設備在井道上方，頂層淨高和吊裝口要先留。</li>
+<li><strong>驅動</strong>：牽引式、油壓式等，機坑深度和機房荷重不同。</li>
+</ul>
+<p>Revit 裡電梯多半在建築模型。機電要連結進來檢查，不要在電氣檔重做一台，見 <a href="#step2">Step 2</a>。</p>
+<h3>介面常出錯的地方</h3>
+<ul>
+<li>機坑牆裡埋了水管。</li>
+<li>機房沒有通風或空調。</li>
+<li>機坑滲水，排水沒有接出去。</li>
+<li>地樑凸進機坑。</li>
+<li>緊急電梯沒有接上緊急電源。電源從哪一台發電機或哪一段匯流排來，見<a href="#electrical">電氣與緊急供電</a>。</li>
+</ul>
+</section>
+
+<section id="mep-iface" class="section">
+<h2><span class="eyebrow">介面</span>建築與機電介面整合</h2>
+<p>介面問題不是畫完再改。地下室、樓板、天花板、管道間在建築還能改的時候就對一次。對的工具是連結模型加干涉檢查，見 Step 2、<a href="#step12">Step 12</a>。</p>
+<h3>地下室機房</h3>
+<ul>
+<li>配電室牆厚：鋼筋混凝土約 12 cm，或 1B 雙磚。以該案結構圖為準。</li>
+<li>配電室上方不要有明管通過。</li>
+<li>接地要預埋。</li>
+<li>配電盤基礎與預埋螺栓的位置、機房預留開口和通風，在結構與建築圖就標出來。</li>
+<li>發電機房的排風獨立，見<a href="#electrical">電氣</a>。</li>
+<li>蓄水池和泵浦要留得進設備、留得了檢修通道。</li>
+</ul>
+<h3>樓板與天花板</h3>
+<ul>
+<li>樓板：預埋地板插座、資訊出線口、吊掛螺栓。漏埋就是打石。</li>
+<li>天花板上方：給排水、冰水管、風管和電纜架需要的淨高，在設計階段用剖面量，不要等輕鋼架做好才發現塞不下。</li>
+</ul>
+<h3>管道間與屋頂</h3>
+<ul>
+<li>垂直管道間截面積要夠，檢修口的位置和尺寸要開在走得到的地方。</li>
+<li>屋頂航空警示燈的電源要拉到，不要只有燈座沒有迴路。</li>
+</ul>
+</section>
+
+<section id="review" class="section">
+<h2><span class="eyebrow">審查</span>設計圖說審查</h2>
+<p>機水電圖說審查先看方向，再逐張對。模型是用來檢查「圖上寫的在空間裡成不成立」，不是取代圖說。</p>
+<h3>七個面向</h3>
+<ul>
+<li>預算合理性</li>
+<li>適法性</li>
+<li>需求符合度</li>
+<li>介面整合，見<a href="#mep-iface">上一節</a></li>
+<li>施工安全</li>
+<li>維護便利（檢修口、盤前空間、閥件能否操作）</li>
+<li>綠建築</li>
+</ul>
+<h3>應備的圖</h3>
+<ul>
+<li>基地配置與高程</li>
+<li>各樓層平面</li>
+<li>地下室機房：配電室、電信室、發電機房、消防與空調機房</li>
+<li>電表箱位置</li>
+<li>各水池、水塔</li>
+<li>天花板高度平面</li>
+<li>排風與排煙口</li>
+<li>管道間與檢修口</li>
+<li>天花板上管線所需高度（剖面或 3D）</li>
+<li>污水處理設施</li>
+</ul>
+<p class="note">公開網站不放實際圖號、檔名或基地名稱。審查時用本案自己的圖說清單對，缺一張就先補，再談模型精緻度。</p>
+</section>
+
+<section id="defects" class="section">
+<h2><span class="eyebrow">缺失</span>常見施工缺失</h2>
+<p>下面這幾種，共同原因多半是施工前沒有套圖。Revit 能先做的是碰撞、淨空和開門範圍，不是取代現場品管。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>現場看到的</th><th>模型裡先查什麼</th></tr></thead>
+<tbody>
+<tr><td>分電箱太寬，混凝土灌不實，鋼筋外露</td><td>箱體寬度對牆厚；箱後、箱側留澆置空間</td></tr>
+<tr><td>窗簾軌道鎖在燈具上；樓層指示燈和出線口距離過遠</td><td>天花板平面把燈、軌道、弱電出線放在同一張視圖</td></tr>
+<tr><td>分電箱門打不開到 90°，被空調設備擋住</td><td>裝置開門範圍用實體或淨空族，和室內機、風管做干涉</td></tr>
+<tr><td>隔間牆放樣錯，預留管路全部偏移</td><td>牆要連結最新建築；管路鎖在牆上的面，不要只鎖座標</td></tr>
+</tbody>
+</table>
+</div>
+<p>做法：建築、結構、機電連結在同一個座標，見 Step 2、Step 3；用<a href="#step12">3D 協調視圖</a>與干涉檢查看碰撞；檢修與開門空間要建成看得到的範圍，而不是只在備註寫「現場調整」。</p>
+</section>
+
+<section id="site-terms" class="section">
+<h2><span class="eyebrow">對照</span>工地用語對照</h2>
+<p>現場口語很多來自台語或日語外來語。圖說、模型參數、明細表仍用左欄的正式說法。聽到右欄時，先對回正式用語再改模型。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>正式用語</th><th>現場常聽到</th></tr></thead>
+<tbody>
+<tr><td>天端（物體頂端）</td><td>掭麻</td></tr>
+<tr><td>閥（valve）</td><td>肉魯姆</td></tr>
+<tr><td>不鏽鋼</td><td>斯電雷斯</td></tr>
+<tr><td>預留間隙</td><td>阿縮比</td></tr>
+<tr><td>樑</td><td>哈利</td></tr>
+<tr><td>樓板（slab）</td><td>速拉不</td></tr>
+<tr><td>洩水坡度</td><td>叩敗</td></tr>
+<tr><td>錨定長度</td><td>按卡</td></tr>
+<tr><td>天花板</td><td>添ㄅㄨㄥˊ</td></tr>
+<tr><td>木合板</td><td>美麗亞</td></tr>
+<tr><td>矽利康</td><td>希利康</td></tr>
+<tr><td>公分</td><td>仙</td></tr>
+<tr><td>平方公尺</td><td>赫麥</td></tr>
+</tbody>
+</table>
+</div>
 </section>
 
 <section id="mapping" class="section">
@@ -1137,11 +1594,13 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <h2><span class="eyebrow">不擋操作</span>十、若畫面差一個字</h2>
 <p>下面幾項不影響照著做。畫面上的文字和這裡不同時，以 Revit 2025.5 繁體中文為準。</p>
 <ol>
-<li>公司樣板的檔名。這裡只寫「電氣樣板」，不猜安裝目錄裡的英文 .rte 檔名。</li>
+<li>公司樣板的檔名。這裡只寫「電氣樣板」「機械樣板」「配管樣板」「系統樣板」，不猜安裝目錄裡的英文 .rte 檔名。</li>
+<li>「族群」與較早章節的「族」、「衛工裝置」與「衛浴裝置」、「佈線解決方案」與講義裡的「佈線解法」、「粗略」與講義裡的「粗糙」：以 2025.5 繁中畫面為準，本站新章用說明文件的寫法，舊章保留已寫過的字。</li>
 <li>取得座標、發佈座標在協同合作頁籤上的面板名稱。本案連結用的是原點到原點，還沒按這兩個指令。</li>
 <li>明細表的高程欄位顯示「高程」或「中間高程」，以性質面板為準。</li>
 <li>電管「新大小」對話框的欄位若寫「大小」而不是「標稱尺寸」，以該對話框為準，仍填標稱、內徑、外徑、彎曲半徑。</li>
 <li>水管關聯頁籤上，加蓋開放端、佈線解決方案的按鈕文字若差一個字，以畫面上的為準。</li>
+<li>視覺型式「線框」若畫面上寫「線架構」，指的是同一個（Wireframe）。</li>
 </ol>
 <p>已經用 2025.5 繁中和 2026-10-16 教材確認過的：電纜架沒有佈線偏好；切割平面低於橋架或吊架時平面不顯示；視圖樣板鎖住可見性時 <code>VG</code> 是灰的，要改樣板裡的 V/G 取代。</p>
 </section>
@@ -1208,6 +1667,16 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     tocLinks.forEach(a=>{
       const txt = (a.textContent + ' ' + (a.getAttribute('data-keywords') || '')).toLowerCase();
       a.parentElement.style.display = (!q || txt.includes(q)) ? '' : 'none';
+    });
+    const items = Array.from(document.querySelectorAll('#toc > li'));
+    items.forEach((li, i)=>{
+      if(!li.classList.contains('toc-group')) return;
+      let visible = false;
+      for(let j = i + 1; j < items.length; j++){
+        if(items[j].classList.contains('toc-group')) break;
+        if(items[j].style.display !== 'none'){ visible = true; break; }
+      }
+      li.style.display = (!q || visible) ? '' : 'none';
     });
   });
 
