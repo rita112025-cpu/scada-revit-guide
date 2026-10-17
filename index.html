@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCADA / Cable Tray 專用 Revit 起手式指南</title>
-<meta name="description" content="新建或接手 Revit MEP／SCADA 專案後，正式繪製 Cable Tray 之前該做哪些設定與檢查的實務指南。">
+<title>行政中心 SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
+<meta name="description" content="行政中心 SCADA 電纜橋架系統的 Revit 2025.5 繁體中文建模指南：起手設定、電纜架繪製、梯型吊架、疑難排解、篩選上色與標籤。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -179,6 +179,27 @@ table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid
 @media(max-width:800px){ .two-col{grid-template-columns:1fr} .content{padding:28px 18px 100px} .page-header h1{font-size:38px} #sidebar{position:fixed; left:0; top:0; transform:translateX(-100%); transition:transform .25s; width:86%; max-width:360px; height:100dvh} #sidebar.open{transform:translateX(0)} .scrim{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:40; display:none} .scrim.open{display:block} }
 .nav-toggle{position:fixed; left:16px; bottom:20px; z-index:60; width:52px; height:52px; border-radius:999px; background:var(--text); color:var(--bg); border:none; display:none; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.25)}
 @media(max-width:800px){ .nav-toggle{display:flex} }
+.card{background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:20px 22px}
+.card h3{margin:0 0 10px; font-size:22px}
+.card ul{margin:8px 0 0; padding-left:1.2em}
+.section h3{font-size:22px; font-weight:800; margin:26px 0 8px}
+.check-static{list-style:none; padding-left:0; margin:8px 0}
+.check-static li{padding:3px 0 3px 1.6em; position:relative}
+.check-static li::before{content:"☐"; position:absolute; left:0; color:var(--text-faint)}
+dl.terms dt{font-weight:800; margin-top:10px}
+dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
+.quick10-list{counter-reset:q; list-style:none; padding:0; margin:0; display:grid; gap:8px}
+.quick10-list li{background:var(--bg-card); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:14px; padding:12px 14px 12px 48px; position:relative; counter-increment:q; font-weight:700}
+.quick10-list li::before{content:counter(q); position:absolute; left:16px; color:var(--accent); font-weight:900}
+.trouble-item{background:var(--bg-card); border:1px solid var(--border); border-radius:16px; margin:0 0 12px; box-shadow:var(--shadow)}
+.trouble-item summary{cursor:pointer; padding:14px 18px; font-weight:800; font-size:18px}
+.trouble-item .step-body{padding:0 18px 16px}
+.btn-reset{border:1px solid var(--border); background:var(--bg-card); color:var(--text); padding:8px 14px; border-radius:999px; font-weight:700; cursor:pointer}
+.checklist-progress{font-weight:800; color:var(--accent)}
+.kicker{display:inline-block; font-size:13px; font-weight:800; letter-spacing:.06em; color:var(--accent); margin-bottom:8px}
+.step-body li{margin:6px 0}
+.table-scroll{overflow-x:auto; margin:14px 0}
+.table-scroll table{margin:0}
 </style>
 </head>
 <body>
@@ -187,8 +208,8 @@ table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid
 <div class="layout">
 <nav id="sidebar">
   <div class="sidebar-header">
-    <p class="sidebar-title">SCADA Revit<br>起手式指南</p>
-    <p class="sidebar-version">Revit 2027 適用</p>
+    <p class="sidebar-title">SCADA 電纜架<br>Revit 入門</p>
+    <p class="sidebar-version">Revit 2025.5 繁中</p>
     <input id="tocSearch" placeholder="搜尋章節 / Step…" />
     <div class="toolbar-left" style="margin-bottom:8px">
       <button class="btn" id="fontMinus">A-</button>
@@ -198,29 +219,36 @@ table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid
     </div>
   </div>
   <ol class="toc" id="toc">
-    <li><a href="#start">0. 新建 or 接手判斷</a></li>
-    <li class="toc-group">一、標準起手式流程</li>
-    <li><a href="#step1">Step 1　Project Units</a></li>
-    <li><a href="#step2">Step 2　Link 模型</a></li>
-    <li><a href="#step3">Step 3　Shared Coordinates</a></li>
-    <li><a href="#step4">Step 4　Level / Grid</a></li>
-    <li><a href="#step5">Step 5　Working Views</a></li>
-    <li><a href="#step6">Step 6　View Range</a></li>
-    <li><a href="#step7">Step 7　View Template</a></li>
-    <li><a href="#step8">Step 8　View Filters</a></li>
-    <li><a href="#step9">Step 9　Cable Tray Types</a></li>
+    <li><a href="#start">0. 新建或接手判斷</a></li>
+    <li class="toc-group">一、標準起手式</li>
+    <li><a href="#step1">Step 1　專案單位</a></li>
+    <li><a href="#step2">Step 2　連結模型</a></li>
+    <li><a href="#step3">Step 3　共用座標</a></li>
+    <li><a href="#step4">Step 4　樓層與網格</a></li>
+    <li><a href="#step5">Step 5　工作視圖</a></li>
+    <li><a href="#step6">Step 6　視圖範圍</a></li>
+    <li><a href="#step7">Step 7　視圖樣板</a></li>
+    <li><a href="#step8">Step 8　篩選與上色</a></li>
+    <li><a href="#step9">Step 9　電纜架類型</a></li>
     <li><a href="#step10">Step 10　SCADA 參數</a></li>
-    <li><a href="#step11">Step 11　Cable Tray Schedule</a></li>
-    <li><a href="#step12">Step 12　3D Coordination View</a></li>
-    <li><a href="#step13">Step 13　QA View</a></li>
-    <li><a href="#step14">Step 14　Browser Organization</a></li>
-    <li><a href="#step15">Step 15　Worksharing</a></li>
-    <li><a href="#quick10">二、起手 10 步快速版</a></li>
-    <li><a href="#checklist">三、畫 Tray 前 Checklist</a></li>
-    <li><a href="#trouble">四、常見問題排查</a></li>
-    <li><a href="#mapping">五、Router ↔ Revit 欄位對應</a></li>
-    <li><a href="#permissions">六、公司電腦權限限制</a></li>
-    <li><a href="#verify">七、待實機驗證清單</a></li>
+    <li><a href="#step11">Step 11　明細表</a></li>
+    <li><a href="#step12">Step 12　3D 協調視圖</a></li>
+    <li><a href="#step13">Step 13　品質檢查視圖</a></li>
+    <li><a href="#step14">Step 14　瀏覽器組織</a></li>
+    <li><a href="#step15">Step 15　工作共用</a></li>
+    <li><a href="#quick10">二、起手 10 步</a></li>
+    <li><a href="#checklist">三、建模檢查清單</a></li>
+    <li class="toc-group">實作教材 2026-10-16</li>
+    <li><a href="#draw">四、電纜架繪製</a></li>
+    <li><a href="#hanger">五、梯型吊架</a></li>
+    <li><a href="#hanger-code">五、吊架間距法規</a></li>
+    <li><a href="#trouble">六、放了看不到</a></li>
+    <li><a href="#vg-locked">六、VG 被樣板鎖住</a></li>
+    <li><a href="#tags">七、電纜架標籤</a></li>
+    <li class="toc-group">資料與限制</li>
+    <li><a href="#mapping">八、路由欄位對應</a></li>
+    <li><a href="#permissions">九、公司電腦權限</a></li>
+    <li><a href="#verify">十、畫面再對一下</a></li>
   </ol>
   <div class="sidebar-footer">
     <a href="SCADA_REVIT_STARTUP_GUIDE.md">完整 Markdown 版 →</a><br>
@@ -231,452 +259,619 @@ table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid
 <div id="main">
 <main class="content">
 <header class="page-header">
-<h1>SCADA / Cable Tray 專用 Revit 起手式指南</h1>
-<p class="lede">新建或接手 Revit MEP／SCADA 專案後，<strong>正式繪製 Cable Tray、Conduit、SCADA 設備之前</strong>，應該先做哪些設定與檢查。每一步都說明「去哪裡按、要檢查什麼、完成標準是什麼」。</p>
+<h1>SCADA 電纜架<br>Revit 入門指南</h1>
+<p class="lede">行政中心 SCADA 電纜橋架系統。介面是 <strong>Revit 2025.5 繁體中文</strong>。正式畫電纜架（Cable Tray）、電管（Conduit）之前先把單位、連結、樓層、視圖設對；再依 2026-10-16 實作教材畫橋架、放吊架、上色、貼標籤。功能名稱第一次寫成「中文（English）」。</p>
 <div class="badge-row">
 <span class="badge badge-must">必做</span>
 <span class="badge badge-suggest">建議</span>
 <span class="badge badge-policy">視公司流程而定</span>
 </div>
-<p class="perm-banner">🔒 <strong>權限前提</strong>：假設使用者是公司電腦、僅一般使用者權限（無系統管理員權限）。全部必要流程只用 Revit 原生功能，不需要 UAC 提權、不需要修改系統設定，也不依賴 pyRevit、Dynamo、Navisworks Manage 等第三方工具（這些工具本身仍可能需要安裝與 IT 核准，只是不在必要流程之內）。詳見<a href="#permissions">「六、公司電腦權限限制」</a>。</p>
-<div class="toolbar">
-<div class="toolbar-left">
-<span style="font-size:13px; color:var(--text-faint)">大字好讀 · 導覽方便 · 瀏覽優先</span>
-</div>
-</div>
-<!-- BENTO NAV -->
+<p class="perm-banner">權限前提：公司電腦、一般使用者權限。必要流程只用 Revit 原生功能，不需要系統管理員、也不依賴 pyRevit、Dynamo、Navisworks Manage。詳見<a href="#permissions">「九、公司電腦權限」</a>。</p>
+<div class="note">教材對照：一、繪製 → <a href="#draw">第四節</a>；二、吊架 → <a href="#hanger">第五節</a>；三、看不到 → <a href="#trouble">第六節</a>；四、可見性被鎖住 → <a href="#vg-locked">VG 灰色</a>；五、間距 → <a href="#hanger-code">法規</a>；六、篩選上色 → <a href="#step8">Step 8</a>；七、標籤 → <a href="#tags">第七節</a>。和舊步驟重複的地方已合併，點法以教材為準。</div>
 <div class="bento">
 <div class="b-card b-span-8 orange">
-<div class="k">開始前判斷</div>
-<h3>0. 新建 or 接手判斷</h3>
-<p>不要一開啟 Revit 就畫 Tray。先判斷情境，兩種要檢查的東西完全不同。</p>
+<div class="k">開始前</div>
+<h3>0. 新建或接手</h3>
+<p>不要一開 Revit 就畫橋架。兩種情境要檢查的東西不一樣。</p>
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px">
-<div style="background:var(--bg-muted); padding:12px; border-radius:12px; font-size:14px"><strong>A. 新建</strong><br>Template、公司標準樣板、既有標準複製、Worksharing 判斷</div>
-<div style="background:var(--bg-muted); padding:12px; border-radius:12px; font-size:14px"><strong>B. 接手</strong><br>Link、Level、Grid、Shared Coordinates、View Template、Filter、Tray Type… 逐項檢查</div>
+<div style="background:var(--bg-muted); padding:12px; border-radius:12px; font-size:14px"><strong>A. 新建</strong><br>電氣樣板、公司樣板、傳遞專案標準、工作共用</div>
+<div style="background:var(--bg-muted); padding:12px; border-radius:12px; font-size:14px"><strong>B. 接手</strong><br>連結、樓層、網格、共用座標、視圖樣板、篩選、電纜架類型</div>
 </div>
 <div style="margin-top:12px"><a href="#start" class="btn btn-accent">前往判斷 →</a></div>
 </div>
 <div class="b-card b-span-4">
-<div class="k">專案資訊</div>
+<div class="k">這份指南</div>
 <div class="big">15</div>
-<p>標準起手 Steps</p>
-<div style="margin-top:12px; font-size:13px; color:var(--text-faint)">Revit 2027 適用<br>免管理員權限<br>適用於公司管控電腦或一般使用者權限環境</div>
+<p>起手步驟，加上繪製、吊架、標籤</p>
+<div style="margin-top:12px; font-size:13px; color:var(--text-faint)">Revit 2025.5 繁體中文<br>免管理員權限<br>教材日期 2026-10-16</div>
 </div>
-<div class="b-card b-span-2 orange"><div class="num">01</div><div class="k">必做</div><h3>Project Units</h3><a href="#step1">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">02</div><div class="k">必做</div><h3>Link 模型</h3><a href="#step2">查看 →</a></div>
-<div class="b-card b-span-2 orange"><div class="num">03</div><div class="k">必做</div><h3>Shared Coordinates</h3><p style="font-size:12px">先確認既有座標與 BIM 流程，Acquire/Publish 視流程而定</p><a href="#step3">查看 →</a></div>
-<div class="b-card b-span-3"><div class="num">04</div><div class="k">必做</div><h3>Level / Grid</h3><a href="#step4">查看 →</a></div>
-<div class="b-card b-span-3"><div class="num">05</div><div class="k">必做</div><h3>Working Views</h3><a href="#step5">查看 →</a></div>
-<div class="b-card b-span-3"><div class="num">06</div><div class="k">必做</div><h3>View Range</h3><p style="font-size:12px">Top / Cut / Bottom 是否涵蓋 Tray Elevation，Category 影響顯示需 2027 實機確認</p><a href="#step6">查看 →</a></div>
-<div class="b-card b-span-3"><div class="num">07</div><div class="k">建議</div><h3>View Template</h3><a href="#step7">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">08</div><div class="k">建議</div><h3>View Filters</h3><a href="#step8">查看 →</a></div>
-<div class="b-card b-span-2 orange"><div class="num">09</div><div class="k">必做</div><h3>Tray Types</h3><a href="#step9">查看 →</a></div>
-<div class="b-card b-span-4 orange"><div class="num">10</div><div class="k">視公司流程而定</div><h3>SCADA 參數</h3><p>SCADA_System / Route_ID / From / To / Area / Level / Drawing_No / Status / Remark。Project 與 Shared 都可用於 Schedule/Filter，Shared 重點是 GUID、跨專案共用、Tag、外部對應</p><a href="#step10">查看 →</a></div>
-<div class="b-card b-span-3"><div class="num">11</div><div class="k">建議</div><h3>Schedule</h3><a href="#step11">查看 →</a></div>
-<div class="b-card b-span-3"><div class="num">12</div><div class="k">必做(協調)</div><h3>3D Coordination</h3><a href="#step12">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">13</div><div class="k">建議</div><h3>QA View</h3><a href="#step13">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">14</div><div class="k">建議</div><h3>Browser Organization</h3><a href="#step14">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">15</div><div class="k">視流程而定</div><h3>Worksharing</h3><a href="#step15">查看 →</a></div>
+<div class="b-card b-span-3 orange"><div class="num">04</div><div class="k">實作</div><h3>電纜架繪製</h3><p>從連結建築畫到橋架</p><a href="#draw">查看 →</a></div>
+<div class="b-card b-span-3"><div class="num">05</div><div class="k">實作</div><h3>梯型吊架</h3><p>吊架(角鐵)，品類是風管附件</p><a href="#hanger">查看 →</a></div>
+<div class="b-card b-span-3"><div class="num">06</div><div class="k">排解</div><h3>放了看不到</h3><p>切割平面與可見性</p><a href="#trouble">查看 →</a></div>
+<div class="b-card b-span-3 orange"><div class="num">07</div><div class="k">實作</div><h3>電纜架標籤</h3><p>鑫亞標籤與問號</p><a href="#tags">查看 →</a></div>
+<div class="b-card b-span-2 orange"><div class="num">01</div><div class="k">必做</div><h3>專案單位</h3><a href="#step1">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">02</div><div class="k">必做</div><h3>連結模型</h3><a href="#step2">查看 →</a></div>
+<div class="b-card b-span-2 orange"><div class="num">03</div><div class="k">必做</div><h3>共用座標</h3><a href="#step3">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">04</div><div class="k">必做</div><h3>樓層網格</h3><a href="#step4">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">05</div><div class="k">必做</div><h3>工作視圖</h3><a href="#step5">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">06</div><div class="k">必做</div><h3>視圖範圍</h3><a href="#step6">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">07</div><div class="k">建議</div><h3>視圖樣板</h3><a href="#step7">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">08</div><div class="k">建議</div><h3>篩選上色</h3><a href="#step8">查看 →</a></div>
+<div class="b-card b-span-2 orange"><div class="num">09</div><div class="k">必做</div><h3>電纜架類型</h3><a href="#step9">查看 →</a></div>
+<div class="b-card b-span-4 orange"><div class="num">10</div><div class="k">視流程</div><h3>SCADA 參數</h3><p>Route_ID、Status 等。標籤與跨專案用共用參數。</p><a href="#step10">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">11</div><div class="k">建議</div><h3>明細表</h3><a href="#step11">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">12</div><div class="k">協調</div><h3>3D 協調</h3><a href="#step12">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">13</div><div class="k">建議</div><h3>品質檢查</h3><a href="#step13">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">14</div><div class="k">建議</div><h3>瀏覽器</h3><a href="#step14">查看 →</a></div>
+<div class="b-card b-span-2"><div class="num">15</div><div class="k">視流程</div><h3>工作共用</h3><a href="#step15">查看 →</a></div>
 </div>
 </header>
+
 <section id="start" class="section">
-
-      <h2>0. 開始前先判斷：新建專案，還是接手專案？</h2>
-      <p>不要一開啟 Revit 就開始畫 Tray。先判斷自己是哪一種情境。</p>
-
-      <div class="two-col">
-        <div class="card">
-          <h3>A. 新建 SCADA / MEP 專案 <span class="badge badge-must">必做：判斷</span></h3>
-          <ul>
-            <li>使用哪個 Template？公司是否有指定樣板檔？</li>
-            <li>是否有公司標準樣板？有的話優先使用。</li>
-            <li>是否有既有 MEP 專案可複製標準（Cable Tray Type、Filter、View Template）？</li>
-            <li>是否需要 Worksharing？（多人協作才需要，見 Step 15）</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>B. 接手既有 Revit 專案 <span class="badge badge-must">必做：逐項檢查</span></h3>
-          <ul class="check-static">
-            <li>Link 模型（建築／結構／機電，是否最新）</li>
-            <li>Level（標高是否與圖面一致）</li>
-            <li>Grid（軸網是否完整）</li>
-            <li>Shared Coordinates（模型是否對齊，見 Step 3）</li>
-            <li>View Template（既有命名規則）</li>
-            <li>View Filters（既有邏輯是否衝突）</li>
-            <li>Cable Tray Type（既有命名與設定）</li>
-            <li>Existing / New Phase</li>
-            <li>Worksets（自己被分配到哪一個）</li>
-            <li>Browser Organization</li>
-            <li>Existing Schedule（統計邏輯）</li>
-          </ul>
-          <p class="note">任何一項看起來怪怪的（模型對不齊、標高對不上），先跟專案負責人確認，<strong>不要自己猜著先畫</strong>。</p>
-        </div>
-      </div>
-    
+<h2><span class="eyebrow">開始之前</span>0. 新建專案，還是接手專案？</h2>
+<p>不要一開啟 Revit 就開始畫電纜架。先判斷情境。</p>
+<div class="two-col">
+<div class="card">
+<h3>A. 新建 SCADA／MEP 專案 <span class="badge badge-must">必做：判斷</span></h3>
+<ul>
+<li>本案用<strong>電氣樣板</strong>新建，單位公釐。公司若有指定樣板檔（.rte），優先用公司的。</li>
+<li>公司樣板裡通常已有電纜架類型、視圖樣板（View Template）和命名規則。</li>
+<li>沒有公司樣板時，用傳遞專案標準（Transfer Project Standards）從舊案子帶類型、篩選（Filters）、視圖樣板。路徑：管理 → 傳遞專案標準。</li>
+<li>只有自己一個人建模，先不要開工作共用（Worksharing）。多人再看 Step 15。</li>
+</ul>
+</div>
+<div class="card">
+<h3>B. 接手既有專案 <span class="badge badge-must">必做：逐項檢查</span></h3>
+<ul class="check-static">
+<li>連結模型（建築／結構／機電，是不是最新版）</li>
+<li>樓層（Level）標高是否與圖面一致</li>
+<li>網格（Grid）是否完整</li>
+<li>共用座標（Shared Coordinates），見 Step 3</li>
+<li>視圖樣板的命名規則</li>
+<li>篩選會不會跟新規則衝突</li>
+<li>電纜架類型是不是「含配件的電纜架」</li>
+<li>階段（Phase）：既有（Existing）／新建（New Construction）</li>
+<li>工作集（Worksets）分到哪一個</li>
+<li>瀏覽器組織（Browser Organization）</li>
+<li>既有明細表（Schedule）在統計什麼</li>
+</ul>
+<p class="note">模型對不齊或標高對不上時，先問專案負責人，不要猜著畫。畫完才發現座標錯，等於全部重接。</p>
+</div>
+</div>
 </section>
-<section id="step1" class="section"><div class="step-card"><div class="step-top"><div class="step-no">01</div><div class="step-title"><span class="step-no">Step 1</span> 確認 Project Units <span class="badge badge-must">必做</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：Cable Tray／Conduit 的寬度、高度、標高、偏移量、彎曲半徑全部依賴單位設定，單位錯，所有尺寸都可能錯。</p>
-          <p><strong>操作位置</strong>：<code>Manage → Settings → Project Units</code>（快捷鍵 <code>UN</code>）</p>
-          <p><strong>設定方式</strong>：Length = Millimeters；Area = Square Meters；Angle = Decimal Degrees。</p>
-          <p><strong>SCADA 注意事項</strong>：Width、Height、Elevation、Offset、Bend Radius、Conduit Size 都直接讀這裡的單位設定。</p>
-          <p><strong>常見錯誤</strong>：誤用英制樣板（Feet and Inches）；只改 Length 沒注意 Angle 單位。</p>
-          <p class="verdict"><strong>驗收條件</strong>：建立一段 300 mm 寬 Cable Tray，Properties 顯示尺寸與畫面量測一致。</p>
-        </div></div></section>
-<section id="step2" class="section"><div class="step-card"><div class="step-top"><div class="step-no">02</div><div class="step-title"><span class="step-no">Step 2</span> 檢查或 Link 建築／結構／機電模型 <span class="badge badge-must">必做</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：SCADA Cable Tray 必須以建築、結構模型為背景，才能判斷路由、避開梁柱、抓對高程。</p>
-          <p><strong>操作位置</strong>：<code>Insert → Link → Link Revit</code>；CAD 圖用 <code>Insert → Link → Link CAD</code></p>
-          <p><strong>設定方式</strong>：確認為最新版檔案；Positioning 建議 <code>Auto - By Shared Coordinates</code>；Link 後用 <code>Insert → Manage Links</code> 確認狀態為 Loaded。</p>
-          <p class="note">三者都是「把外部檔案放進目前模型」，差別在於是否保持獨立、能否更新。CAD 圖也應優先 <strong>Link CAD</strong>，不是只能 Import——Import 只在真的需要把 CAD 幾何變成本檔物件時才用。</p>
-          <table class="compare">
-            <thead><tr><th></th><th>Link Revit</th><th>Link CAD</th><th>Import CAD</th></tr></thead>
-            <tbody>
-              <tr><td>來源類型</td><td>.rvt</td><td>.dwg／.dxf</td><td>.dwg／.dxf</td></tr>
-              <tr><td>檔案關係</td><td>獨立檔案，可 Reload</td><td>獨立檔案，可 Reload</td><td>幾何被吃進本檔</td></tr>
-              <tr><td>更新方式</td><td>Manage Links → Reload</td><td>Manage Links → Reload</td><td>需重新 Import</td></tr>
-              <tr><td>檔案大小</td><td>較小</td><td>較小</td><td>直接增加本檔大小</td></tr>
-              <tr><td>適用情境</td><td>建築／結構／機電背景模型</td><td>只有 CAD 圖時的<strong>優先</strong>做法</td><td>需當本檔物件處理時（少用）</td></tr>
-            </tbody>
-          </table>
-          <p><strong>SCADA 注意事項</strong>：優先 Link（Revit 或 CAD 皆同），不要 Import；不要把所有來源檔案塞進同一模型；不要自己重畫建築模型，除非真的沒有來源。</p>
-          <p><strong>常見錯誤</strong>：Positioning 選錯導致座標對不上；Import CAD 沒放獨立 Workset 難以單獨關閉。</p>
-          <p class="verdict"><strong>驗收條件</strong>：Manage Links 中所有連結皆為 Loaded，平面圖可見建築牆柱與結構梁柱。</p>
-        </div></div></section>
-<section id="step3" class="section"><div class="step-card"><div class="step-top"><div class="step-no">03</div><div class="step-title"><span class="step-no">Step 3</span> 確認 Shared Coordinates / Position <span class="badge badge-must">必做</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：畫 Tray 前先確認模型「真的對齊」，不是看起來對。</p>
-          <p><strong>檢查樓層</strong>：1F、典型樓層、屋頂層、地下層。</p>
-          <p><strong>觀察重點</strong>：建築柱位、電梯、樓梯、機房、豎井、外牆線是否對得上。</p>
-          <p class="warn"><strong>若對不上：先停下來，不要開始畫 Tray。</strong></p>
-          <dl class="terms">
-            <dt>Internal Origin</dt><dd>Revit 檔案內部原點，通常不用管。</dd>
-            <dt>Project Base Point</dt><dd>這個專案自訂的「0,0,0」。</dd>
-            <dt>Survey Point</dt><dd>對應真實世界測量座標。</dd>
-            <dt>Shared Coordinates</dt><dd>讓多個 Revit 檔案彼此對齊的共用座標系統。</dd>
-          </dl>
-          <p><strong>常見錯誤</strong>：只看 3D 視圖覺得「有對到」就開始畫；忽略地下層／屋頂層最容易對不齊。</p>
-          <p class="verdict"><strong>驗收條件</strong>：至少 3 個樓層的柱網、電梯、豎井位置與其他 Link 模型疊合誤差在可接受範圍（容許值視公司 BIM 標準）。</p>
-        </div></div></section>
-<section id="step4" class="section"><div class="step-card"><div class="step-top"><div class="step-no">04</div><div class="step-title"><span class="step-no">Step 4</span> 確認 Level 與 Grid <span class="badge badge-must">必做</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：Cable Tray 高程完全依賴 Level + Offset／Elevation，Level 錯，整條 Tray 樓層歸屬就錯。</p>
-          <p>Link 模型中的 Level <strong>不等於</strong>自己模型的 Level，即使同名也是獨立元素。</p>
-          <p><strong>Copy/Monitor</strong>（<code>Collaborate → Copy/Monitor → Select Link</code>）：適合 Levels、Grids。需要跨團隊持續協調標高／軸網時使用。</p>
-          <div class="example-box">
-            <p>1F FFL = 0　　Tray Elevation = 2700 mm</p>
-            <p>→ Tray 實際標高 = 1F + 2700 mm</p>
-          </div>
-          <p><strong>常見錯誤</strong>：誤把 Link 模型的 Level 當自己的 Level 設 View Range；FFL 與樓板厚度混淆；未做 Copy/Monitor 導致標高變更沒同步。</p>
-          <p class="verdict"><strong>驗收條件</strong>：Level 名稱、數量、標高與建築模型一致或有清楚對應。</p>
-        </div></div></section>
-<section id="step5" class="section"><div class="step-card"><div class="step-top"><div class="step-no">05</div><div class="step-title"><span class="step-no">Step 5</span> 建立 SCADA Working Views <span class="badge badge-must">必做</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：不要在同一張視圖從草稿畫到出圖，管理會失控。</p>
-          <p><strong>建議建立</strong>：<code>WIP_SCADA_1F</code>、<code>WIP_SCADA_2F</code>、<code>WIP_SCADA_3F</code>、<code>COORD_SCADA_1F</code>、<code>{3D}_SCADA_COORD</code></p>
-          <table class="compare">
-            <thead><tr><th>類型</th><th>用途</th></tr></thead>
-            <tbody>
-              <tr><td>WIP</td><td>日常配管路由、測試 Fitting</td></tr>
-              <tr><td>COORD</td><td>跨系統協調、疊合檢查碰撞</td></tr>
-              <tr><td>SHEET</td><td>正式出圖</td></tr>
-            </tbody>
-          </table>
-          <p><strong>操作方式</strong>：複製既有平面視圖 → 右鍵 <code>Duplicate View → Duplicate</code> → 重新命名。</p>
-          <p class="verdict"><strong>驗收條件</strong>：至少一組 WIP、一組 COORD、一組 3D 協調視圖，命名清楚可辨。</p>
-        </div></div></section>
-<section id="step6" class="section"><div class="step-card"><div class="step-top"><div class="step-no">06</div><div class="step-title"><span class="step-no">Step 6</span> 設定 View Range <span class="badge badge-must">必做</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：Cable Tray 最常見狀況是「有畫但平面看不到」，九成是 View Range 沒設對。</p>
-          <p><strong>操作位置</strong>：平面視圖空白處 → Properties → <code>View Range → Edit…</code></p>
-          <p><strong>四個關鍵值</strong>：Top（最高裁切面）、Cut Plane（水平切割面）、Bottom（最低裁切面）、View Depth（延伸深度）。</p>
-          <div class="example-box">
-            <p>FFL = 0　Cable Tray Elevation = +2700 mm</p>
-            <p>Cut Plane = +1200 mm　Top = +3000 mm</p>
-            <p class="warn">→ Tray 落在 View Range 垂直範圍外（超出 Cut Plane +1200 mm）。</p>
-          </div>
-          <p class="note"><strong>若 Tray 在視圖垂直範圍外，先檢查 Top／Cut Plane／Bottom 是否涵蓋 Tray 的 Elevation</strong>——這是排查第一步，不是絕對規則。Cable Tray 實際的 projection/cut 顯示行為還牽涉 Category 設定、View Discipline 等因素，不同類別判斷邏輯不完全相同，具體顯示結果需於 Revit 2027 實機確認。</p>
-          <p><strong>排查順序</strong>：平面看不到時，先檢查 View Range，再懷疑模型壞掉。</p>
-          <p class="verdict"><strong>驗收條件</strong>：Top 明確高於 Tray Elevation，平面視圖能正常看到該 Tray。</p>
-        </div></div></section>
-<section id="step7" class="section"><div class="step-card"><div class="step-top"><div class="step-no">07</div><div class="step-title"><span class="step-no">Step 7</span> 建立 SCADA View Template <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：固定「這張視圖該顯示什麼」，套用到多張視圖，標準一致。</p>
-          <p><strong>操作位置</strong>：<code>View → Graphics → View Templates → Create Template from Current View…</code></p>
-          <p><strong>建議建立</strong>：<code>VT_SCADA_ROUTING</code>（日常路由）、<code>VT_SCADA_COORD</code>（跨系統協調）</p>
-          <p><strong>至少要控制</strong>：Scale、Detail Level、Discipline、Visibility/Graphics、Revit Links、Model Categories、Annotation Categories、Filters。</p>
-          <table class="compare">
-            <thead><tr><th>類別</th><th>建議設定</th></tr></thead>
-            <tbody>
-              <tr><td>Architecture</td><td>Halftone（淡化）</td></tr>
-              <tr><td>Structure</td><td>可見</td></tr>
-              <tr><td>Cable Tray / Fittings</td><td>顯示</td></tr>
-              <tr><td>Conduit</td><td>顯示</td></tr>
-              <tr><td>Electrical Equipment</td><td>顯示</td></tr>
-              <tr><td>Furniture / Planting</td><td>關閉</td></tr>
-            </tbody>
-          </table>
-          <p class="warn"><strong>不要把 Temporary Hide/Isolate 當 View Template 用</strong>——只是暫時性操作，未必保留，不能取代正式設定。</p>
-          <p class="verdict"><strong>驗收條件</strong>：建立至少一個 View Template 並套用，畫面顯示符合建議設定。</p>
-        </div></div></section>
-<section id="step8" class="section"><div class="step-card"><div class="step-top"><div class="step-no">08</div><div class="step-title"><span class="step-no">Step 8</span> 建立 View Filters <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：用參數自動決定顏色／線型，比手動 Override 更適合長期、多人專案。</p>
-          <p><strong>操作位置</strong>：<code>View → Graphics → Filters</code></p>
-          <p><strong>建議建立</strong>：<code>FILTER_SCADA_TRAY</code>、<code>FILTER_SCADA_CONDUIT</code>、<code>FILTER_EXISTING</code>、<code>FILTER_NEW</code></p>
-          <p><strong>過濾依據</strong>：System、Comments、Type、Route_ID、Discipline、Status（見 Step 10）。</p>
-          <p><strong>常見錯誤</strong>：Filter 條件對應的參數，物件實際上沒填值，導致 Filter「看起來沒作用」。</p>
-          <p class="verdict"><strong>驗收條件</strong>：套用 Filter 後，改變物件對應參數值，畫面顏色自動跟著變化。</p>
-        </div></div></section>
-<section id="step9" class="section"><div class="step-card"><div class="step-top"><div class="step-no">09</div><div class="step-title"><span class="step-no">Step 9</span> 建立 Cable Tray Types <span class="badge badge-must">必做</span></div></div><div class="step-body">
-          <p><strong>目的</strong>：大量路由前先確認各種 Fitting 都能正常產生。</p>
-          <p><strong>操作位置</strong>：<code>Systems → Cable Tray → Edit Type → Duplicate</code></p>
-          <p><strong>命名範例</strong>：<code>SCADA_LADDER_300x100</code>、<code>SCADA_LADDER_600x100</code></p>
-          <p><strong>至少確認</strong>：Width、Height、Type、Fitting Type、Bend Radius。</p>
-          <p class="warn"><strong>不要只測直線。</strong>正式建模前逐一實測：</p>
-          <ul class="check-static">
-            <li>Straight（直線段）</li>
-            <li>Elbow（轉彎）</li>
-            <li>Tee（三通）</li>
-            <li>Cross（十字接頭）</li>
-            <li>Reducer（大小頭）</li>
-            <li>Vertical Rise（垂直上升）</li>
-            <li>Vertical Drop（垂直下降）</li>
-          </ul>
-          <p>每一項檢查：能否生成、尺寸是否正確、接頭是否正確、高程是否正確、Width 是否相容。</p>
-          <p class="verdict"><strong>驗收條件</strong>：上述 7 項全部實測過，皆正常生成、尺寸正確、高程正確銜接。</p>
-        </div></div></section>
-<section id="step10" class="section"><div class="step-card"><div class="step-top"><div class="step-no">10</div><div class="step-title"><span class="step-no">Step 10</span> 建立 SCADA 專用參數 <span class="badge badge-policy">視公司流程而定</span></div></div><div class="step-body">
-          <p><strong>操作位置</strong>：<code>Manage → Settings → Shared Parameters</code>（建議優先於 Project Parameters）</p>
-          <p><strong>建議參數</strong>：<code>SCADA_System</code>、<code>Route_ID</code>、<code>From</code>、<code>To</code>、<code>Area</code>、<code>Level</code>、<code>Drawing_No</code>、<code>Status</code>、<code>Remark</code></p>
-          <p><strong>用途</strong>：Filter、Schedule、QA、BOQ、查詢、後續自動化（見第五節）。</p>
-          <p class="note"><strong>Project Parameter 與 Shared Parameter 的差異</strong>：兩者都可出現在 Schedule 中、都可用於 Filter——「能不能被 Schedule 讀到」不是主要區別。差異在於 Project Parameter 只存在於本專案，無法跨專案重複使用；Shared Parameter 有固定 GUID，可跨專案套用、可用於 Tag、也是未來跟外部資料（見第五節）對應的基礎。若參數未來可能跨專案沿用或對接外部資料，優先用 Shared Parameter；純本案內部統計，Project Parameter 也可以。實際在 Schedule／Filter 中的可用性細節需於 Revit 2027 實機確認。</p>
-          <p class="warn">🔒 <strong>權限提醒</strong>：共用參數檔（.txt）存在自己有寫入權限的路徑即可（如自己的 Documents、OneDrive），不需要系統管理員權限，不要存到 <code>Program Files</code> 或系統目錄。不確定共用資料夾權限時標記【需確認權限】並詢問專案負責人。</p>
-          <p class="verdict"><strong>驗收條件</strong>：至少建立 Route_ID 與 Status，並能於 Properties 填寫數值。</p>
-        </div></div></section>
-<section id="step11" class="section"><div class="step-card"><div class="step-top"><div class="step-no">11</div><div class="step-title"><span class="step-no">Step 11</span> 建立 Cable Tray Schedule <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
-          <p><strong>操作位置</strong>：<code>View → Create → Schedules → Schedule/Quantities</code> → Category: Cable Trays</p>
-          <p><strong>建議欄位</strong>：Type、Width、Height、Level、Length、Elevation、Route_ID、From、To、Status</p>
-          <p class="warn"><strong>Schedule 數量不等於最終 BOQ 一定正確</strong>，仍要確認：重複建模、Fitting 是否計入、分段方式、單位、長度規則。</p>
-          <p class="verdict"><strong>驗收條件</strong>：Schedule 正確列出所有 Cable Tray，欄位資料與模型一致。</p>
-        </div></div></section>
-<section id="step12" class="section"><div class="step-card"><div class="step-top"><div class="step-no">12</div><div class="step-title"><span class="step-no">Step 12</span> 建立 3D Coordination View <span class="badge badge-must">必做（多專業協調）</span></div></div><div class="step-body">
-          <p><strong>建議建立</strong>：<code>{3D}_SCADA_COORD</code>，只保留 Architecture、Structure、Cable Tray、Conduit、Electrical Equipment、SCADA Equipment。</p>
-          <p><strong>操作方式</strong>：開 3D 視圖 → <code>View → Section Box</code> 勾選 → 拖曳邊界縮小檢查範圍。</p>
-          <p><strong>主要檢查</strong>：穿梁、穿牆、穿樓板、撞風管、撞消防、撞其他 Tray、空間不足、維修空間不足。</p>
-          <p class="verdict"><strong>驗收條件</strong>：能用 Section Box 縮小範圍檢查局部區域，只顯示必要類別。</p>
-        </div></div></section>
-<section id="step13" class="section"><div class="step-card"><div class="step-top"><div class="step-no">13</div><div class="step-title"><span class="step-no">Step 13</span> 建立 QA View <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
-          <p><strong>建議建立</strong>：<code>QA_SCADA</code> — 建築淡化、結構突出、Cable Tray／Conduit 高對比、設備可見。</p>
-          <p class="warn">不要用正式出圖 View 做問題檢查。</p>
-          <p class="verdict"><strong>驗收條件</strong>：QA_SCADA 視圖存在，顯示設定與 SHEET 視圖不同。</p>
-        </div></div></section>
-<section id="step14" class="section"><div class="step-card"><div class="step-top"><div class="step-no">14</div><div class="step-title"><span class="step-no">Step 14</span> Browser Organization <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
-          <p><strong>操作位置</strong>：Project Browser 右鍵 → <code>Browser Organization…</code></p>
-          <p><strong>整理依據</strong>：Discipline → Purpose（WIP／COORD／SHEET／QA）→ Level</p>
-          <p class="verdict"><strong>驗收條件</strong>：視圖依 Discipline／Purpose 分類清楚可辨。</p>
-        </div></div></section>
-<section id="step15" class="section"><div class="step-card"><div class="step-top"><div class="step-no">15</div><div class="step-title"><span class="step-no">Step 15</span> Worksharing / Worksets <span class="badge badge-policy">視公司流程而定</span></div></div><div class="step-body">
-          <p>只有多人協作專案才需要啟用。</p>
-          <p><strong>操作位置</strong>：<code>Collaborate → Worksharing</code>；同步用 <code>Synchronize with Central</code>；抓更新用 <code>Reload Latest</code>。</p>
-          <p class="warn">若公司已有既有 Central Model，不要重新建立，加入專案應開啟中央檔並 Create New Local。</p>
-          <p class="verdict"><strong>驗收條件</strong>：多人協作下能完成一次 Synchronize with Central，未跳出未預期衝突警告。</p>
-        </div></div></section>
+
+<section id="step1" class="section"><div class="step-card"><div class="step-top"><div class="step-no">01</div><div class="step-title">確認專案單位 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<p><strong>目的</strong>：電纜架、電管的寬度、高度、高程、偏移、彎曲半徑都依單位。單位錯，尺寸全錯。</p>
+<p><strong>操作位置</strong>：<code>管理 → 設定 → 專案單位（Project Units）</code>，快捷鍵 <code>UN</code></p>
+<p><strong>設定</strong>：長度（Length）＝公釐；面積（Area）＝平方公尺；角度（Angle）＝十進位度。</p>
+<p><strong>注意</strong>：寬度、高度、高程、偏移（Offset）、彎曲半徑（Bend Radius）和電管尺寸都讀這裡。單位若是英呎，輸入 300 會變成 300 英呎。</p>
+<p><strong>常見錯誤</strong>：用到英制樣板沒發現；只改長度、沒改角度。</p>
+<p class="verdict"><strong>驗收</strong>：畫一段 300 mm 寬的電纜架，性質（Properties）面板的寬度顯示 300，和畫面量測一致。</p>
+</div></div></section>
+
+<section id="step2" class="section"><div class="step-card"><div class="step-top"><div class="step-no">02</div><div class="step-title">連結建築、結構、機電模型 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<p><strong>目的</strong>：橋架要避開梁柱、抓對高程，必須有建築和結構當背景。</p>
+<p><strong>本案點法</strong>：</p>
+<ol>
+<li>插入 → 連結 Revit（Link Revit）→ 選 <code>DN-AR-1100-0000 20260923.rvt</code>。</li>
+<li>定位（Positioning）選「原點到原點」（Origin to Origin）→ 用釘選（Pin）固定。</li>
+<li>日期版和無日期版重複報錯：管理 → 管理連結（Manage Links）→ 移除重複 → 選無日期版 →「重新載入自…」（Reload From）指向最新日期版。</li>
+<li>CAD 底圖：插入 → 連結 CAD（Link CAD）。手動選單位、勾「僅目前視圖」（Current view only）→ 對齊柱網、樓梯間、管道間 → 釘選。<strong>用連結，不要用匯入（Import）</strong>，原檔更新才會跟著更新。</li>
+</ol>
+<p class="note">專案若已經發佈過共用座標，定位改「自動 - 依共用座標」（Auto - By Shared Coordinates）。本案建築檔用原點到原點。還沒發佈座標時不要先選依共用座標。另一個常見選項是「自動 - 中心到中心」（Auto - Center to Center）。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th></th><th>連結 Revit</th><th>連結 CAD</th><th>匯入 CAD</th></tr></thead>
+<tbody>
+<tr><td>來源</td><td>.rvt</td><td>.dwg／.dxf</td><td>.dwg／.dxf</td></tr>
+<tr><td>關係</td><td>獨立檔，可重新載入</td><td>獨立檔，可重新載入</td><td>幾何被吃進本檔</td></tr>
+<tr><td>更新</td><td>管理連結 → 重新載入（Reload）</td><td>管理連結 → 重新載入</td><td>要重新匯入</td></tr>
+<tr><td>檔案大小</td><td>較小</td><td>較小</td><td>本檔變大</td></tr>
+<tr><td>何時用</td><td>建築／結構／機電背景</td><td>只有 CAD 圖時優先用這個</td><td>真的要把線變成本檔物件才用</td></tr>
+</tbody>
+</table>
+</div>
+<p>管理連結裡的狀態應為已載入（Loaded），不是找不到（Not Found）或未載入（Unloaded）。</p>
+<p class="verdict"><strong>驗收</strong>：管理連結全部已載入，平面看得到牆、柱、梁。</p>
+</div></div></section>
+
+<section id="step3" class="section"><div class="step-card"><div class="step-top"><div class="step-no">03</div><div class="step-title">確認共用座標與位置 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<p><strong>目的</strong>：畫之前先確認連結模型真的對齊，不是看起來對。</p>
+<p><strong>至少看</strong>：1F、典型樓層、屋頂層、地下層。核對柱位、電梯、樓梯、機房、管道間、外牆線。</p>
+<p class="warn"><strong>對不上就停。</strong>不要開始畫電纜架。</p>
+<dl class="terms">
+<dt>內部原點（Internal Origin）</dt><dd>檔案自己的原點，通常不用管。</dd>
+<dt>專案基準點（Project Base Point）</dt><dd>這個專案認定的 0,0,0。</dd>
+<dt>測量點（Survey Point）</dt><dd>對到真實測量座標，例如 TWD97。</dd>
+<dt>共用座標（Shared Coordinates）</dt><dd>讓多個 Revit 檔對齊。要先發佈座標（Publish Coordinates）、再取得座標（Acquire Coordinates），之後連結才選「自動 - 依共用座標」。兩個指令在協同合作（Collaborate）頁籤。</dd>
+</dl>
+<p><strong>常見錯誤</strong>：只看 3D 覺得有對到；地下層和屋頂最容易歪了沒人發現。本案約定用原點到原點，前提是建築檔的原點就是對齊基準。</p>
+<p class="verdict"><strong>驗收</strong>：至少 3 個樓層的柱網、電梯、管道間，誤差在公司 BIM 標準以內。</p>
+</div></div></section>
+
+<section id="step4" class="section"><div class="step-card"><div class="step-top"><div class="step-no">04</div><div class="step-title">確認樓層與網格 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<p><strong>目的</strong>：電纜架高程＝樓層＋偏移。樓層錯，整條橋架的樓層歸屬就錯。連結模型裡的樓層<strong>不是</strong>自己模型裡的樓層，名稱一樣也是兩個元素。</p>
+<p><strong>複製/監視（Copy/Monitor）</strong>，本案點法：</p>
+<ol>
+<li>協同合作 → 複製/監視 → 選取連結（Select Link）。</li>
+<li>按複製（Copy）。立面選樓層線，平面選網格線，可勾「多個」（Multiple）。</li>
+<li>模式裡的完成，以及工具上的完成，<strong>兩個完成都要按</strong>。</li>
+</ol>
+<p>只把建築當背景、不跟著出同一套標高時，可以先不做。</p>
+<div class="example-box">
+<p>1F 樓板完成面（FFL）＝ 0</p>
+<p>電纜架高程＝ 2700 mm → 實際標高＝ 1F ＋ 2700 mm</p>
+</div>
+<p>吊架性質用「距離樓層的高程」（Elevation from Level）。電纜架選項列用「中間高程」（Middle Elevation）。</p>
+<p><strong>常見錯誤</strong>：拿連結樓層去設視圖範圍；樓板完成面和結構板厚搞混；沒做複製/監視，建築改標高沒人知道。</p>
+<p class="verdict"><strong>驗收</strong>：能說出這條橋架是哪個樓層、中間高程多少，而且樓層標高和建築一致或有對應。</p>
+</div></div></section>
+
+<section id="step5" class="section"><div class="step-card"><div class="step-top"><div class="step-no">05</div><div class="step-title">建立工作視圖 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<p><strong>目的</strong>：不要在出圖視圖上試畫。可見性一改，圖就壞了。</p>
+<p><strong>本案</strong>：<code>視圖 → 平面視圖 → 樓板平面圖（Floor Plan）</code> → 選樓層。命名例如 <code>SCADA_樓層_Tray配置</code>。清單是空白時，取消勾選「不要複製現有視圖」。</p>
+<p>建議再留：<code>WIP_SCADA_1F</code>（工作中）、<code>COORD_SCADA_1F</code>（協調）、<code>{3D}_SCADA_COORD</code>（3D 協調）。出圖視圖另外留。</p>
+<p>複製視圖：專案瀏覽器（Project Browser）的平面上按右鍵 → 複製視圖（Duplicate View）→ 複製（Duplicate）。要連標註一起複製才用「含細部設計複製」（Duplicate with Detailing）。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>類型</th><th>用途</th></tr></thead>
+<tbody>
+<tr><td>工作中（WIP）</td><td>日常畫路由、試配件</td></tr>
+<tr><td>協調（COORD）</td><td>疊結構、機電、消防查碰撞</td></tr>
+<tr><td>出圖（SHEET）</td><td>比例和圖框固定，不拿來試畫</td></tr>
+<tr><td>品質檢查（QA）</td><td>高對比找問題，見 Step 13</td></tr>
+</tbody>
+</table>
+</div>
+<p class="verdict"><strong>驗收</strong>：至少一張工作平面、一張協調平面、一張 3D，名稱看得出用途。</p>
+</div></div></section>
+
+<section id="step6" class="section"><div class="step-card"><div class="step-top"><div class="step-no">06</div><div class="step-title">設定視圖範圍 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<p><strong>目的</strong>：有畫但平面看不到，本案第一個原因就是切割平面太低。</p>
+<p><strong>操作位置</strong>：平面空白處點一下 → 性質面板「範圍」→ 視圖範圍（View Range）→ 編輯…。性質面板不見按 <code>Ctrl+1</code>。數值被切掉時，把面板左邊界往左拖。</p>
+<p>對話框有頂部（Top）、切割平面（Cut Plane）、底部（Bottom）、視景深度（View Depth）。每一列有關聯的樓層（Associated Level）和偏移（Offset），頂部也可以選上方樓層（Level Above）。</p>
+<div class="example-box">
+<p>樓板完成面＝ 0，橋架／吊架＝ 2700～3000 mm</p>
+<p>預設切割平面偏移＝ 1200 → 高過切割平面，平面不顯示</p>
+<p>改成 3500（高於吊架頂、低於上一層樓）→ 套用 → 確定</p>
+</div>
+<p class="note">電纜架和吊架高於切割平面時，樓板平面圖不會畫出來。先把切割平面拉過物件，再懷疑模型壞掉。樓板、坡道等少數品類另有規則；橋架和吊架以這條為準。完整排解見<a href="#trouble">第六節</a>。</p>
+<p class="verdict"><strong>驗收</strong>：切割平面偏移高於這段橋架的高程，平面看得到。</p>
+</div></div></section>
+
+<section id="step7" class="section"><div class="step-card"><div class="step-top"><div class="step-no">07</div><div class="step-title">建立視圖樣板 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<p><strong>目的</strong>：把「這張視圖顯示什麼」固定下來，多張視圖才一致。</p>
+<p><strong>操作位置</strong>：<code>視圖 → 圖形 → 視圖樣板（View Templates）→ 從目前視圖建立樣板</code>，或「管理視圖樣板」。</p>
+<p>建議：<code>VT_SCADA_ROUTING</code>（日常路由）、<code>VT_SCADA_COORD</code>（協調）。</p>
+<p>至少控制：視圖比例（Scale）、詳細等級（Detail Level）、領域（Discipline）、可見性/圖形取代（Visibility/Graphics）、Revit 連結、模型品類（Model Categories）、標註品類（Annotation Categories）、篩選。</p>
+<p>性質面板「圖形」區有：視圖比例、詳細等級、可見性/圖形取代、領域、次領域（Sub-Discipline）。「識別資料」（Identity Data）區有視圖樣板。「範圍」區有裁剪視圖（Crop View）和視圖範圍。上方功能區的「圖形」面板，不等於性質裡的「圖形」區。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>品類</th><th>建議</th></tr></thead>
+<tbody>
+<tr><td>建築（連結或建築品類）</td><td>半色調（Halftone）</td></tr>
+<tr><td>結構</td><td>可見，方便看碰撞</td></tr>
+<tr><td>電纜架、電纜架配件</td><td>顯示</td></tr>
+<tr><td>電管、電管配件</td><td>顯示</td></tr>
+<tr><td>電氣設備</td><td>顯示</td></tr>
+<tr><td>家具、植栽</td><td>關閉</td></tr>
+<tr><td>風管、風管配件、風管附件</td><td>有放吊架就要開。吊架是風管附件</td></tr>
+</tbody>
+</table>
+</div>
+<p class="warn">可見性/圖形取代整個是灰的，就是視圖樣板把可見性鎖住。改法見<a href="#vg-locked">「VG 被樣板鎖住」</a>。不要用暫時隱藏/隔離（Temporary Hide/Isolate）代替樣板，那只是暫時的。</p>
+<p class="verdict"><strong>驗收</strong>：至少一個樣板套在工作視圖上；電纜架或風管附件被關掉時，在樣板裡打開。</p>
+</div></div></section>
+
+<section id="step8" class="section"><div class="step-card"><div class="step-top"><div class="step-no">08</div><div class="step-title">篩選與 3D 上色 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<p class="kicker">教材第六節</p>
+<p><strong>目的</strong>：用規則上色。手動取代圖形（Override Graphics）只對當下選到的物件，新畫的不會跟上。篩選只存在這個檔案；別的檔要重建，或用管理 → 傳遞專案標準 → 勾「篩選」。</p>
+<h3>1. 建立篩選</h3>
+<ol>
+<li><code>VG</code> →「篩選」分頁 →「編輯/新建…」。或走視圖 → 圖形 → 篩選（Filters）。</li>
+<li>左下新建 → 命名例如 <code>SCADA</code> → 依規則篩選。</li>
+<li>中間「品類」（Categories）：篩選清單選「電氣」→ 勾<strong>電纜架、電纜架配件</strong>。需要再勾電管、電管配件。<strong>品類沒勾，什麼都篩不到。</strong></li>
+<li>右邊篩選規則（Filter Rules）可留「(無)」，表示這些品類全部算進來。要分開 SCADA 和動力橋架時才加規則，例如「類型名稱 包含 SCADA」。</li>
+<li>確定。</li>
+</ol>
+<p>也可以再加 <code>FILTER_SCADA_TRAY</code>、<code>FILTER_SCADA_CONDUIT</code>、<code>FILTER_EXISTING</code>、<code>FILTER_NEW</code>。規則可用系統、備註（Comments）、類型、<code>Route_ID</code>、領域、狀態。參數沒填值時，篩選會像沒作用。</p>
+<h3>2. 套到視圖（建好不會自己出現）</h3>
+<ol>
+<li>該視圖 <code>VG</code> →「篩選」→「加入」→ 選 <code>SCADA</code> → 確定。</li>
+<li>勾「啟用篩選」「可見性」。</li>
+<li>「投影/表面」（Projection/Surface）：線設線色；樣式點「取代…」，前景和背景都選「&lt;單色填滿&gt;」（Solid Fill）並設顏色。</li>
+<li>視圖套了樣板、<code>VG</code> 是灰的：改樣板的「V/G 取代篩選」，不是只改這一張。</li>
+</ol>
+<p>可見性/圖形取代的分頁：模型品類、標註品類、分析模型品類、匯入的品類、篩選、Revit 連結。模型品類的欄位有投影/表面、切割（Cut）、半色調、詳細等級。</p>
+<h3>3. 只有線變色、表面沒變色</h3>
+<p>視覺型式（Visual Style）若是「隱藏線」（Hidden Line），不會畫表面填滿。左下角比例旁的立方體，改成「塗彩」（Shaded）或「一致色彩」（Consistent Colors）。</p>
+<p class="verdict"><strong>驗收</strong>：3D 裡符合品類的橋架表面有顏色。改回隱藏線時，填滿消失、線色還在，這是正常的。</p>
+</div></div></section>
+
+<section id="step9" class="section"><div class="step-card"><div class="step-top"><div class="step-no">09</div><div class="step-title">電纜架類型與配件 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<p><strong>目的</strong>：大量畫之前，彎頭、T 型、十字、異徑都要接得起來。電纜架<strong>沒有佈線偏好（Routing Preferences）</strong>，跟水管、風管不同。配件在類型性質裡指定。</p>
+<ol>
+<li>管理 → MEP 設定 → 電氣設定（Electrical Settings）→ 電纜架設定：設尺寸、平面標註樣式。</li>
+<li>系統 → 電氣 → 電纜架（Cable Tray）→ 選梯式或槽式 → 編輯類型（Edit Type）。</li>
+<li>類型選「<strong>含配件的電纜架</strong>」（Cable Tray with Fittings）。「不含配件的電纜架」（Cable Tray without Fittings）不會自動長彎頭。</li>
+<li>「配件」欄指定：水平彎、垂直內彎、垂直外彎、T 型、十字、異徑、接頭。</li>
+<li>彎曲半徑預設＝內寬。可在類型性質改倍數，或畫完點彎頭改半徑。</li>
+</ol>
+<p>命名例：<code>SCADA_LADDER_300x100</code>、<code>SCADA_LADDER_600x100</code>。</p>
+<p class="warn"><strong>不要只測直線。</strong></p>
+<ul class="check-static">
+<li>直線段</li>
+<li>水平彎</li>
+<li>T 型</li>
+<li>十字</li>
+<li>異徑</li>
+<li>垂直上升</li>
+<li>垂直下降</li>
+</ul>
+<p>每一項看能不能生成、尺寸、接頭、高程、寬度是否相容。官方說明：<a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-MEPEng/files/GUID-C9FCE20F-32CE-4C96-BB60-DA43E63D6E05.htm">繪製電纜架</a>、<a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-MEPEng/files/GUID-1730B8F3-D877-4A9F-9AC1-6684E4D2ADD2.htm">變更彎曲半徑</a>。</p>
+<p class="verdict"><strong>驗收</strong>：上面 7 項都畫過，能生成、尺寸正確、高程接得上。</p>
+</div></div></section>
+
+<section id="step10" class="section"><div class="step-card"><div class="step-top"><div class="step-no">10</div><div class="step-title">SCADA 專用參數 <span class="badge badge-policy">視公司流程而定</span></div></div><div class="step-body">
+<p><strong>操作位置</strong>：<code>管理 → 設定 → 共用參數（Shared Parameters）</code>。只在這個案子用時，也可以用專案參數（Project Parameters）。</p>
+<p><strong>建議自己取的參數名稱</strong>（不是功能區指令）：<code>SCADA_System</code>、<code>Route_ID</code>、<code>From</code>、<code>To</code>、<code>Area</code>、<code>Level</code>、<code>Drawing_No</code>、<code>Status</code>、<code>Remark</code>。</p>
+<p class="note">兩種參數都可以進明細表、也可以做篩選。專案參數只在這個檔。共用參數有固定 GUID，可跨專案、可被標籤讀，之後對 AutoCAD 路由資料也用它。共用參數的 .txt 放在自己寫得進去的資料夾，不要放 <code>Program Files</code>。不確定權限就標【需確認權限】。</p>
+<p class="verdict"><strong>驗收</strong>：至少有 <code>Route_ID</code> 和 <code>Status</code>，性質面板填得到值。</p>
+</div></div></section>
+
+<section id="step11" class="section"><div class="step-card"><div class="step-top"><div class="step-no">11</div><div class="step-title">電纜架明細表 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<p><strong>操作位置</strong>：<code>視圖 → 建立 → 明細表 → 明細表/數量（Schedule/Quantities）</code> → 品類選電纜架。</p>
+<p>建議名稱 <code>SCADA_CABLE_TRAY_SCHEDULE</code>。欄位：類型、寬度、高度、樓層、長度、高程或中間高程、<code>Route_ID</code>、<code>From</code>、<code>To</code>、<code>Status</code>。內建欄位顯示中文；自己加的參數用建立時的名稱。</p>
+<p class="warn">明細表數字還不是數量清單（BOQ）。要再看有沒有畫兩次、配件長度算不算、直線被拆成幾段、單位一不一致。</p>
+<p class="verdict"><strong>驗收</strong>：明細表列出模型裡的電纜架，和性質面板一致。</p>
+</div></div></section>
+
+<section id="step12" class="section"><div class="step-card"><div class="step-top"><div class="step-no">12</div><div class="step-title">3D 協調視圖 <span class="badge badge-must">必做（多專業協調）</span></div></div><div class="step-body">
+<p>建議名稱 <code>{3D}_SCADA_COORD</code>。用 <code>VG</code> 只留建築、結構、電纜架、電纜架配件、電管、電管配件、電氣設備。要看吊架再加風管附件。</p>
+<p>開 3D → 勾選剖面框（Section Box）→ 拖邊界縮小範圍。線顏色：電纜架、電纜架配件、電管、電管配件的「投影/表面 → 線」。碰撞用協同合作 → 干涉檢查（Interference Check）。</p>
+<p>檢查穿梁、穿牆、穿樓板、撞風管、撞消防、撞其他橋架、空間和維修空間夠不夠。</p>
+<p class="verdict"><strong>驗收</strong>：剖面框縮得到單一區域，畫面只剩要協調的品類。</p>
+</div></div></section>
+
+<section id="step13" class="section"><div class="step-card"><div class="step-top"><div class="step-no">13</div><div class="step-title">品質檢查視圖 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<p>建議名稱 <code>QA_SCADA</code>。建築半色調、結構看得到、電纜架和電管高對比、設備可見。不要拿正式出圖視圖做檢查，避免高對比顏色留在出圖上。</p>
+<p class="verdict"><strong>驗收</strong>：<code>QA_SCADA</code> 的顯示和出圖視圖不同。</p>
+</div></div></section>
+
+<section id="step14" class="section"><div class="step-card"><div class="step-top"><div class="step-no">14</div><div class="step-title">瀏覽器組織 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<p><strong>操作位置</strong>：專案瀏覽器上按右鍵 → 瀏覽器組織（Browser Organization）。</p>
+<p>建議依領域 → 用途（工作中／協調／出圖／品質檢查）→ 樓層。找 <code>SCADA_樓層_Tray配置</code> 不用翻完整份清單。</p>
+<p class="verdict"><strong>驗收</strong>：視圖依用途分得開。</p>
+</div></div></section>
+
+<section id="step15" class="section"><div class="step-card"><div class="step-top"><div class="step-no">15</div><div class="step-title">工作共用與工作集 <span class="badge badge-policy">視公司流程而定</span></div></div><div class="step-body">
+<p>一個人建模不用開。兩人以上同時改同一個模型才需要。</p>
+<p><strong>操作位置</strong>：協同合作 → 協同合作（Collaborate，用來啟用工作共用）；上傳用與中央同步（Synchronize with Central）；只抓別人的更新用重新載入最新（Reload Latest）。</p>
+<p>中央模型（Central Model）在共用位置。自己電腦上編輯的是本端模型（Local Model）。改完要放開借走的元件時用放棄（Relinquish）。</p>
+<p class="warn">公司已經有中央模型時，不要另外建一個。開啟中央檔後建立新本端（Create New Local）。需要的是網路資料夾讀寫權限，不是系統管理員。不確定就標【需確認權限】。</p>
+<p class="verdict"><strong>驗收</strong>：能完成一次與中央同步，沒有未預期的衝突。</p>
+</div></div></section>
+
 <section id="quick10" class="section">
-
-      <h2>二、SCADA Revit 起手 10 步（快速版）</h2>
-      <p>適合列印或放桌面提醒，熟悉流程後的懶人版。</p>
-      <ol class="quick10-list">
-        <li>開正確模型</li>
-        <li>確認 UN = mm</li>
-        <li>檢查 Link</li>
-        <li>檢查座標</li>
-        <li>檢查 Level / Grid</li>
-        <li>建 WIP View</li>
-        <li>設 View Range</li>
-        <li>套 View Template / Filter</li>
-        <li>測 Cable Tray Fitting</li>
-        <li>再正式 Routing</li>
-      </ol>
-    
+<h2><span class="eyebrow">快速版</span>二、起手 10 步</h2>
+<ol class="quick10-list">
+<li>開正確、最新的模型</li>
+<li>專案單位：長度＝公釐（<code>UN</code>）</li>
+<li>檢查連結，並釘選</li>
+<li>檢查位置（本案是原點到原點）</li>
+<li>檢查樓層與網格，必要時複製/監視</li>
+<li>建工作用的樓板平面圖</li>
+<li>視圖範圍：切割平面高於橋架（本案約 3500）</li>
+<li>套視圖樣板與篩選</li>
+<li>測含配件的電纜架：彎頭、T 型、十字、異徑、垂直</li>
+<li>再正式畫路由</li>
+</ol>
 </section>
+
 <section id="checklist" class="section">
-
-      <h2>三、正式畫 Tray 前 Checklist</h2>
-      <p>開始大量路由之前，逐項勾選確認。勾選狀態會自動保存在這台裝置的瀏覽器中。</p>
-      <div class="checklist-toolbar">
-        <span id="checklistProgress" class="checklist-progress">0 / 17</span>
-        <button id="resetChecklist" type="button" class="btn-reset">清空勾選</button>
-      </div>
-      <ul class="checklist" id="checklist">
-        <li><label><input type="checkbox" data-key="units"> 單位正確（UN = mm）</label></li>
-        <li><label><input type="checkbox" data-key="arch-link"> 建築 Link 正確（最新版、位置正確）</label></li>
-        <li><label><input type="checkbox" data-key="struct-link"> 結構 Link 正確（最新版、位置正確）</label></li>
-        <li><label><input type="checkbox" data-key="position"> 模型位置正確（Shared Coordinates 已核對至少 3 個樓層）</label></li>
-        <li><label><input type="checkbox" data-key="level"> Level 正確（標高與建築模型一致或有清楚對應）</label></li>
-        <li><label><input type="checkbox" data-key="viewrange"> View Range 正確（Cut Plane／Top 涵蓋 Tray 實際高程）</label></li>
-        <li><label><input type="checkbox" data-key="traytype"> Cable Tray Type 正確（命名規則、Width/Height 設定完成）</label></li>
-        <li><label><input type="checkbox" data-key="elbow"> Elbow 正常（實測可生成、尺寸正確）</label></li>
-        <li><label><input type="checkbox" data-key="tee"> Tee 正常（實測可生成、尺寸正確）</label></li>
-        <li><label><input type="checkbox" data-key="cross"> Cross 正常（實測可生成、尺寸正確）</label></li>
-        <li><label><input type="checkbox" data-key="reducer"> Reducer 正常（實測可生成、尺寸正確）</label></li>
-        <li><label><input type="checkbox" data-key="vertical"> Vertical Transition 正常（垂直上升／下降可正確銜接）</label></li>
-        <li><label><input type="checkbox" data-key="viewtemplate"> View Template 已套用（WIP／COORD 至少一組）</label></li>
-        <li><label><input type="checkbox" data-key="qaview"> QA View 已建立</label></li>
-        <li><label><input type="checkbox" data-key="3dcoord"> 3D Coordination View 已建立</label></li>
-        <li><label><input type="checkbox" data-key="schedule"> Schedule 可讀取 Tray（欄位資料正確顯示）</label></li>
-        <li><label><input type="checkbox" data-key="elevation-confirmed"> 正式路由高程已確認（與設計圖或設備需求核對過）</label></li>
-      </ul>
-    
+<h2><span class="eyebrow">畫大量路由之前</span>三、建模檢查清單</h2>
+<p>勾選存在這台瀏覽器。吊架、篩選、標籤可以邊做邊勾。</p>
+<div class="checklist-toolbar">
+<span id="checklistProgress" class="checklist-progress">0 / 22</span>
+<button id="resetChecklist" type="button" class="btn-reset">清空勾選</button>
+</div>
+<ul class="checklist">
+<li><label><input type="checkbox" data-key="units"> 長度單位是公釐（專案單位，<code>UN</code>）</label></li>
+<li><label><input type="checkbox" data-key="arch-link"> 建築連結是最新版，定位正確，已釘選</label></li>
+<li><label><input type="checkbox" data-key="struct-link"> 結構連結是最新版，位置正確</label></li>
+<li><label><input type="checkbox" data-key="position"> 柱網、電梯、管道間至少核對 3 個樓層</label></li>
+<li><label><input type="checkbox" data-key="level"> 樓層標高與建築一致，或已複製/監視</label></li>
+<li><label><input type="checkbox" data-key="viewrange"> 切割平面高於橋架與吊架（本案約 3500）</label></li>
+<li><label><input type="checkbox" data-key="traytype"> 類型是「含配件的電纜架」</label></li>
+<li><label><input type="checkbox" data-key="fittings"> 配件已指定：水平彎、垂直內彎、垂直外彎、T 型、十字、異徑、接頭</label></li>
+<li><label><input type="checkbox" data-key="elbow"> 水平彎實際畫過、尺寸正確</label></li>
+<li><label><input type="checkbox" data-key="tee"> T 型實際畫過、尺寸正確</label></li>
+<li><label><input type="checkbox" data-key="cross"> 十字實際畫過、尺寸正確</label></li>
+<li><label><input type="checkbox" data-key="reducer"> 異徑實際畫過、尺寸正確</label></li>
+<li><label><input type="checkbox" data-key="vertical"> 垂直上升、下降接得上</label></li>
+<li><label><input type="checkbox" data-key="viewtemplate"> 視圖樣板已套用，且沒有把電纜架或風管附件鎖成隱藏</label></li>
+<li><label><input type="checkbox" data-key="vg"> 可見性/圖形取代已勾電纜架、電纜架配件、電管、電管配件</label></li>
+<li><label><input type="checkbox" data-key="qaview"> 品質檢查視圖已建立</label></li>
+<li><label><input type="checkbox" data-key="3dcoord"> 3D 協調視圖已建立</label></li>
+<li><label><input type="checkbox" data-key="schedule"> 明細表列得出電纜架</label></li>
+<li><label><input type="checkbox" data-key="elevation-confirmed"> 正式路由高程已和圖說或設備需求核對</label></li>
+<li><label><input type="checkbox" data-key="filter3d"> 篩選已加入視圖；要看表面填滿時視覺型式是塗彩或一致色彩</label></li>
+<li><label><input type="checkbox" data-key="hanger"> 吊架用吊架(角鐵)，風管附件已勾選</label></li>
+<li><label><input type="checkbox" data-key="tags"> 電纜線架標籤已載入，類型改成看得到數值的類型</label></li>
+</ul>
 </section>
+
+<section id="draw" class="section">
+<h2><span class="eyebrow">教材第一節</span>四、從連結建築到畫出電纜架</h2>
+<div class="step-card"><div class="step-body">
+<p>設定原因見 Step 2、4、6、9。下面是本案實際順序。</p>
+<ol>
+<li><strong>新專案</strong>：電氣樣板，單位公釐。</li>
+<li><strong>連結建築</strong>：插入 → 連結 Revit → <code>DN-AR-1100-0000 20260923.rvt</code>，定位「原點到原點」→ 釘選。
+<ul><li>日期版／無日期版重複：管理 → 管理連結 → 移除重複 → 選無日期版 →「重新載入自…」指向最新日期版。</li></ul>
+</li>
+<li><strong>複製/監視</strong>：協同合作 → 複製/監視 → 選取連結 → 複製 → 立面選樓層線、平面選網格線（可勾「多個」）→ 兩個完成都要按。</li>
+<li><strong>平面視圖</strong>：視圖 → 平面視圖 → 樓板平面圖 → 選樓層。例如 <code>SCADA_樓層_Tray配置</code>。清單空白就取消「不要複製現有視圖」。</li>
+<li><strong>連結 CAD</strong>：插入 → 連結 CAD，手動選單位、勾「僅目前視圖」→ 對齊柱網、樓梯間、管道間 → 釘選。用連結，不要用匯入。</li>
+<li><strong>畫之前設定電纜架</strong>（最常卡關）：
+<ul>
+<li>管理 → MEP 設定 → 電氣設定 → 電纜架設定：尺寸、平面標註樣式。</li>
+<li>選類型（梯式／槽式）→ 編輯類型 → 配件指定水平彎、垂直內彎、垂直外彎、T 型、十字、異徑、接頭。</li>
+<li>選「含配件的電纜架」。電纜架沒有佈線偏好。</li>
+<li>彎曲半徑預設＝內寬，可改倍數，或畫完再改彎頭半徑。</li>
+</ul>
+</li>
+<li><strong>繪製</strong>：系統 → 電氣 → 電纜架 → 選項列設寬、高、中間高程 → 沿 CAD 綠線分段點。
+<ul>
+<li>垂直段：設起始高程 → 點位置 → 改結束高程 →「套用」。</li>
+<li>傾斜段：先畫水平，再改兩端高程。</li>
+<li>接不上：系統 → 電氣 → 電纜架配件，手動放彎頭或 T 型，旋轉、調寬度後拖去對齊。</li>
+</ul>
+</li>
+<li><strong>檢查</strong>：剖面核對高程。3D 按 <code>VG</code>，把電纜架、電纜架配件、電管、電管配件的「投影/表面 → 線」上色（表面填滿見 <a href="#step8">Step 8</a>）。協同合作 → 干涉檢查。平面看不到先看<a href="#trouble">第六節</a>，不要先重畫。</li>
+</ol>
+</div></div>
+</section>
+
+<section id="hanger" class="section">
+<h2><span class="eyebrow">教材第二節</span>五、梯型吊架（兩根吊桿＋橫擔）</h2>
+<div class="step-card"><div class="step-body">
+<p>族庫：<code>Revit課程資料\鑫亞電通\Autodesk 機電元件\04_台灣專用元件族\13_固定工具\APP風管及電纜線架\</code></p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>族</th><th>樣式</th><th>用途</th></tr></thead>
+<tbody>
+<tr><td>吊架(角鐵).rfa（圓形／標準／矩形）</td><td>兩根吊桿＋角鐵橫擔</td><td><strong>本案用這個</strong></td></tr>
+<tr><td>吊架(槽鋼).rfa／吊架(槽鐵).rfa</td><td>兩根吊桿＋槽鋼橫擔</td><td>較重的梯型吊架</td></tr>
+<tr><td>吊架(四角管束).rfa、吊架(可調整管束).rfa</td><td>單根吊桿＋管束</td><td>不是梯型，不要選</td></tr>
+<tr><td>吊架(風管角鐵).rfa</td><td>風管用</td><td>不要用在電纜架</td></tr>
+</tbody>
+</table>
+</div>
+<p class="warn">這些族的品類是「<strong>風管附件</strong>」（Duct Accessories），不是電纜架配件。電氣樣板常把風管類關掉，吊架會跟著消失。</p>
+<ol>
+<li>插入 → 載入族（Load Family）→ <code>吊架(角鐵).rfa</code>。</li>
+<li>專案瀏覽器：風管附件 → 吊架(角鐵)，拖到橋架中心線。方向不對按空白鍵，橫擔要垂直橋架。</li>
+<li>性質：「距離樓層的高程」＝橋架底（例 3000）。吊架寬度＝橋架寬＋餘量（400 寬填 500）。吊桿拉到樓板底或樑底。</li>
+<li>剖面確認橫擔托住橋架底 → 修改頁籤「陣列」（Array），沿橋架每 1.5～2 m 一個。彎頭、T 型兩側和垂直段另外補。</li>
+</ol>
+</div></div>
+</section>
+
+<section id="hanger-code" class="section">
+<h2><span class="eyebrow">教材第五節</span>吊架間距（法規）</h2>
+<div class="step-card"><div class="step-body">
+<p>《用戶用電設備裝置規則》第 354～363 條（電纜架裝置）<strong>沒有直接規定吊架間距</strong>，只要求：</p>
+<ul>
+<li>支撐間隔依電纜架荷重設計，要撐得住架子和電纜。</li>
+<li>電纜從一個電纜架跨到另一個，或進入管槽、設備時，支撐點間隔 ≤ 1.8 m。</li>
+</ul>
+<p>實務依廠商「容許跨距與荷重表」和設計圖，一般 <strong>1.5～2 m</strong> 一支。轉彎、T 型兩側、垂直段另外加。</p>
+<p>條文：<a href="https://lawplayer.com/act/6437d1ade800e5f0b9304146/section/4.7">用戶用電設備裝置規則 第 354 條起</a></p>
+</div></div>
+</section>
+
 <section id="trouble" class="section">
+<h2><span class="eyebrow">教材第三節</span>六、放了東西卻看不到</h2>
+<p><strong>症狀</strong>：放吊架或畫風管後出現「已建立的元素在樓板平面圖……視圖中都沒有顯示……」，平面和 3D 都看不到。</p>
+<p><strong>本案兩個原因會一起出現</strong>：</p>
+<ol>
+<li>切割平面太低。預設 1200，吊架和橋架在 2700～3000。</li>
+<li>可見性/圖形取代把風管類關掉。電氣樣板的「1 - 照明」「動力」這一類視圖預設隱藏機械品類。吊架是風管附件，所以被藏起來。</li>
+</ol>
+<div class="step-card"><div class="step-body">
+<ol>
+<li>平面空白處點一下，不要選到東西。</li>
+<li>性質 → 範圍 → 視圖範圍 → 編輯… → <strong>切割平面偏移改 3500</strong> → 套用 → 確定。</li>
+<li><code>V</code> 然後 <code>G</code> → 模型品類 → 勾選<strong>風管、風管定位、風管襯層、風管配件、風管附件、風管隔熱層</strong>，並確認電纜架、電纜架配件、電管、電管配件有勾。再看篩選分頁有沒有隱藏條件。</li>
+<li>性質「圖形」區的領域設「協調」。視圖樣板若有套用，改「&lt;無&gt;」或去改樣板（下一節）。</li>
+<li>還是看不到：詳細等級改「細緻」。3D 再查剖面框、可見性/圖形取代、工作集。</li>
+</ol>
+<p>已放但看不到：專案瀏覽器 → 族類型按右鍵 →「選取所有實體 → 在整個專案中」（Select All Instances → In Entire Project）→ 不要的按 Delete。</p>
+<p class="note"><strong>口訣</strong>：放了看不到 → 先看視圖範圍的切割平面 → 再看 VG 品類有沒有勾。性質面板：<code>Ctrl+1</code>。面板太窄就把左邊框往左拖。</p>
+</div></div>
 
-      <h2>四、最常發生的問題</h2>
-
-      <details class="trouble-item" open>
-        <summary>問題 1　Tray 畫了但平面看不到</summary>
-        <div class="step-body">
-          <p>優先依序檢查：</p>
-          <ol>
-            <li>View Range（Step 6，最常見原因）</li>
-            <li>Visibility/Graphics（該 View 是否關閉 Cable Tray 類別）</li>
-            <li>View Template（是否套用會隱藏 Tray 的範本）</li>
-            <li>Phase（Phase Created 是否在目前視圖篩選之外）</li>
-            <li>Workset（所在 Workset 是否被關閉顯示）</li>
-            <li>Discipline（視圖 Discipline 設定是否過濾掉該類別）</li>
-          </ol>
-        </div>
-      </details>
-
-      <details class="trouble-item">
-        <summary>問題 2　Tray 接不起來</summary>
-        <div class="step-body">
-          <p>檢查：Width、Height、Type、Elevation（是否有微小落差）、Fitting 設定、Angle（是否為支援角度）。</p>
-        </div>
-      </details>
-
-      <details class="trouble-item">
-        <summary>問題 3　Elbow / Tee 不會自動產生</summary>
-        <div class="step-body">
-          <p>檢查：Cable Tray Type 的 Fitting 對應、Routing Preferences／Fitting 設定（介面路徑需於 Revit 2027 實機確認）、Width compatibility、Geometry angle。</p>
-        </div>
-      </details>
-
-      <details class="trouble-item">
-        <summary>問題 4　模型跟建築對不起來</summary>
-        <div class="step-body">
-          <p class="warn"><strong>先停工，不要繼續畫。</strong></p>
-          <p>檢查：Positioning、Shared Coordinates（是否真的發佈／接收過）、Project Base Point、Survey Point、Revit Link positioning method。</p>
-        </div>
-      </details>
-
-      <details class="trouble-item">
-        <summary>問題 5　畫到後面模型超亂</summary>
-        <div class="step-body">
-          <p>常見原因：沒命名、沒 View Template、沒 Filter、沒 Browser Organization、沒分流 WIP／COORD／SHEET。</p>
-        </div>
-      </details>
-    
+<details class="trouble-item" open>
+<summary>問題 1　電纜架畫了但平面看不到</summary>
+<div class="step-body">
+<ol>
+<li>視圖範圍的切割平面（上面，最常見）。</li>
+<li>可見性/圖形取代有沒有關掉電纜架。</li>
+<li>視圖樣板有沒有鎖住可見性（<a href="#vg-locked">下一節</a>）。</li>
+<li>階段：建立的階段（Phase Created）是不是在視圖的階段篩選之外。</li>
+<li>工作集是不是被關掉顯示。</li>
+<li>領域。建築或結構有機會濾掉機電，本案改「協調」。</li>
+</ol>
+</div>
+</details>
+<details class="trouble-item">
+<summary>問題 2　電纜架接不起來</summary>
+<div class="step-body">
+<p>看寬度、高度、是不是含配件的類型、兩端高程有沒有微小落差、配件指定了沒有、角度配不配。接不上就改走系統 → 電氣 → 電纜架配件，手動放了再對齊。</p>
+</div>
+</details>
+<details class="trouble-item">
+<summary>問題 3　彎頭或 T 型不會自動產生</summary>
+<div class="step-body">
+<p>電纜架沒有佈線偏好。確認類型是「含配件的電纜架」，編輯類型的配件欄已指定水平彎、垂直內彎、垂直外彎、T 型、十字、異徑、接頭。寬度不同要有異徑。角度要是配件支援的，常見是 90° 和 45°。</p>
+</div>
+</details>
+<details class="trouble-item">
+<summary>問題 4　模型跟建築對不起來</summary>
+<div class="step-body">
+<p class="warn"><strong>先停工。</strong>檢查定位是不是原點到原點、有沒有誤選依共用座標、專案基準點或測量點有沒有被搬動。</p>
+</div>
+</details>
+<details class="trouble-item">
+<summary>問題 5　畫到後面模型超亂</summary>
+<div class="step-body">
+<p>視圖和類型都用預設名、沒有視圖樣板、顏色都靠手動取代、沒有瀏覽器組織、同一張視圖從草稿用到出圖。</p>
+</div>
+</details>
 </section>
+
+<section id="vg-locked" class="section">
+<h2><span class="eyebrow">教材第四節</span>VG 整個是灰的、不能勾</h2>
+<div class="step-card"><div class="step-body">
+<p>原因：視圖套了視圖樣板，可見性被樣板鎖住。</p>
+<ul>
+<li><strong>方法 1（建議）</strong>：性質 → 識別資料 → 視圖樣板 → 點按鈕 →「V/G 取代模型」按「編輯…」→ 勾風管類品類 → 確定。同一張樣板的視圖會一起改。篩選上色則改「V/G 取代篩選」。</li>
+<li><strong>方法 2</strong>：視圖樣板改「&lt;無&gt;」，再用 <code>VG</code> 自己勾。這張視圖之後不再跟樣板同步。</li>
+</ul>
+</div></div>
+</section>
+
+<section id="tags" class="section">
+<h2><span class="eyebrow">教材第七節</span>七、電纜架標籤（鑫亞 03_機電用標籤）</h2>
+<div class="step-card"><div class="step-body">
+<p>資料夾：<code>Revit課程資料\鑫亞電通\Autodesk 機電元件\03_機電用標籤\</code></p>
+<ul>
+<li><code>管\</code>：管、導管、撓性管、可變彎管、管道、<strong>電纜線架標籤</strong>、電路標籤 A/B/C。每種有一般版和「(物件方向)」版。</li>
+<li><code>管配附件\</code>：管配件、管附件、導管配件、<strong>電纜線架配件標籤</strong>。</li>
+<li><code>設備\</code>：照明、電氣設備、機械、火警、衛工、資料、通信、門禁、電話。檔名有 (SP) 的用共用參數。</li>
+</ul>
+<p>一般版永遠水平。「(物件方向)」版跟著橋架旋轉。</p>
+<h3>1. 載入</h3>
+<p>插入 → 載入族 → <code>03_機電用標籤\管\電纜線架標籤.rfa</code>。配件標籤在 <code>管配附件\</code>。</p>
+<h3>2. 標註</h3>
+<ul>
+<li>單個：標註 → 依品類建立標籤（Tag by Category，快捷鍵 <code>TG</code>）→ 點橋架。</li>
+<li>一次全部：標註 → 全部加上標籤（Tag All；對話框是「標籤所有未標籤的」）→ 勾「電纜架標籤」，「載入的標籤」確認是 <code>電纜線架標籤</code> → 確定。</li>
+</ul>
+<h3>3. 3D 要先鎖方位</h3>
+<p>出現「在您可以加入標籤……3D 視圖的方位必須已鎖住」：視圖控制列「房子＋鎖」→「儲存方位並鎖住視圖」（Save Orientation and Lock View）→ 命名，例如 <code>scada</code>。要轉角度就解鎖、調好、再鎖，標籤會留著。建議另複製一張 3D 專門放標籤。</p>
+<h3>4. 標籤都是「?」</h3>
+<p>標籤讀到的參數是空的。這個族裡四個標記疊在一起：<code>BOD:底部高程</code>、<code>物件描述</code>、<code>寬度 x 高度</code>、<code>線徑描述</code>。顯示用族類型（Family Types）切，可見性綁高程、物件描述、尺寸、線徑描述。預設類型的物件描述和線徑描述沒有值，就顯示「?」。</p>
+<ol>
+<li>選取標籤 → 編輯族。</li>
+<li>修改頁籤最左「性質」→「族類型」。這不是標記的「編輯類型」（Edit Type），編輯類型只能改字的大小。</li>
+<li>新增類型 <code>尺寸+高程</code> → 勾「尺寸」「高程」，不勾物件描述、線徑描述 → 確定。</li>
+<li>載入到專案（Load into Project）→ 覆寫既有版本（Overwrite the existing version）。也可以用載入到專案並關閉（Load into Project and Close）。</li>
+<li>專案裡標籤按右鍵 → 選取所有實體 → 在視圖中可見 → 類型選擇器改 <code>電纜線架標籤 : 尺寸+高程</code>。</li>
+</ol>
+<p>結果例如 <code>300 BOD:2700 mm</code>。兩行疊住就回族，把 BOD 標記往上移。要加 SCADA 字樣：標記加備註（Comments），橋架的備註填 <code>SCADA</code>。</p>
+<h3>5. 字超大</h3>
+<p>標籤依視圖比例放大，<code>1:500</code> 字就很大。左下改 <code>1:100</code> 或 <code>1:50</code>；或族內標記 → 編輯類型，文字從 1.5 mm 改 1 mm；或每段直線只留一個標籤。疊字時拖中間藍點，性質勾「引線」（Leader）。</p>
+<h3>6. 自己改顯示格式</h3>
+<p>編輯族 → 點標記 → 編輯標記（Edit Label）→ 左邊參數按 → 加到右邊：寬度（前置詞 <code>CT</code>、尾碼 <code>×</code>）、高度、底部高程（前置詞 <code> / FFL+</code>）、備註（前置詞 <code> / </code>）。編輯參數單位格式 → 取消使用專案設定 → 公釐、小數 0。另存例如 <code>電纜線架標籤_SCADA.rfa</code> → 載入到專案 → 覆寫既有版本。</p>
+</div></div>
+</section>
+
 <section id="mapping" class="section">
-
-      <h2>五、AutoCAD Router 與 Revit 欄位對應</h2>
-      <p class="note"><strong>資料架構建議</strong>：以下為欄位對應的架構建議，<strong>不代表目前已完成自動同步功能</strong>，實際銜接需另行開發匯入／匯出流程。</p>
-      <table class="mapping-table">
-        <thead><tr><th>AutoCAD / Router 端欄位</th><th>Revit 對應參數</th></tr></thead>
-        <tbody>
-          <tr><td>ROUTE_ID</td><td>Route_ID</td></tr>
-          <tr><td>TYPE</td><td>Type</td></tr>
-          <tr><td>WIDTH</td><td>Width</td></tr>
-          <tr><td>HEIGHT</td><td>Height</td></tr>
-          <tr><td>ELEVATION</td><td>Elevation</td></tr>
-          <tr><td>FROM</td><td>From</td></tr>
-          <tr><td>TO</td><td>To</td></tr>
-          <tr><td>LEVEL</td><td>Level</td></tr>
-          <tr><td>SYSTEM</td><td>SCADA_System</td></tr>
-          <tr><td>STATUS</td><td>Status</td></tr>
-        </tbody>
-      </table>
-      <div class="pipeline">
-        <span>AutoCAD Router</span><span class="arrow">→</span>
-        <span>CSV / Excel</span><span class="arrow">→</span>
-        <span>Revit</span><span class="arrow">→</span>
-        <span>Schedule</span><span class="arrow">→</span>
-        <span>BOQ</span>
-      </div>
-      <p class="note">上圖為未來可能的銜接路徑示意，非目前已實作功能。</p>
-    
+<h2><span class="eyebrow">資料架構，尚未自動同步</span>八、AutoCAD 路由與 Revit 欄位</h2>
+<p class="note">這是以後對欄位用的建議，不是已經做好的同步。AutoCAD MEP 的指令維持英文，例如 <code>STYLEMANAGER</code>、<code>CABLETRAYPREFERENCES</code>；這張表沒有要在 AutoCAD 裡下這些指令。</p>
+<div class="table-scroll">
+<table class="mapping-table">
+<thead><tr><th>路由端欄位</th><th>意思</th><th>Revit 側</th></tr></thead>
+<tbody>
+<tr><td>ROUTE_ID</td><td>路由編號</td><td>參數 Route_ID</td></tr>
+<tr><td>TYPE</td><td>類型</td><td>類型</td></tr>
+<tr><td>WIDTH</td><td>寬度</td><td>寬度</td></tr>
+<tr><td>HEIGHT</td><td>高度</td><td>高度</td></tr>
+<tr><td>ELEVATION</td><td>高程</td><td>高程或中間高程</td></tr>
+<tr><td>FROM</td><td>起點</td><td>參數 From</td></tr>
+<tr><td>TO</td><td>終點</td><td>參數 To</td></tr>
+<tr><td>LEVEL</td><td>樓層</td><td>樓層</td></tr>
+<tr><td>SYSTEM</td><td>系統</td><td>參數 SCADA_System</td></tr>
+<tr><td>STATUS</td><td>狀態</td><td>參數 Status</td></tr>
+</tbody>
+</table>
+</div>
+<div class="pipeline">
+<span>AutoCAD 路由</span><span class="arrow">→</span>
+<span>CSV／Excel</span><span class="arrow">→</span>
+<span>Revit 共用參數</span><span class="arrow">→</span>
+<span>明細表</span><span class="arrow">→</span>
+<span>數量清單</span>
+</div>
 </section>
+
 <section id="permissions" class="section">
-
-      <h2>六、公司電腦權限限制（硬性規則）</h2>
-      <p>適用情境：公司 Windows 電腦，使用者帳號<strong>沒有系統管理員權限</strong>。本節是整份指南的硬性前提——所有「必做」與「建議」流程都已依此限制設計，不需要提權即可完成。</p>
-
-      <h3>禁止事項</h3>
-      <p>以下操作一律不列入本文件的必要流程：</p>
-      <ul class="check-static">
-        <li>要求以「系統管理員身分執行」</li>
-        <li>修改 Windows 系統層級設定 / 系統目錄 / Program Files</li>
-        <li>修改 Registry（除非明確確認是目前使用者可寫入的 HKCU 且不需提權）</li>
-        <li>安裝需要管理員權限的 MSI / EXE、Windows Service、系統 Driver</li>
-        <li>修改系統 PATH 或全機環境變數</li>
-        <li>啟用需要 IT 權限的 Windows Feature</li>
-        <li>假設使用者能安裝 Revit Add-in、Navisworks Manage、Dynamo 套件、pyRevit</li>
-        <li>假設使用者能修改 Revit 安裝目錄，或安裝 Autodesk Desktop Connector、ODA、第三方 BIM 工具</li>
-      </ul>
-
-      <h3>優先方案順序</h3>
-      <ol>
-        <li>Revit 原生功能</li>
-        <li>使用者層級設定</li>
-        <li>專案檔內設定</li>
-        <li>View Template</li>
-        <li>View Filter</li>
-        <li>Schedule</li>
-        <li>Project Parameters</li>
-        <li>Shared Parameters（前提是不需系統管理員，見 Step 10）</li>
-        <li>Excel / CSV</li>
-        <li>純文字設定檔</li>
-        <li>PowerShell / CMD，僅限不需管理員權限的命令</li>
-        <li>Portable 工具，須確認不需安裝、不需 UAC、不修改系統</li>
-        <li>Git / Python，僅限目前電腦已存在且可直接執行，不可假設可以安裝</li>
-      </ol>
-
-      <h3>若某功能通常需要額外安裝</h3>
-      <p>涉及 Revit Add-in、Dynamo Package、pyRevit、Navisworks Manage、外部 clash detection 工具、Python 套件、第三方外掛或 Windows 系統工具時，一律標註「<em>此方案可能需要額外安裝或管理員權限，目前不列為主要方案</em>」，並提供無管理員權限的替代方案：</p>
-      <table class="compare">
-        <thead><tr><th></th><th>寫法</th></tr></thead>
-        <tbody>
-          <tr><td>❌ 不要只寫</td><td>「安裝 pyRevit 做批次處理」</td></tr>
-          <tr><td>✅ 應改成</td><td><strong>主要方案</strong>：用 Revit 原生 Schedule／View Filter／Project Parameters 完成。<br><strong>進階方案</strong>：pyRevit 可進一步自動化，但可能需公司 IT 核准，不列入必要流程。</td></tr>
-        </tbody>
-      </table>
-
-      <h3>執行原則</h3>
-      <p class="warn">若某操作是否需要管理員權限無法確認：<strong>不得直接要求執行</strong>。必須標註「<strong>【需確認權限】</strong>」，並優先提供無管理員權限替代方案。</p>
-
-      <h3>本指南（Step 1～15）權限自查結果</h3>
-      <table class="mapping-table">
-        <thead><tr><th>Step</th><th>需安裝／提權？</th><th>說明</th></tr></thead>
-        <tbody>
-          <tr><td>1～9, 11～14</td><td>否</td><td>皆為 Revit 原生選單功能</td></tr>
-          <tr><td>10　SCADA 參數</td><td>否</td><td>共用參數檔存於使用者可寫入路徑即可</td></tr>
-          <tr><td>15　Worksharing</td><td>否（需網路資料夾讀寫權限，非系統管理員權限）</td><td>不確定資料夾權限時標記【需確認權限】並詢問 IT／專案負責人</td></tr>
-        </tbody>
-      </table>
-      <p class="verdict"><strong>結論</strong>：Step 1～15 全部可用一般使用者權限完成，不需要安裝 pyRevit、Dynamo、Navisworks Manage 或任何第三方外掛。</p>
-    
+<h2><span class="eyebrow">硬性規則</span>九、公司電腦權限限制</h2>
+<p>公司 Windows 電腦、沒有系統管理員權限。必做和建議都不需要提權。</p>
+<h3>不要做的事</h3>
+<ul class="check-static">
+<li>不要用系統管理員身分執行</li>
+<li>不要改 Windows 系統設定、系統目錄、<code>Program Files</code></li>
+<li>不要改登錄，除非已確認是使用者可寫的 HKCU 且不用提權</li>
+<li>不要安裝需要管理員的 MSI／EXE、Windows 服務、驅動程式</li>
+<li>不要改系統 PATH 或全機環境變數</li>
+<li>不要開需要 IT 權限的 Windows 功能</li>
+<li>不要假設能裝 Revit 增益集、Navisworks Manage、Dynamo 套件、pyRevit</li>
+<li>不要假設能改 Revit 安裝目錄，或裝 Autodesk Desktop Connector、ODA、其他 BIM 工具</li>
+</ul>
+<h3>優先順序</h3>
+<ol>
+<li>Revit 原生功能</li>
+<li>使用者自己的設定</li>
+<li>專案檔裡的設定</li>
+<li>視圖樣板</li>
+<li>篩選</li>
+<li>明細表</li>
+<li>專案參數</li>
+<li>共用參數（見 Step 10，不需要系統管理員）</li>
+<li>Excel／CSV、純文字設定檔</li>
+<li>不需提權的 PowerShell／CMD、免安裝工具</li>
+<li>這台電腦已經有的 Git／Python，不要假設可以另外安裝</li>
+</ol>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th></th><th>寫法</th></tr></thead>
+<tbody>
+<tr><td>不要只寫</td><td>「安裝 pyRevit 做批次處理」</td></tr>
+<tr><td>應改成</td><td><strong>主要方案</strong>：明細表、篩選、專案參數。<strong>進階方案</strong>：pyRevit 可能要 IT 核准，不列入必要流程。</td></tr>
+</tbody>
+</table>
+</div>
+<p class="warn">不確定要不要管理員權限時，不要直接要求執行。標「<strong>【需確認權限】</strong>」，並先給不需提權的做法。</p>
+<div class="table-scroll">
+<table class="mapping-table">
+<thead><tr><th>步驟</th><th>要安裝或提權？</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td>1～9、11～14，以及繪製、吊架、篩選、標籤</td><td>否</td><td>Revit 原生功能與載入族</td></tr>
+<tr><td>10　參數</td><td>否</td><td>參數檔放在自己寫得進去的路徑</td></tr>
+<tr><td>15　工作共用</td><td>否（要網路資料夾讀寫，不是系統管理員）</td><td>不確定就標【需確認權限】</td></tr>
+</tbody>
+</table>
+</div>
+<p class="verdict"><strong>結論</strong>：必要流程用一般使用者權限就做得完。</p>
 </section>
-<section id="verify" class="section">
 
-      <h2>七、仍需 Revit 2027 實機驗證的項目清單</h2>
-      <ol>
-        <li>Step 0-A：新建專案時 Revit 2027 內建樣板的實際名稱。</li>
-        <li>Step 6：View Range 中 Cut Plane 判斷各 Category 顯示與否的細部邏輯。</li>
-        <li>Step 10：Project Parameter 與 Shared Parameter 在 Schedule／Filter 中可用性的實際差異。</li>
-        <li>問題 3：Routing Preferences／Fitting 設定的實際選單路徑。</li>
-      </ol>
-      <p>在完成上述驗證前，本文件屬於「可直接照做的操作指南」，但這 4 個細節建議由實際操作 Revit 2027 的人員補充確認。</p>
-    
+<section id="verify" class="section">
+<h2><span class="eyebrow">不擋操作</span>十、若畫面差一個字</h2>
+<p>下面幾項不影響照著做。畫面上的文字和這裡不同時，以 Revit 2025.5 繁體中文為準。</p>
+<ol>
+<li>公司樣板的檔名。這裡只寫「電氣樣板」，不猜安裝目錄裡的英文 .rte 檔名。</li>
+<li>取得座標、發佈座標在協同合作頁籤上的面板名稱。本案連結用的是原點到原點，還沒按這兩個指令。</li>
+<li>明細表的高程欄位顯示「高程」或「中間高程」，以性質面板為準。</li>
+</ol>
+<p>已經用 2025.5 繁中和 2026-10-16 教材確認過的：電纜架沒有佈線偏好；切割平面低於橋架或吊架時平面不顯示；視圖樣板鎖住可見性時 <code>VG</code> 是灰的，要改樣板裡的 V/G 取代。</p>
 </section>
 
 <footer style="margin-top:80px; padding-top:24px; border-top:1px solid var(--border); color:var(--text-faint); font-size:13px">
-<p>完整內容以 <a href="SCADA_REVIT_STARTUP_GUIDE.md">SCADA_REVIT_STARTUP_GUIDE.md</a> 為準。</p>
+<p>完整內容以 <a href="SCADA_REVIT_STARTUP_GUIDE.md">SCADA_REVIT_STARTUP_GUIDE.md</a> 為準。介面用語對照 Revit 2025.5 繁體中文。</p>
 </footer>
 </main>
-</div>
 </div>
 </div>
 <script>
@@ -769,7 +964,7 @@ table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid
   scrim.addEventListener('click', closeDrawer);
   tocLinks.forEach(a=>a.addEventListener('click', ()=>{ if(window.innerWidth<=800) closeDrawer(); }));
 
-  // Checklist localStorage 17 items
+  // Checklist localStorage
   const checklist = document.getElementById('checklist');
   if(checklist){
     const boxes = checklist.querySelectorAll('input[type="checkbox"]');
