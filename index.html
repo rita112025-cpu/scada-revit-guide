@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>行政中心 SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="行政中心 SCADA 電纜橋架系統的 Revit 2025.5 繁體中文建模指南：起手設定、電纜架繪製、梯型吊架、疑難排解、篩選上色與標籤。">
+<title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
+<meta name="description" content="SCADA 電纜橋架系統的 Revit 2025.5 繁體中文建模指南：起手設定、電纜架繪製、梯型吊架、疑難排解、篩選上色與標籤。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -260,7 +260,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <main class="content">
 <header class="page-header">
 <h1>SCADA 電纜架<br>Revit 入門指南</h1>
-<p class="lede">行政中心 SCADA 電纜橋架系統。介面是 <strong>Revit 2025.5 繁體中文</strong>。正式畫電纜架（Cable Tray）、電管（Conduit）之前先把單位、連結、樓層、視圖設對；再依 2026-10-16 實作教材畫橋架、放吊架、上色、貼標籤。功能名稱第一次寫成「中文（English）」。</p>
+<p class="lede">SCADA 電纜橋架系統。介面是 <strong>Revit 2025.5 繁體中文</strong>。正式畫電纜架（Cable Tray）、電管（Conduit）之前先把單位、連結、樓層、視圖設對；再依 2026-10-16 實作教材畫橋架、放吊架、上色、貼標籤。功能名稱第一次寫成「中文（English）」。</p>
 <div class="badge-row">
 <span class="badge badge-must">必做</span>
 <span class="badge badge-suggest">建議</span>
@@ -288,7 +288,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="b-card b-span-3 orange"><div class="num">04</div><div class="k">實作</div><h3>電纜架繪製</h3><p>從連結建築畫到橋架</p><a href="#draw">查看 →</a></div>
 <div class="b-card b-span-3"><div class="num">05</div><div class="k">實作</div><h3>梯型吊架</h3><p>吊架(角鐵)，品類是風管附件</p><a href="#hanger">查看 →</a></div>
 <div class="b-card b-span-3"><div class="num">06</div><div class="k">排解</div><h3>放了看不到</h3><p>切割平面與可見性</p><a href="#trouble">查看 →</a></div>
-<div class="b-card b-span-3 orange"><div class="num">07</div><div class="k">實作</div><h3>電纜架標籤</h3><p>鑫亞標籤與問號</p><a href="#tags">查看 →</a></div>
+<div class="b-card b-span-3 orange"><div class="num">07</div><div class="k">實作</div><h3>電纜架標籤</h3><p>廠商標籤與問號</p><a href="#tags">查看 →</a></div>
 <div class="b-card b-span-2 orange"><div class="num">01</div><div class="k">必做</div><h3>專案單位</h3><a href="#step1">查看 →</a></div>
 <div class="b-card b-span-2"><div class="num">02</div><div class="k">必做</div><h3>連結模型</h3><a href="#step2">查看 →</a></div>
 <div class="b-card b-span-2 orange"><div class="num">03</div><div class="k">必做</div><h3>共用座標</h3><a href="#step3">查看 →</a></div>
@@ -353,7 +353,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p><strong>目的</strong>：橋架要避開梁柱、抓對高程，必須有建築和結構當背景。</p>
 <p><strong>本案點法</strong>：</p>
 <ol>
-<li>插入 → 連結 Revit（Link Revit）→ 選 <code>DN-AR-1100-0000 20260923.rvt</code>。</li>
+<li>插入 → 連結 Revit（Link Revit）→ 選 <code>日期版建築模型（例：建築模型_YYYYMMDD.rvt）</code>。</li>
 <li>定位（Positioning）選「原點到原點」（Origin to Origin）→ 用釘選（Pin）固定。</li>
 <li>日期版和無日期版重複報錯：管理 → 管理連結（Manage Links）→ 移除重複 → 選無日期版 →「重新載入自…」（Reload From）指向最新日期版。</li>
 <li>CAD 底圖：插入 → 連結 CAD（Link CAD）。手動選單位、勾「僅目前視圖」（Current view only）→ 對齊柱網、樓梯間、管道間 → 釘選。<strong>用連結，不要用匯入（Import）</strong>，原檔更新才會跟著更新。</li>
@@ -607,7 +607,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p>設定原因見 Step 2、4、6、9。下面是本案實際順序。</p>
 <ol>
 <li><strong>新專案</strong>：電氣樣板，單位公釐。</li>
-<li><strong>連結建築</strong>：插入 → 連結 Revit → <code>DN-AR-1100-0000 20260923.rvt</code>，定位「原點到原點」→ 釘選。
+<li><strong>連結建築</strong>：插入 → 連結 Revit → <code>日期版建築模型（例：建築模型_YYYYMMDD.rvt）</code>，定位「原點到原點」→ 釘選。
 <ul><li>日期版／無日期版重複：管理 → 管理連結 → 移除重複 → 選無日期版 →「重新載入自…」指向最新日期版。</li></ul>
 </li>
 <li><strong>複製/監視</strong>：協同合作 → 複製/監視 → 選取連結 → 複製 → 立面選樓層線、平面選網格線（可勾「多個」）→ 兩個完成都要按。</li>
@@ -636,7 +636,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <section id="hanger" class="section">
 <h2><span class="eyebrow">教材第二節</span>五、梯型吊架（兩根吊桿＋橫擔）</h2>
 <div class="step-card"><div class="step-body">
-<p>族庫：<code>Revit課程資料\鑫亞電通\Autodesk 機電元件\04_台灣專用元件族\13_固定工具\APP風管及電纜線架\</code></p>
+<p>族庫：<code>課程提供的機電元件庫\04_台灣專用元件族\13_固定工具\風管及電纜線架\</code></p>
 <div class="table-scroll">
 <table class="compare">
 <thead><tr><th>族</th><th>樣式</th><th>用途</th></tr></thead>
@@ -742,9 +742,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </section>
 
 <section id="tags" class="section">
-<h2><span class="eyebrow">教材第七節</span>七、電纜架標籤（鑫亞 03_機電用標籤）</h2>
+<h2><span class="eyebrow">教材第七節</span>七、電纜架標籤（廠商提供的機電標籤族）</h2>
 <div class="step-card"><div class="step-body">
-<p>資料夾：<code>Revit課程資料\鑫亞電通\Autodesk 機電元件\03_機電用標籤\</code></p>
+<p>資料夾：<code>課程提供的機電元件庫\03_機電用標籤\</code></p>
 <ul>
 <li><code>管\</code>：管、導管、撓性管、可變彎管、管道、<strong>電纜線架標籤</strong>、電路標籤 A/B/C。每種有一般版和「(物件方向)」版。</li>
 <li><code>管配附件\</code>：管配件、管附件、導管配件、<strong>電纜線架配件標籤</strong>。</li>
