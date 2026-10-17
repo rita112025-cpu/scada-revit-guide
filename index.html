@@ -1026,7 +1026,17 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li><strong>方法 1（建議）</strong>：性質 → 識別資料 → 視圖樣板 → 點按鈕 →「V/G 取代模型」按「編輯…」→ 勾風管類品類 → 確定。同一張樣板的視圖會一起改。篩選上色則改「V/G 取代篩選」。</li>
 <li><strong>方法 2</strong>：視圖樣板改「&lt;無&gt;」，再用 <code>VG</code> 自己勾。這張視圖之後不再跟樣板同步。</li>
 </ul>
-<p>專案瀏覽器右鍵「套用樣板性質」，和在性質裡指定視圖樣板，都會把樣板綁到這張視圖。哪些項目變灰，看樣板有沒有勾該列的「包括」。上色要帶走哪些項目，見<a href="#view-template-color">上色存成視圖樣板</a>。</p>
+<p>VG 變灰，只發生在下面的「綁定」。右鍵「套用樣板性質」不會鎖住 VG。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>方式</th><th>做法</th><th>特性</th></tr></thead>
+<tbody>
+<tr><td>套一次</td><td>專案瀏覽器對視圖按右鍵 → 套用樣板性質（Apply Template Properties）→ 選樣板。或視圖 → 圖形 → 視圖樣板 → 將樣板性質套用到目前視圖（Apply Template Properties to Current View）。</td><td>只複製當下的設定。性質「識別資料 → 視圖樣板」仍是 &lt;無&gt;。之後可以自己改 VG。樣板再更新，這張視圖不會同步。</td></tr>
+<tr><td>綁定</td><td>性質「識別資料 → 視圖樣板」選樣板。</td><td>視圖和樣板連在一起。有勾「包括」的項目會變灰。樣板更新會同步。灰掉時用上面兩個方法。</td></tr>
+</tbody>
+</table>
+</div>
+<p>上色要帶走哪些項目，見<a href="#view-template-color">上色存成視圖樣板</a>。</p>
 </div></div>
 </section>
 
@@ -1112,32 +1122,30 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>開啟已經改好顏色的視圖。</li>
 <li>視圖 → 圖形 → 視圖樣板 → 從目前視圖建立樣板（Create Template from Current View）。也可以在專案瀏覽器對該視圖按右鍵 → 從視圖建立視圖樣板。</li>
 <li>命名，例如 <code>SCADA電纜架_平面上色</code> → 確定。</li>
-<li>在視圖樣板視窗確認這些項目有勾「包括」（Include）：<strong>V/G 取代模型</strong>（V/G Overrides Model）、<strong>V/G 取代篩選</strong>（V/G Overrides Filters）、視覺型式（Visual Style）、領域（Discipline）、視圖範圍（View Range）→ 確定。沒勾包括的項目，套用時不會被蓋掉，也不會被鎖住。</li>
+<li>在視圖樣板視窗確認這些項目有勾「包括」（Include）：<strong>V/G 取代模型</strong>（V/G Overrides Model）、<strong>V/G 取代篩選</strong>（V/G Overrides Filters）、視覺型式（Visual Style）、領域（Discipline）、視圖範圍（View Range）→ 確定。沒勾包括的項目，套一次時不會被複製過去，綁定時也不會變灰。</li>
 </ol>
 <h3>套到其他視圖</h3>
-<p>下面兩種都會把樣板指定到視圖上。之後樣板一改，有勾包括的項目會跟著更新，那些項目在性質裡變灰。</p>
 <div class="table-scroll">
 <table class="compare">
-<thead><tr><th>從哪裡點</th><th>做法</th></tr></thead>
+<thead><tr><th>方式</th><th>做法</th><th>特性</th></tr></thead>
 <tbody>
-<tr><td>專案瀏覽器</td><td>視圖名稱按右鍵 → 套用樣板性質（Apply Template Properties）→ 選樣板</td></tr>
-<tr><td>性質面板</td><td>識別資料 → 視圖樣板 → 選同一個樣板</td></tr>
+<tr><td>套一次</td><td>專案瀏覽器對視圖按右鍵 → 套用樣板性質（Apply Template Properties）→ 選樣板。或視圖 → 圖形 → 視圖樣板 → 將樣板性質套用到目前視圖（Apply Template Properties to Current View）。</td><td>只複製當下的設定。性質「識別資料 → 視圖樣板」仍是 &lt;無&gt;。之後可以自己改 VG。樣板再更新，這張視圖不會同步。</td></tr>
+<tr><td>綁定</td><td>性質「識別資料 → 視圖樣板」選樣板。</td><td>視圖和樣板連在一起。有勾「包括」的項目會變灰，要改就改樣板。樣板更新會同步。見<a href="#vg-locked">VG 被樣板鎖住</a>。</td></tr>
 </tbody>
 </table>
 </div>
 <ul>
-<li>多張一起套：專案瀏覽器按住 <code>Ctrl</code> 多選 → 右鍵 → 套用樣板性質。</li>
-<li>怎麼確認已經套上：性質「識別資料 → 視圖樣板」顯示樣板名稱，不是 &lt;無&gt;。</li>
+<li>多張一起套一次：專案瀏覽器按住 <code>Ctrl</code> 多選 → 右鍵 → 套用樣板性質。視圖樣板仍是 &lt;無&gt;。</li>
+<li>怎麼分辨：套一次之後顏色會變，但視圖樣板仍是 &lt;無&gt;。綁定之後，性質「識別資料 → 視圖樣板」會顯示樣板名稱。</li>
 </ul>
 <p class="warn"><strong>繪圖區按右鍵沒有「套用樣板」。</strong>要在專案瀏覽器的視圖名稱上按右鍵，或用性質面板的視圖樣板。</p>
-<p class="note">有的講義把右鍵「套用樣板性質」寫成只套一次、之後還能改 VG，把性質裡指定樣板寫成才會鎖住。Revit 2025 這兩種都會指定樣板。想保留某一項可以自己改，建立樣板時不要勾該列的「包括」。顏色要跟樣板走，就把「V/G 取代模型」和「V/G 取代篩選」留著勾。</p>
 <h3>注意</h3>
 <ul>
 <li><strong>平面和 3D 要各建一個樣板。</strong>視圖類型不同，平面樣板不能套到 3D。3D 可另存 <code>SCADA電纜架_3D上色</code>。</li>
 <li>右鍵「取代視圖中的圖形（Override Graphics in View）→ 依元素（By Element）」改的顏色不會寫進樣板。要帶去其他視圖，用篩選上色，再把「V/G 取代篩選」勾進包括。</li>
 <li>別的專案要用：管理 → 傳遞專案標準（Transfer Project Standards）→ 勾「視圖樣板」。篩選也要帶走時，一併勾「篩選」。</li>
 </ul>
-<p class="verdict"><strong>驗收</strong>：另一張同類型平面套用後，性質裡看得到樣板名稱，橋架顏色和來源視圖一致。</p>
+<p class="verdict"><strong>驗收</strong>：套一次後，另一張同類型平面的橋架顏色和來源視圖一致，視圖樣板仍是 &lt;無&gt;。性質裡若看得到樣板名稱，代表已綁定，之後改樣板會一起更新。</p>
 </div></div>
 </section>
 
@@ -1725,7 +1733,17 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>水管關聯頁籤上，加蓋開放端、佈線解決方案的按鈕文字若差一個字，以畫面上的為準。</li>
 <li>視覺型式「線框」若畫面上寫「線架構」，指的是同一個（Wireframe）。</li>
 <li>干涉報告跳到碰撞的按鈕是「展示」，再次打開是「展示上次報告」。品類來源的預設值是「目前的專案」。梁那一類在清單裡是「結構構架」；對話框若寫「結構框架」，指的是同一個品類。</li>
-<li>視圖樣板對話框的勾選欄是「包括」。右鍵「套用樣板性質」和性質裡指定視圖樣板，都會把樣板綁上；沒勾包括的項目才不會被鎖。</li>
+<li>功能區指令在說明文件寫「將樣板性質套用到目前視圖」。畫面若寫「套用樣板性質至目前視圖」，是同一個指令。它和右鍵「套用樣板性質」都是套一次，不會綁定。對照：
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>方式</th><th>做法</th><th>特性</th></tr></thead>
+<tbody>
+<tr><td>套一次</td><td>專案瀏覽器對視圖按右鍵 → 套用樣板性質（Apply Template Properties）。或視圖 → 圖形 → 視圖樣板 → 將樣板性質套用到目前視圖（Apply Template Properties to Current View）。</td><td>只複製當下的設定。性質「識別資料 → 視圖樣板」仍是 &lt;無&gt;。之後可以自己改 VG。樣板再更新，這張視圖不會同步。</td></tr>
+<tr><td>綁定</td><td>性質「識別資料 → 視圖樣板」選樣板。</td><td>視圖和樣板連在一起。有勾「包括」的項目會變灰。樣板更新會同步。</td></tr>
+</tbody>
+</table>
+</div>
+</li>
 <li>匯出 NWC 的頁籤，說明文件寫「附加模組」。2025.5 畫面若寫「增益集」，就是同一個頁籤，底下仍是外部工具 → Navisworks。</li>
 </ol>
 <p>已經用 2025.5 繁中和 2026-10-16 教材確認過的：電纜架沒有佈線偏好；切割平面低於橋架或吊架時平面不顯示；視圖樣板鎖住可見性時 <code>VG</code> 是灰的，要改樣板裡的 V/G 取代。</p>
