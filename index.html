@@ -280,6 +280,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#discipline" data-keywords="領域 次領域 Discipline Sub-Discipline 電氣 機械 衛工 協調 半色調 瀏覽器組織 建築 結構 視圖標籤">領域與次領域</a></li>
     <li><a href="#view-template-color" data-keywords="視圖樣板 View Template 從目前視圖建立樣板 套用樣板性質 包括 V/G 取代模型 V/G 取代篩選 上色 SCADA電纜架_平面上色 傳遞專案標準">上色存成視圖樣板</a></li>
     <li><a href="#interference" data-keywords="干涉檢查 Interference Check 碰撞 展示 展示上次報告 重新整理 NWC NWD NWF Navisworks 碰撞偵測 Clash Detective 匯出 目前的專案">干涉檢查與 Navisworks</a></li>
+    <li><a href="#nwc-nwd" data-keywords="匯出 NWC NWD NWF Navisworks NWC Export Utility SwitchBack 增益集 外部工具 附加 Append 重新整理 取得座標 指定點的座標 共用座標 測量點 專案基準點 選集樹 單位和轉換 外觀分析工具 Appearance Profiler Clash Detective 衝突測試">匯出 NWC 並整合到對方的 NWD</a></li>
     <li class="toc-group">Revit 操作 · 管路、族群與出圖</li>
     <li><a href="#conduit-size" data-keywords="EMT 電管 標稱尺寸 內徑 外徑 CNS 薄鋼管 RNC 彎曲半徑">電管尺寸</a></li>
     <li><a href="#pipe-setup" data-keywords="配管系統設定 佈線偏好 管區段 給水 排水 PVC 斜度 配件 管系統 圖形取代 材料 細緻 粗略 粗糙 SP WP VP CW HW 存水彎 清潔口">管路設定</a></li>
@@ -322,7 +323,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <span class="badge badge-policy">視公司流程而定</span>
 </div>
 <p class="perm-banner">權限前提：公司電腦、一般使用者權限。必要流程只用 Revit 原生功能，不需要系統管理員、也不依賴 pyRevit、Dynamo、Navisworks Manage。詳見<a href="#permissions">「九、公司電腦權限」</a>。</p>
-<div class="note">教材對照：一、繪製 → <a href="#draw">第四節</a>；二、吊架 → <a href="#hanger">第五節</a>；三、看不到 → <a href="#trouble">第六節</a>；四、可見性被鎖住 → <a href="#vg-locked">VG 灰色</a>；五、間距 → <a href="#hanger-code">法規</a>；六、篩選上色 → <a href="#step8">Step 8</a>；七、標籤 → <a href="#tags">第七節</a>；十、領域 → <a href="#discipline">領域與次領域</a>；十一、上色存樣板 → <a href="#view-template-color">視圖樣板</a>；十二、碰撞 → <a href="#interference">干涉檢查與 Navisworks</a>。和舊步驟重複的地方已合併，點法以教材為準。</div>
+<div class="note">教材對照：一、繪製 → <a href="#draw">第四節</a>；二、吊架 → <a href="#hanger">第五節</a>；三、看不到 → <a href="#trouble">第六節</a>；四、可見性被鎖住 → <a href="#vg-locked">VG 灰色</a>；五、間距 → <a href="#hanger-code">法規</a>；六、篩選上色 → <a href="#step8">Step 8</a>；七、標籤 → <a href="#tags">第七節</a>；十、領域 → <a href="#discipline">領域與次領域</a>；十一、上色存樣板 → <a href="#view-template-color">視圖樣板</a>；十二、碰撞 → <a href="#interference">干涉檢查與 Navisworks</a>；十三、匯出 NWC → <a href="#nwc-nwd">整合到對方的 NWD</a>。和舊步驟重複的地方已合併，點法以教材為準。</div>
 <div class="note">補充觀念與機電：<a href="#bim">BIM 觀念</a>、<a href="#ui">Revit 介面</a>、<a href="#template">專案樣板</a>、<a href="#mep-org">機電系統分工</a>、<a href="#tray-types">電纜架型式</a>、<a href="#conduit-size">電管尺寸</a>、<a href="#pipe-setup">管路設定</a>、<a href="#pipe-draw">管段繪製</a>、<a href="#family">族群製作</a>、<a href="#sheets">圖紙出圖</a>、<a href="#arch-model">建築建模</a>、<a href="#mep-model">機電建模重點</a>。既有步驟都保留。</div>
 <div class="note">機電實務與品管：<a href="#materials">管材與線材</a>、<a href="#electrical">電氣與緊急供電</a>、<a href="#elv">弱電與中央監控</a>、<a href="#plumbing-qc">給排水</a>、<a href="#fire">消防</a>、<a href="#hvac">空調</a>、<a href="#elevator">電梯</a>、<a href="#mep-iface">介面整合</a>、<a href="#review">設計圖說審查</a>、<a href="#defects">常見施工缺失</a>、<a href="#site-terms">工地用語</a>。</div>
 <div class="bento">
@@ -1184,6 +1185,88 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>存 NWF，自己更新時開這份。要交付時發佈（Publish）成 NWD。</li>
 </ol>
 <p class="warn">只有 Navisworks Manage 有碰撞偵測。免費的 Navisworks Freedom 只能看 NWD，不能跑測試。必要的碰撞檢查仍是本節的干涉檢查。</p>
+<p>要把自己的 .nwc 匯出、對齊座標，再附加到對方的 .nwd，見<a href="#nwc-nwd">匯出 NWC 並整合到對方的 NWD</a>。</p>
+</div></div>
+</section>
+
+<section id="nwc-nwd" class="section">
+<h2><span class="eyebrow">教材第十三節</span>匯出 NWC 並整合到對方的 NWD（Navisworks 實作）</h2>
+<div class="step-card"><div class="step-body">
+<p>這一段不在必要流程。日常碰撞仍用上一節的干涉檢查。安裝匯出工具要系統管理員權限，標【需確認權限】，見<a href="#permissions">第九節</a>。</p>
+<h3>A. 安裝匯出工具</h3>
+<ul>
+<li>安裝 Autodesk 免費的 <strong>Navisworks NWC Export Utility</strong>（2025 系列最新版，不要選到 Freedom）。安裝前先關閉 Revit，需要系統管理員權限。【需確認權限】</li>
+<li>裝好後在 <strong>增益集（Add-Ins）→ 外部工具（External Tools）</strong> 會出現：
+<ul>
+<li><strong>Navisworks 2025</strong>：匯出 .nwc。</li>
+<li><strong>Navisworks SwitchBack 2025</strong>：在 Navisworks 選取物件後跳回 Revit 同一位置修改（需搭配 Navisworks Manage）。</li>
+</ul>
+</li>
+<li>Revit 只能匯出 .nwc；要產生 .nwd，必須用 Navisworks Manage 或 Simulate 發佈（Publish）。免費的 Freedom 只能看，不能存檔，也不能做碰撞。</li>
+</ul>
+<h3>B. 檔案格式</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>格式</th><th>是什麼</th><th>會不會跟著更新</th></tr></thead>
+<tbody>
+<tr><td>.nwc</td><td>單一模型匯出的快取檔（一個 .rvt 對應一個 .nwc）</td><td>重新匯出後會更新</td></tr>
+<tr><td>.nwf</td><td>自己的工作檔，只記錄載入哪些檔案、碰撞設定、顏色</td><td>開啟或重新整理時讀取最新 .nwc</td></tr>
+<tr><td>.nwd</td><td>整合後發佈的獨立檔，給別人看</td><td>不會更新，要請對方重給</td></tr>
+</tbody>
+</table>
+</div>
+<h3>C. 先對齊座標（很重要）</h3>
+<p>沒對齊的話，模型在 Navisworks 會出現在離建築很遠的地方。</p>
+<ol>
+<li>Revit：<strong>管理 → 專案位置 → 座標 → 取得座標（Acquire Coordinates）</strong>，點一下連結進來的建築模型（.rvt）。</li>
+<li>出現「取得座標成功」，會顯示 GIS 座標系統（例如台灣 TWD97），按關閉後存檔。</li>
+<li>連結的建築模型要跟對方整合用的建築模型是同一份或座標相同，才對得準。</li>
+</ol>
+<h3>D. 匯出 NWC</h3>
+<ol>
+<li>切到 {3D} 視圖，隱藏不需要匯出的東西（匯出的內容就是這個視圖看得到的東西）。</li>
+<li><strong>增益集 → 外部工具 → Navisworks 2025</strong>，在存檔視窗按 <strong>Navisworks 設定（Navisworks Settings）</strong>。</li>
+<li><strong>檔案讀取器（File Readers）→ Revit</strong>，檢查以下設定：
+<ul>
+<li><strong>座標（Coordinates）</strong>：共用（Shared）。畫面若寫「已共用」，就是這個。不要選專案內部（Project Internal）。</li>
+<li><strong>轉換元素參數（Convert Element Parameters）</strong>：不要留在「無」。選「元素」或「所有」，之後在 Navisworks 才看得到品類、尺寸等性質。畫面若是「轉換元素性質」的勾選方塊，勾起來即可。</li>
+<li><strong>轉換連結的 Revit 檔案（Convert Linked Revit Files）</strong>：要把連結的建築一起轉進來才勾；分開匯出會比較好管理。畫面若寫「轉換連結的檔案」，就是這個。</li>
+</ul>
+</li>
+<li>確定後存檔，產生 .nwc。</li>
+</ol>
+<h3>E. 在 Navisworks Manage 整合</h3>
+<ol>
+<li>開啟對方給的 .nwd。</li>
+<li><strong>常用 → 附加（Append）</strong>，選自己的 .nwc。</li>
+<li>找不到自己的模型時：在選集樹（Selection Tree）點自己的檔案（或展開點到電纜架那一層）→ <strong>項目工具 → 縮放（Zoom）</strong>。在 3D 空白處按右鍵，選項會反灰，因為沒選到東西。</li>
+<li>如果模型在很遠的地方，就是座標沒對齊，回 Revit 照 C 節取得座標，重新匯出，再到 Navisworks 按 <strong>常用 → 重新整理（Refresh）</strong>。</li>
+<li>檢查性質（Properties）面板的「轉移 X/Y/Z、旋轉角度」。如果是手動移過的，到選集樹右鍵 → <strong>單位和轉換（Units and Transform）</strong> 歸零，以座標對齊為準。</li>
+</ol>
+<h3>F. 改模型顏色</h3>
+<ul>
+<li>選集樹點選物件 → <strong>項目工具 → 外觀 → 顏色（Color）</strong>（旁邊可調 <strong>透明度（Transparency）</strong>，例如建築半透明）。</li>
+<li>改回原色：<strong>重置外觀（Reset Appearance）</strong>。</li>
+<li>要每次都穩定套用，或照系統、品類自動分色：<strong>常用 → 工具 → 外觀分析工具（Appearance Profiler）</strong>。存下來的設定叫外觀設定檔。</li>
+</ul>
+<h3>G. 碰撞與更新流程</h3>
+<ol>
+<li><strong>常用 → 工具 → Clash Detective</strong>（2025 繁中按鈕維持這個英文；說明稱衝突測試）：新增測試，A 組選自己的 .nwc（電纜架），B 組選對方的結構、管線，按執行。</li>
+<li>存成 <strong>.nwf</strong>，下次直接開 .nwf。</li>
+<li>Revit 改完後：重新匯出 .nwc 覆蓋 → Navisworks <strong>重新整理</strong>。Navisworks 不會自動偵測 Revit 的修改。</li>
+<li>要交回給對方時，再發佈成 .nwd。</li>
+</ol>
+<h3>H. 專案座標統一流程（新模型開始前做一次）</h3>
+<p>多專業整合的專案，通常會提供一份「測量點母檔（.rvt）」和一張「各分區基準點數值表（Excel）」，讓所有模型使用同一套座標。</p>
+<ol>
+<li><strong>連結母檔</strong>：插入 → 連結 Revit（Link Revit），選測量點母檔，定位選「<strong>自動 - 根據共用座標</strong>」（Auto - By Shared Coordinates）。2025.5 畫面若寫「自動 - 依共用座標」，就是這個選項。</li>
+<li><strong>取得座標</strong>：管理 → 專案位置 → 座標 → <strong>取得座標</strong>，點選母檔。</li>
+<li><strong>檢查 GIS 座標系統</strong>：管理 → 專案位置 → <strong>位置（Location）</strong>，確認代碼和專案規定一致（台灣常見的是 TWD97 TM2 121 分帶）。</li>
+<li><strong>核對測量點</strong>：管理 → 專案位置 → 座標 → <strong>指定點的座標（Specify Coordinates at Point）</strong>，點測量點（Survey Point），核對北/南、東/西、高程，要跟數值表一致（通常所有分區共用同一個測量點）。</li>
+<li><strong>核對專案基準點</strong>：同樣用「指定點的座標」，依數值表中<strong>自己所屬分區</strong>那一列，核對北/南、東/西、高程、到正北的角度（Angle to True North；數值表若寫正北夾角，就是這個欄位）。</li>
+<li><strong>在 Navisworks 驗證</strong>：附加 .nwc 後，看性質面板的「轉移 X/Y/Z」和「旋轉角度」。旋轉角度應該等於所屬分區的到正北的角度（度分秒換算成十進位度，例如 5°49'13" ≈ 5.82°），位移應該接近測量點座標（單位換成 m）。</li>
+</ol>
+<p class="warn"><strong>注意</strong>：數值表的單位可能混用 mm 與 m，輸入前先確認單位。</p>
 </div></div>
 </section>
 
