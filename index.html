@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。">
+<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含教學影片操作筆記。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -161,6 +161,7 @@ pre{background:var(--code-bg); padding:16px; border-radius:12px; overflow:auto; 
 .step-body p{margin:12px 0}
 .verdict{background:var(--verdict-bg); border:1px solid var(--verdict-border); padding:14px 16px; border-radius:12px; margin-top:16px; font-size:16px}
 .warn{background:var(--warn-bg); border:1px solid var(--warn-border); padding:12px 16px; border-radius:12px; margin:14px 0; font-size:16px}
+.warn ul{margin:8px 0 0; padding-left:1.2em}
 .note{background:var(--note-bg); border:1px solid var(--border); padding:12px 16px; border-radius:12px; margin:14px 0; font-size:16px}
 .example-box{background:var(--bg-muted); border:1px dashed var(--border-strong); padding:14px 16px; border-radius:12px; margin:14px 0; font-family:Consolas,"Cascadia Mono",monospace; font-size:15px}
 table.compare, table.mapping-table{width:100%; border-collapse:collapse; margin:14px 0; font-size:16px; background:var(--bg-card); border-radius:12px; overflow:hidden; border:1px solid var(--border)}
@@ -305,6 +306,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#review" data-keywords="設計圖說審查 審查 圖說 適法 綠建築 預算 機水電">設計圖說審查</a></li>
     <li><a href="#defects" data-keywords="常見施工缺失 缺失 套圖 分電箱 碰撞 開門 預留">常見施工缺失</a></li>
     <li><a href="#site-terms" data-keywords="工地用語對照 台語 天端 閥 不鏽鋼 預留 樑 樓板 洩水 錨定 天花板 矽利康 公分">工地用語對照</a></li>
+    <li class="toc-group">Revit 操作 · 教學影片</li>
+    <li><a href="#video-notes" data-keywords="教學影片 操作筆記 第39片 第40片 第44片 第45片 專案匯出族群 另存資源庫 Save as Library 連結 CAD Link CAD 給水 對齊 Align 釘選 Pin 關閉隱藏的視窗 Close Inactive Views 干涉檢查 Interference Check 展示 重新整理 可見性 圖形取代 Visibility Graphics 篩選器 Filters VV VG 系統類型 CW 模型品類">Revit 教學影片操作筆記</a></li>
     <li class="toc-group">資料與限制</li>
     <li><a href="#mapping">八、路由欄位對應</a></li>
     <li><a href="#permissions">九、公司電腦權限</a></li>
@@ -331,6 +334,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="note">交付與整合補充：<a href="#scope">交付範圍</a>、<a href="#elevation">高程換算與跨樓層</a>、<a href="#pullbox">拉線箱與 Tray 轉電管</a>、<a href="#export-own">只匯出自己的系統</a>。</div>
 <div class="note">補充觀念與機電：<a href="#bim">BIM 觀念</a>、<a href="#ui">Revit 介面</a>、<a href="#template">專案樣板</a>、<a href="#mep-org">機電系統分工</a>、<a href="#tray-types">電纜架型式</a>、<a href="#conduit-size">電管尺寸</a>、<a href="#pipe-setup">管路設定</a>、<a href="#pipe-draw">管段繪製</a>、<a href="#family">族群製作</a>、<a href="#sheets">圖紙出圖</a>、<a href="#arch-model">建築建模</a>、<a href="#mep-model">機電建模重點</a>。既有步驟都保留。</div>
 <div class="note">機電實務與品管：<a href="#materials">管材與線材</a>、<a href="#electrical">電氣與緊急供電</a>、<a href="#elv">弱電與中央監控</a>、<a href="#plumbing-qc">給排水</a>、<a href="#fire">消防</a>、<a href="#hvac">空調</a>、<a href="#elevator">電梯</a>、<a href="#mep-iface">介面整合</a>、<a href="#review">設計圖說審查</a>、<a href="#defects">常見施工缺失</a>、<a href="#site-terms">工地用語</a>。</div>
+<div class="note">教學影片：<a href="#video-notes">Revit 教學影片操作筆記</a>（<a href="#video-39">第 39 片：專案匯出族群</a>、<a href="#video-40">第 40 片：連結 CAD 給水底圖</a>、<a href="#video-44">第 44 片：干涉檢查</a>、<a href="#video-45">第 45 片：視圖篩選</a>）。</div>
 <div class="bento">
 <div class="b-card b-span-8 orange">
 <div class="k">開始前</div>
@@ -367,6 +371,12 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="b-card b-span-2"><div class="num">13</div><div class="k">建議</div><h3>品質檢查</h3><a href="#step13">查看 →</a></div>
 <div class="b-card b-span-2"><div class="num">14</div><div class="k">建議</div><h3>瀏覽器</h3><a href="#step14">查看 →</a></div>
 <div class="b-card b-span-2"><div class="num">15</div><div class="k">視流程</div><h3>工作共用</h3><a href="#step15">查看 →</a></div>
+<div class="b-card b-span-12 orange">
+<div class="k">教學影片</div>
+<h3>Revit 教學影片操作筆記</h3>
+<p>第 39、40、44、45 片：另存族群、連結 CAD、干涉檢查、視圖篩選。步驟附時間碼。</p>
+<a href="#video-notes">查看筆記 →</a>
+</div>
 </div>
 </header>
 
@@ -1975,6 +1985,142 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </tbody>
 </table>
 </div>
+</section>
+
+<section id="video-notes" class="section">
+<h2><span class="eyebrow">教學影片</span>Revit 教學影片操作筆記</h2>
+<div class="step-card"><div class="step-body">
+<p>下面依 4 部教學影片整理操作順序，刪除口語重複，保留影片時間碼。尚未逐格核對畫面；辨識不清或依語境推定的用語，放在各片的「待核對」。</p>
+<p class="note">和現有章節一起看：族群見<a href="#family">族群製作</a>，連結 CAD 見 <a href="#step2">Step 2</a>，碰撞見<a href="#interference">干涉檢查與 Navisworks</a>，篩選見 <a href="#step8">Step 8</a>。本頁記的是這 4 部影片的點法。畫面用詞與本站其他章節差一個字時，以 Revit 2025.5 繁體中文實際顯示為準。</p>
+
+<h3>影片索引</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>編號</th><th>原影片主題</th><th>學習目標</th><th>操作重點</th></tr></thead>
+<tbody>
+<tr><td><a href="#video-39">39</a></td><td>專案匯出族群</td><td>將專案內可匯出的族群另存，供後續使用</td><td>檔案 → 另存資源庫（Save as Library）→ 族群</td></tr>
+<tr><td><a href="#video-40">40</a></td><td>連結 CAD 給水底圖</td><td>將給水 CAD 底圖連結至對應樓層視圖，完成對齊與固定</td><td>連結 CAD（Link CAD）、單位、定位、對齊（Align）、釘選（Pin）</td></tr>
+<tr><td><a href="#video-44">44</a></td><td>干涉檢查（Interference Check）</td><td>找出管線碰撞，調整後更新檢查結果</td><td>檢查類別、展示碰撞、偏移高度、重新整理</td></tr>
+<tr><td><a href="#video-45">45</a></td><td>視圖篩選－1</td><td>以篩選器控制特定管路系統的顯示</td><td>VV／VG、模型品類、篩選器（Filters）、系統類型</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="video-39">39｜專案匯出族群</h3>
+<p><strong>目的</strong>：將現有專案內可匯出的族群（Family）另存到資料夾，方便建立資源庫或後續重複使用。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>00:00–00:21：進入族群另存功能。在「檔案」（File）中找到「另存資源庫」（Save as Library），選擇「族群」。</li>
+<li>00:23–00:38：準備獨立資料夾。講師建議先新增資料夾，因為批次匯出會產生多個檔案，且需要等待。</li>
+<li>00:38–00:50：選擇匯出範圍。可指定族群，或選擇畫面中的「所有族群」進行批次匯出。</li>
+<li>00:50–01:18：執行並等待匯出。講師示範專案中的族群陸續輸出。</li>
+</ol>
+<p><strong>重點與注意事項</strong></p>
+<ul>
+<li>使用獨立資料夾收納，避免匯出檔案與其他資料混在一起。</li>
+<li>01:01–01:11 講師提醒：交付專案檔時，也需考慮檔案內族群可被他人另存使用。</li>
+<li>逐字稿中「所有元件都能帶走」是講師的口語說明；本筆記不據此推定所有 Revit 元件類別皆可透過同一功能匯出。</li>
+</ul>
+<div class="warn"><strong>待核對</strong>
+<ul>
+<li>00:34–00:38「新要領」辨識不清，依前後文整理為建立新資料夾。</li>
+<li>01:01–01:07「教 rpt」疑為「交 RVT」，需回看片段確認。</li>
+</ul>
+</div>
+
+<h3 id="video-40">40｜連結 CAD 給水底圖</h3>
+<p><strong>目的</strong>：以二樓給水配置為例，在對應樓層視圖連結 CAD 底圖，再對齊並固定底圖位置。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>00:00–00:29：開啟目標樓層視圖。從專案瀏覽器（Project Browser）找到二樓的對應視圖，雙擊開啟並放大。樹狀分類名稱辨識不清，需對照畫面。</li>
+<li>00:29–00:49：關閉不需要的視窗。使用「關閉隱藏的視窗」（Close Inactive Views），保留目前工作視圖；講師說明開太多視圖容易造成操作變慢。</li>
+<li>00:49–01:17：連結 CAD。在「插入」（Insert）頁籤選擇「連結 CAD」（Link CAD），找到案例中的給水底圖。</li>
+<li>01:17–01:26：設定連結選項。本案例勾選「僅目前視圖」（Current view only），單位選擇「公分」，定位選擇「中心到中心」（Center to Center），然後開啟檔案。</li>
+<li>01:33–01:48：啟用連結選取。若無法選取 CAD 連結，檢查右下角選取控制列的連結選取開關。</li>
+<li>01:50–02:05：對齊底圖。進入「修改」（Modify）頁籤的「對齊」（Align）功能，先選基準，再選要移動的對象。</li>
+<li>02:05–02:16：退出指令並固定。按兩次 Esc，選取底圖後將其釘選（Pin），避免後續誤移動。</li>
+</ol>
+<p><strong>重點與注意事項</strong></p>
+<ul>
+<li>「公分」「中心到中心」「僅目前視圖」是本案例的設定，使用其他 CAD 檔案前須確認其單位與定位需求。</li>
+<li>無法選到連結時，先檢查選取開關，再繼續操作。</li>
+<li>對齊完成後再釘選，避免底圖位置被意外改動。</li>
+</ul>
+<div class="warn"><strong>待核對</strong>
+<ul>
+<li>00:12–00:17 專案瀏覽器的分類與視圖名稱辨識不清。</li>
+<li>02:11–02:14「盯起來」依語境整理為「釘選」，仍需對照影片按鈕。</li>
+</ul>
+</div>
+
+<h3 id="video-44">44｜干涉檢查</h3>
+<p><strong>目的</strong>：檢查管（Pipes）與管配件（Pipe Fittings）之間的碰撞，定位問題後調整高度，再更新報告確認處理結果。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>00:01–00:16：啟動檢查。在「協同合作」（Collaborate）頁籤右側找到「干涉檢查」（Interference Check），選擇執行檢查。</li>
+<li>00:16–00:38：設定比較類別。A、B 兩側皆選擇管與管配件，再按確定。</li>
+<li>00:38–00:54：定位碰撞。從結果選取冷、熱水管碰撞項目；使用「展示」（Show）讓畫面放大至問題位置。</li>
+<li>00:56–01:19：調整管線高度。講師選取熱水管，修改偏移高度，示範輸入 2600 後按 Enter，觀察連接管組抬高並避開碰撞。</li>
+<li>01:19–01:34：更新檢查結果。回到干涉檢查，開啟上一份報告並「重新整理」（Refresh）；講師說明已解決的項目會從報告中消失。</li>
+</ol>
+<p><strong>重點與注意事項</strong></p>
+<ul>
+<li>本片示範的是所選「管與管配件」類別的檢查，不能據此認定整個模型所有碰撞皆已排除。</li>
+<li>2600 是示範輸入值；逐字稿未說明單位，實作時應先確認專案單位與設計標高。</li>
+<li>調整時要觀察相連管件是否一起變動；調整完成後，再檢查結果，而非只憑單一視角判斷。</li>
+</ul>
+<div class="warn"><strong>待核對</strong>
+<ul>
+<li>01:22–01:26「展示上市報告」依語境整理為顯示上一份報告，實際選單名稱需對照畫面。本站<a href="#interference">干涉檢查</a>一節使用的按鈕是「展示上次報告」（Show Last Report）。</li>
+</ul>
+</div>
+
+<h3 id="video-45">45｜視圖篩選－1</h3>
+<p><strong>目的</strong>：區分整個模型品類的顯示控制與個別系統的篩選控制，讓給水、排水、灑水等不同用途的視圖呈現需要的內容。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>00:00–00:35：開啟可見性/圖形設定。從視圖的「可見性/圖形取代」（Visibility/Graphics Overrides）進入編輯。</li>
+<li>00:35–01:12：示範模型品類（Model Categories）開關。在模型品類中取消管的勾選，可隱藏整個管類別；再恢復顯示。此方式不區分給水或排水系統。</li>
+<li>01:13–01:29：使用快捷鍵。可用 <code>VV</code> 或 <code>VG</code> 開啟設定，品類開關會影響整類管路。</li>
+<li>01:29–01:43：認識標註品類（Annotation Categories）。尺寸、樓層線、網格線與標籤等標註內容，可在對應品類中控制顯示。</li>
+<li>01:43–02:20：建立篩選器（Filters）。切換至篩選器功能，進入加入／編輯／新建流程，新增名為 CW 的篩選條件。</li>
+<li>02:20–02:43：設定適用類別與條件。講師提到管配件、管附件（Pipe Accessories）等類別；篩選條件設為「系統類型」（System Type）等於 CW。完整勾選類別需核對畫面。</li>
+<li>02:43–03:03：加入視圖並測試。將 CW 篩選器加入目前視圖，關閉其可見性，示範單獨隱藏該冷水系統。</li>
+</ol>
+<p><strong>控制方式比較</strong></p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>方式</th><th>片中示範用途</th><th>影響範圍</th></tr></thead>
+<tbody>
+<tr><td>模型品類</td><td>關閉管類別</td><td>所有符合該品類的管，不區分系統</td></tr>
+<tr><td>標註品類</td><td>控制尺寸、網格線、標籤</td><td>對應的標註內容</td></tr>
+<tr><td>篩選器</td><td>關閉 CW 冷水系統</td><td>符合所選類別與條件的元件</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>重點與注意事項</strong></p>
+<ul>
+<li>需要依系統區分顯示時，採用篩選器，而非直接關閉整個管類別。</li>
+<li>CW 是本案例使用的系統類型值，套用到其他專案前應確認實際命名。</li>
+<li>本片到單獨隱藏 CW 的示範為止，未包含後續色彩、線型或視圖樣板操作。</li>
+</ul>
+<div class="warn"><strong>待核對</strong>
+<ul>
+<li>01:46–02:13 多次辨識為「session」，依後續新建條件及系統類型設定，整理為篩選器操作。</li>
+<li>02:22–02:30 類別清單未完整辨識，勿假定所有必要類別均已勾選。</li>
+</ul>
+</div>
+
+<h3 id="video-practice">建議練習順序</h3>
+<p>整理者建議，非原影片課程順序。</p>
+<ol class="quick10-list">
+<li>依<a href="#video-40">第 40 片</a>連結 CAD，練習樓層視圖、單位、對齊與釘選。</li>
+<li>依<a href="#video-45">第 45 片</a>建立 CW 篩選器，比較品類開關與系統篩選的差異。</li>
+<li>依<a href="#video-44">第 44 片</a>執行指定類別的干涉檢查，調整後更新結果。</li>
+<li>依<a href="#video-39">第 39 片</a>將可匯出的族群另存至獨立資料夾。</li>
+</ol>
+</div></div>
+<p class="note">本頁依教學影片機器逐字稿整理，部分用語依語境推定。</p>
 </section>
 
 <section id="mapping" class="section">
