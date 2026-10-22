@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含教學影片操作筆記。">
+<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課與教學影片操作筆記。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -183,7 +183,7 @@ table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid
 .card{background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:20px 22px}
 .card h3{margin:0 0 10px; font-size:22px}
 .card ul{margin:8px 0 0; padding-left:1.2em}
-.section h3{font-size:22px; font-weight:800; margin:26px 0 8px}
+.section h3{font-size:22px; font-weight:800; margin:26px 0 8px; scroll-margin-top:24px}
 .check-static{list-style:none; padding-left:0; margin:8px 0}
 .check-static li{padding:3px 0 3px 1.6em; position:relative}
 .check-static li::before{content:"☐"; position:absolute; left:0; color:var(--text-faint)}
@@ -306,6 +306,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#review" data-keywords="設計圖說審查 審查 圖說 適法 綠建築 預算 機水電">設計圖說審查</a></li>
     <li><a href="#defects" data-keywords="常見施工缺失 缺失 套圖 分電箱 碰撞 開門 預留">常見施工缺失</a></li>
     <li><a href="#site-terms" data-keywords="工地用語對照 台語 天端 閥 不鏽鋼 預留 樑 樓板 洩水 錨定 天花板 矽利康 公分">工地用語對照</a></li>
+    <li class="toc-group">Revit 機電入門課</li>
+    <li><a href="#mep-intro" data-keywords="機電入門 樣板 配管樣板 衛工 性質 專案瀏覽器 專案單位 連結 Revit Link Revit 管理連結 複製 監視 Copy Monitor 樓層 Level 網格 Grid 平面視圖 瀏覽器組織 共用參數 主系統 次系統 連結 CAD 僅目前視圖 管系統 配管 圖形取代 線粗 線寬 視覺型式">從建立專案到管線配色</a></li>
     <li class="toc-group">Revit 操作 · 教學影片</li>
     <li><a href="#video-notes" data-keywords="教學影片 操作筆記 第39片 第40片 第44片 第45片 專案匯出族群 另存資源庫 Save as Library 連結 CAD Link CAD 給水 對齊 Align 釘選 Pin 關閉隱藏的視窗 Close Inactive Views 干涉檢查 Interference Check 展示 重新整理 可見性 圖形取代 Visibility Graphics 篩選器 Filters VV VG 系統類型 CW 模型品類">Revit 教學影片操作筆記</a></li>
     <li class="toc-group">資料與限制</li>
@@ -334,6 +336,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="note">交付與整合補充：<a href="#scope">交付範圍</a>、<a href="#elevation">高程換算與跨樓層</a>、<a href="#pullbox">拉線箱與 Tray 轉電管</a>、<a href="#export-own">只匯出自己的系統</a>。</div>
 <div class="note">補充觀念與機電：<a href="#bim">BIM 觀念</a>、<a href="#ui">Revit 介面</a>、<a href="#template">專案樣板</a>、<a href="#mep-org">機電系統分工</a>、<a href="#tray-types">電纜架型式</a>、<a href="#conduit-size">電管尺寸</a>、<a href="#pipe-setup">管路設定</a>、<a href="#pipe-draw">管段繪製</a>、<a href="#family">族群製作</a>、<a href="#sheets">圖紙出圖</a>、<a href="#arch-model">建築建模</a>、<a href="#mep-model">機電建模重點</a>。既有步驟都保留。</div>
 <div class="note">機電實務與品管：<a href="#materials">管材與線材</a>、<a href="#electrical">電氣與緊急供電</a>、<a href="#elv">弱電與中央監控</a>、<a href="#plumbing-qc">給排水</a>、<a href="#fire">消防</a>、<a href="#hvac">空調</a>、<a href="#elevator">電梯</a>、<a href="#mep-iface">介面整合</a>、<a href="#review">設計圖說審查</a>、<a href="#defects">常見施工缺失</a>、<a href="#site-terms">工地用語</a>。</div>
+<div class="note">機電入門課：<a href="#mep-intro">從建立專案到管線系統配色</a>（<a href="#mep-u1">樣板</a>、<a href="#mep-u4">連結模型</a>、<a href="#mep-u6">樓層</a>、<a href="#mep-u9">連結 CAD</a>、<a href="#mep-u10">配管配色</a>，單元 1–10）。</div>
 <div class="note">教學影片：<a href="#video-notes">Revit 教學影片操作筆記</a>（<a href="#video-39">第 39 片：專案匯出族群</a>、<a href="#video-40">第 40 片：連結 CAD 給水底圖</a>、<a href="#video-44">第 44 片：干涉檢查</a>、<a href="#video-45">第 45 片：視圖篩選</a>）。</div>
 <div class="bento">
 <div class="b-card b-span-8 orange">
@@ -371,6 +374,12 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="b-card b-span-2"><div class="num">13</div><div class="k">建議</div><h3>品質檢查</h3><a href="#step13">查看 →</a></div>
 <div class="b-card b-span-2"><div class="num">14</div><div class="k">建議</div><h3>瀏覽器</h3><a href="#step14">查看 →</a></div>
 <div class="b-card b-span-2"><div class="num">15</div><div class="k">視流程</div><h3>工作共用</h3><a href="#step15">查看 →</a></div>
+<div class="b-card b-span-12 orange">
+<div class="k">機電入門課</div>
+<h3>從建立專案到管線系統配色</h3>
+<p>10 個單元：樣板、介面、單位、連結模型、樓層與網格、CAD 底圖、配管配色。步驟附時間索引。</p>
+<a href="#mep-intro">查看講義 →</a>
+</div>
 <div class="b-card b-span-12 orange">
 <div class="k">教學影片</div>
 <h3>Revit 教學影片操作筆記</h3>
@@ -1985,6 +1994,515 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </tbody>
 </table>
 </div>
+</section>
+
+<section id="mep-intro" class="section">
+<h2><span class="eyebrow">機電入門課</span>從建立專案到管線系統配色</h2>
+<div class="step-card"><div class="step-body">
+<p>下面依一堂 Revit 機電入門課整理成「學習目標 → 操作步驟 → 完成檢查」，適合初次接觸 Revit、已有 CAD 看圖經驗的機電工程人員。錄音約 1 小時 41 分。尚未逐格核對畫面；逐字稿提到的軟體版本與本站對照的 Revit 2025.5 不一定相同，按鈕文字以實際安裝版本為準。</p>
+<p class="note">和現有章節一起看：樣板見<a href="#template">專案樣板</a>，介面見<a href="#ui">Revit 介面</a>，單位見 <a href="#step1">Step 1</a>，連結見 <a href="#step2">Step 2</a>，樓層與網格見 <a href="#step4">Step 4</a>，視圖樣板見 <a href="#step7">Step 7</a>，瀏覽器組織見 <a href="#step14">Step 14</a>，領域見<a href="#discipline">領域與次領域</a>，管系統顏色見<a href="#pipe-setup">管路設定</a>。本頁記的是這堂課的點法。畫面用詞與本站其他章節差一個字時，以 Revit 2025.5 繁體中文實際顯示為準。</p>
+<p>整理範圍是環境設定、模型參考、基準線、視圖管理與配管系統顯示。完整配管路由、接頭規則、尺寸表及施工設計，不在這段示範的完整範圍。</p>
+
+<h3 id="mep-outcomes">學完後應能完成什麼</h3>
+<ul>
+<li>依工作內容選擇專案樣板（Project Template），辨識專案（Project）與族群（Family）的用途。</li>
+<li>找回性質（Properties）面板與專案瀏覽器（Project Browser），設定專案長度單位。</li>
+<li>連結建築模型，處理課堂案例中的跨版本開啟問題。</li>
+<li>使用複製/監視（Copy/Monitor）取得樓層（Level）與網格（Grid），建立對應平面視圖。</li>
+<li>使用領域（Discipline）、次領域（Sub-Discipline），或自訂主系統、次系統整理視圖。</li>
+<li>正確連結 CAD（Link CAD）底圖，檢查比例、定位與顯示範圍。</li>
+<li>分辨系統線條配色、材質（Material）顏色與視圖顯示設定。</li>
+</ul>
+
+<h3 id="mep-prep">課前準備</h3>
+<ol>
+<li>準備可使用的 Revit 環境。</li>
+<li>若有原課程教材，準備建築／結構 RVT、CAD 底圖、元件族群及教材 PDF。這些教材未附在本頁。</li>
+<li>自行練習時可用等效模型替代；先另存（Save As）練習副本。</li>
+<li>記下 RVT 與 DWG 的檔案版本、來源、長度單位及定位依據。</li>
+<li>建立自己的成果資料夾，區分來源檔與練習成果。</li>
+</ol>
+<p class="note">本頁的「電氣／強電／綠色」沿用課堂示例，不代表配色或交付標準。練習用名稱與驗收方式為編者補充。</p>
+
+<h3 id="mep-index">課程時間索引</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>單元</th><th>錄音時間</th><th>主題</th></tr></thead>
+<tbody>
+<tr><td><a href="#mep-u1">1</a></td><td>00:00:02–00:10:42</td><td>首頁、專案／族群、樣板與作業模式</td></tr>
+<tr><td><a href="#mep-u2">2</a></td><td>00:10:44–00:19:26</td><td>介面、面板、主題與背景</td></tr>
+<tr><td><a href="#mep-u3">3</a></td><td>00:19:31–00:25:34</td><td>教材與專案單位</td></tr>
+<tr><td><a href="#mep-addon">補充</a></td><td>00:25:34–00:29:23</td><td>外掛與族群的差異、外掛搜尋</td></tr>
+<tr><td><a href="#mep-u4">4</a></td><td>00:29:23–00:38:00</td><td>連結模型、管理連結、版本升級案例</td></tr>
+<tr><td><a href="#mep-u5">5</a></td><td>00:38:00–00:46:51</td><td>立面標記、移動與快速鍵</td></tr>
+<tr><td><a href="#mep-u6">6</a></td><td>00:46:51–01:01:26</td><td>樓層建立與複製/監視</td></tr>
+<tr><td><a href="#mep-u7">7</a></td><td>01:01:27–01:05:56</td><td>平面視圖建立與網格複製</td></tr>
+<tr><td><a href="#mep-u8">8</a></td><td>01:05:58–01:25:50</td><td>視圖樣板、分類與共用參數</td></tr>
+<tr><td><a href="#mep-u9">9</a></td><td>01:25:50–01:31:37</td><td>CAD 底圖連結與選項</td></tr>
+<tr><td><a href="#mep-u10">10</a></td><td>01:31:37–01:41:07</td><td>配管系統、線條、線粗與材質</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="mep-u1">單元 1｜選擇樣板，建立自己的機電專案</h3>
+<p><strong>學習目標</strong>：分清楚「專案」「族群」「樣板」，選擇符合主要工作內容的起點。</p>
+<p><strong>先理解三個名詞</strong></p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>名詞</th><th>用途</th><th>本課程中的角色</th></tr></thead>
+<tbody>
+<tr><td>專案（Project）</td><td>承載這份模型、視圖及相關資料</td><td>本次實際工作的檔案</td></tr>
+<tr><td>族群（Family）</td><td>建立或載入可使用的元件</td><td>設備、閥件、管件等元件來源</td></tr>
+<tr><td>專案樣板（Project Template）</td><td>預先整理常用設定與內容</td><td>新專案的起始配置</td></tr>
+</tbody>
+</table>
+</div>
+<p>樣板的差別主要在預載內容與設定；不能只因樣板叫「電氣」，就判定其他專業模型無法顯示。是否看得到參考模型，仍須檢查連結與視圖顯示。樣板怎麼選，另見<a href="#template">專案樣板</a>。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>開啟 Revit，在首頁的「模型」裡找到「新建」（New）。</li>
+<li>選擇專案樣板。課堂示範先選衛工方向的樣板，供配管設定練習。本站開啟對話框寫的是「配管樣板」。</li>
+<li>在建立類型中選「專案」，再確認。</li>
+<li>另存練習檔，例如 <code>MEP_入門練習.rvt</code>。</li>
+</ol>
+<p><strong>如何選擇樣板</strong></p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>主要工作</th><th>課堂介紹的樣板方向</th></tr></thead>
+<tbody>
+<tr><td>空調風管、空調水管</td><td>機械（Mechanical）</td></tr>
+<tr><td>電纜架、電管、電氣設備</td><td>電氣（Electrical）</td></tr>
+<tr><td>給排水、消防配管</td><td>衛工／配管樣板（Plumbing）</td></tr>
+<tr><td>多種機電系統整合</td><td>系統（Systems）；課堂提醒預載內容較多</td></tr>
+</tbody>
+</table>
+</div>
+<p>不要只看名稱選樣板。若已有指定樣板，優先使用。</p>
+<p><strong>本地作業與雲端協作</strong></p>
+<p>本地作業可先建立自己的專案，連結收到的參考模型，再依交付方式交換更新檔。雲端協作另涉及服務、權限及授權；這段錄音沒有完整示範設定，不列為實作要求。</p>
+<p><strong>完成檢查</strong></p>
+<ul class="check-static">
+<li>能說出目前開啟的是工作專案，還是樣板／族群編輯環境。</li>
+<li>知道自己的檔案存放位置，並保留來源模型。</li>
+</ul>
+
+<h3 id="mep-u2">單元 2｜認識介面，找回必要面板</h3>
+<p><strong>學習目標</strong>：知道在哪裡找功能、在哪裡改參數，以及在哪裡切換視圖。介面六區另見<a href="#ui">Revit 介面</a>。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>區域</th><th>主要用途</th></tr></thead>
+<tbody>
+<tr><td>功能區（Ribbon）／頁籤</td><td>「系統」（Systems）找機電建模工具；「修改」（Modify）找移動等編輯工具</td></tr>
+<tr><td>性質面板</td><td>檢查目前視圖或所選物件的參數</td></tr>
+<tr><td>專案瀏覽器</td><td>找到平面圖、立面圖、3D 視圖及族群等內容</td></tr>
+<tr><td>繪圖區</td><td>看圖、選取物件與執行操作</td></tr>
+<tr><td>快速存取工具列（Quick Access Toolbar）</td><td>放置常用工具，課堂示範可移至功能區下方</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>找到性質面板及專案瀏覽器。</li>
+<li>拖曳面板標題，看到停駐預覽區後放開，調整成自己方便使用的位置。</li>
+<li>若面板被關閉，前往「視圖 → 使用者介面」（User Interface），重新勾選性質及專案瀏覽器。</li>
+<li>若要修改介面或繪圖區背景，到「檔案 → 選項」（Options）尋找顏色相關設定；依版本確認選項名稱。</li>
+</ol>
+<p>性質面板與專案瀏覽器建議保持可見。選取元件時，性質面板可供檢查元件；取消選取後，可檢查目前視圖的設定。</p>
+<p><strong>完成檢查</strong></p>
+<ul class="check-static">
+<li>能從專案瀏覽器開啟一張平面圖，並在性質面板找到該視圖設定。</li>
+</ul>
+
+<h3 id="mep-u3">單元 3｜設定專案單位，區分顯示格式與匯入比例</h3>
+<p><strong>學習目標</strong>：避免把專案單位與 CAD 匯入單位混為一談。完整設定見 <a href="#step1">Step 1</a>。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>前往「管理 → 設定 → 專案單位」（Project Units）。快捷鍵 <code>UN</code>。課堂口述是「管理 → 專案單位」，指的是同一個指令。</li>
+<li>找到「長度」（Length）的格式設定。</li>
+<li>依需求選擇公分 cm 或公厘 mm。本站電纜架流程用公釐。</li>
+<li>設定小數位數、四捨五入及單位符號，再確認。</li>
+<li>用已知尺寸檢查顯示結果。</li>
+</ol>
+<p><strong>課堂示例</strong></p>
+<p>同一段長度若顯示為 1,000 cm，切換為 mm 後應顯示為 10,000 mm；實體長度不會因顯示單位切換而改變。逐字稿中出現的「公里」依上下文修正為「公厘 mm」。</p>
+<p><strong>必須分清楚的兩種單位</strong></p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>設定</th><th>影響</th><th>檢查方式</th></tr></thead>
+<tbody>
+<tr><td>專案長度單位</td><td>尺寸數字的顯示與一般輸入習慣</td><td>同一物件切換單位前後比較</td></tr>
+<tr><td>CAD 匯入單位</td><td>來源幾何單位如何換算進模型，會影響比例</td><td>比較一個已知的實際尺寸</td></tr>
+</tbody>
+</table>
+</div>
+<p>若 CAD 底圖小了十倍，先檢查來源幾何單位與匯入單位，不要直接放大十倍後就結案。</p>
+
+<h3 id="mep-addon">補充｜外掛與族群的差異</h3>
+<p>課堂介紹機電元件包、尺寸相關表格、標籤、設備族群與分日教材。族群提供可用元件；外掛則擴充軟體功能。找到一個名稱相似的外掛，並不等於取得所需族群。</p>
+
+<h3 id="mep-u4">單元 4｜連結建築模型，處理版本升級案例</h3>
+<p><strong>學習目標</strong>：以外部參考支援機電作業，理解「連結」與「匯入」的差異。對照表見 <a href="#step2">Step 2</a>。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>方式</th><th>核心差異</th><th>更新時的處理</th></tr></thead>
+<tbody>
+<tr><td>連結 CAD／連結 Revit（Link Revit）</td><td>保留對外部檔案的參考關係</td><td>檢查來源，再重新載入（Reload）；存放位置變了就用「重新載入自…」（Reload From）</td></tr>
+<tr><td>匯入 CAD（Import CAD）</td><td>將當時的內容帶入專案</td><td>來源修改後，需另行處理專案內已匯入的內容</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>在自己的機電專案選擇「插入 → 連結 Revit」。</li>
+<li>選擇建築／結構 RVT。</li>
+<li>依約定檢查定位（Positioning），載入模型。常見選項見 <a href="#step2">Step 2</a>。連上之後用釘選（Pin）固定。</li>
+<li>選取連結，從性質確認檔案名稱與連結身分。</li>
+<li>開啟「管理 → 管理連結」（Manage Links），確認來源及載入狀態。</li>
+<li>來源檔更新後，重新載入並確認內容；若檔名或存放位置改變，用「重新載入自…」重新指定來源。</li>
+</ol>
+<p><strong>課堂遇到的問題：舊模型連結升級失敗</strong></p>
+<p>課堂示範將 2021 模型帶入所稱的 2027 環境，連結過程失敗，改為個別開啟來源模型處理錯誤。</p>
+<ol>
+<li>先保留舊版來源副本。</li>
+<li>個別開啟待升級模型，閱讀錯誤訊息。</li>
+<li>依模型責任與錯誤內容判斷處理方式；不要為了通過升級就直接刪除不明實體。</li>
+<li>將處理後的檔案另存為清楚標示版本的副本。</li>
+<li>關閉來源模型，回到機電專案，連結處理後的副本。</li>
+<li>對照來源檢查模型完整性。</li>
+</ol>
+<p>這是課堂的排除案例，不保證適用所有升級失敗。原稿對升級後版本與備份有口誤；本頁採明確保留副本的方式，不以編號備份取代來源保存。</p>
+<p><strong>完成檢查</strong></p>
+<ul class="check-static">
+<li>在平面與 3D 視圖都能找到參考模型，來源版本與連結來源可追溯。</li>
+</ul>
+
+<h3 id="mep-u5">單元 5｜調整立面標記，學會移動與快速鍵</h3>
+<p><strong>學習目標</strong>：調整立面（Elevation）觀看位置，避免標記落在建築內部而看不到預期範圍。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>在平面圖找到預設立面標記。</li>
+<li>若標記落在模型內部，確認選到標記及需要的相關部分，避免只選到其中的符號。</li>
+<li>使用「修改 → 移動」（Move），移到適當觀看位置。</li>
+<li>開啟對應立面圖，檢查方向與可見範圍。</li>
+</ol>
+<p>標記不必一律移動；依實際視圖檢查結果調整。</p>
+<p><strong>快速鍵練習</strong></p>
+<ol>
+<li>滑鼠停在工具上，查看工具提示中的快速鍵（Keyboard Shortcut）。</li>
+<li>課堂以 <code>MV</code> 示範移動；使用前先切換英文輸入。</li>
+<li>自訂快速鍵可從「視圖 → 使用者介面 → 快速鍵」尋找設定。</li>
+<li>指派前檢查是否重複；練習時先保留容易辨識的按鍵。</li>
+<li>設定完成可匯出 XML；到另一台電腦使用時，再從快速鍵設定匯入。</li>
+</ol>
+<p class="note">原稿對後續自訂按鍵的字母辨識不一致，因此不列出該組合。</p>
+
+<h3 id="mep-u6">單元 6｜建立樓層，使用複製/監視取得建築基準</h3>
+<p><strong>學習目標</strong>：分清楚手動畫樓層與從連結模型複製樓層兩種方法。樓層與網格的檢查見 <a href="#step4">Step 4</a>。</p>
+<p><strong>方法 A：手動建立</strong></p>
+<ol>
+<li>開啟適當的立面圖。</li>
+<li>在「建築」（Architecture）或「結構」（Structure）頁籤尋找「樓層」（Level）。</li>
+<li>依需要設定是否建立平面視圖及視圖類型。</li>
+<li>繪製樓層線，設定名稱與高程。</li>
+<li>檢查樓層線端點的對齊與顯示範圍。</li>
+</ol>
+<p>課堂以名稱遞增示範命名行為，但逐字稿對字母與數字順序有混亂。實作時以既有命名規則為準，逐一檢查新樓層名稱，不將示範解讀成數字不能放在名稱前方。</p>
+<p><strong>方法 B：從連結模型複製/監視</strong></p>
+<p>適用情境：建築／結構已提供確認可用的樓層，不希望逐層重輸入名稱與高程。</p>
+<ol>
+<li>開啟立面圖，確認連結模型的樓層可見。</li>
+<li>若新建空白練習檔的預設樓層會造成重複，先檢查是否可移除。刪除樓層可能連帶刪除視圖與相關內容，既有檔案不可直接照做。</li>
+<li>選擇「協同合作 → 複製/監視 → 選取連結」（Select Link）。</li>
+<li>在繪圖區選取正確的 RVT 連結。</li>
+<li>選擇「複製」（Copy），啟用「多個」（Multiple）。課堂口述是「多重選取」，2025.5 畫面是「多個」。</li>
+<li>框選樓層，利用「篩選」（Filter）只保留需要的品類。</li>
+<li>完成目前的多重選取操作。</li>
+<li>再按複製/監視模式的「完成」（Finish），退出整個工具。</li>
+<li>選取本專案的樓層，核對名稱、高程及監視關係。</li>
+</ol>
+<p><strong>框選方向</strong></p>
+<ul>
+<li>由左向右：物件需完整落在框內。</li>
+<li>由右向左：與框相交的物件也可能被選取。</li>
+<li>框完仍須篩選，避免混入其他物件。</li>
+</ul>
+<p><strong>監視代表什麼</strong></p>
+<p>監視用來提示參考物件發生變更，需要人工協調檢查。不能把它當成「對方改了，我方所有內容就自動改好」。本頁保留監視關係供練習查看；停止監視應依協調需求決定。</p>
+<p><strong>完成檢查</strong></p>
+<ul class="check-static">
+<li>已退出複製/監視模式。</li>
+<li>複製後的本地樓層可被選取。</li>
+<li>名稱與高程符合來源，且沒有不必要的重複樓層。</li>
+</ul>
+<p>操作順序另對照官方說明「Copying Levels for Monitoring」，見<a href="#mep-docs">下方 A1</a>。該文件為舊版說明，介面以安裝版本為準。</p>
+
+<h3 id="mep-u7">單元 7｜建立平面視圖，複製網格</h3>
+<p><strong>學習目標</strong>：理解「有樓層」與「已有該樓層平面圖」是兩件事。</p>
+<p><strong>建立平面視圖</strong></p>
+<ol>
+<li>完成樓層複製後，選擇「視圖 → 平面視圖」（Plan Views）。</li>
+<li>先選樓板平面圖（Floor Plan），勾選需要建立的樓層。</li>
+<li>確認類型，建立視圖。</li>
+<li>如作業需要，再建立對應的天花板平面圖（Ceiling Plan）。</li>
+<li>到專案瀏覽器確認視圖確實存在。</li>
+</ol>
+<p>若找不到新視圖，先搜尋其他分類。課堂中天花板平面圖出現在「協調／???」之下，原因與視圖參數和瀏覽器組織設定有關，不代表所有檔案都會有相同分類。</p>
+<p><strong>複製網格</strong></p>
+<p>課堂說的軸網、網格線、柱位線，本站 2025.5 用「網格」（Grid）。</p>
+<ol>
+<li>開啟適當平面圖。</li>
+<li>重做「協同合作 → 複製/監視 → 選取連結」。</li>
+<li>選取來源連結，再按「複製 → 多個」。</li>
+<li>框選需要的網格，篩選只保留網格品類。</li>
+<li>完成選取，再完成複製/監視模式。</li>
+<li>對照來源檢查編號與位置。</li>
+</ol>
+
+<h3 id="mep-u8">單元 8｜整理視圖分類，建立主系統與次系統</h3>
+<p><strong>學習目標</strong>：讓工作視圖容易尋找，並避免為了分類而任意改變顯示設定。樣板如何鎖住欄位，見 <a href="#step7">Step 7</a> 與<a href="#vg-locked">VG 被樣板鎖住</a>。瀏覽器分組見 <a href="#step14">Step 14</a> 與<a href="#discipline">領域與次領域</a>。</p>
+<p><strong>第一階段：了解現有分類</strong></p>
+<ol>
+<li>在專案瀏覽器最上方「視圖」按右鍵，開啟「瀏覽器組織」（Browser Organization）。</li>
+<li>查看目前套用的配置與「組成群組和排序」（Grouping and Sorting）。</li>
+<li>課堂樣板使用領域、次領域及族群與類型（Family and Type）等條件。</li>
+<li>選取一張視圖，對照性質中的值，理解它為何出現在該群組。</li>
+</ol>
+<p>領域除了可作為分類條件，也與視圖顯示相關；次領域可供進一步分類。內建領域選項與自訂文字欄位的用途不同。</p>
+<p><strong>遇到灰色欄位時</strong></p>
+<ol>
+<li>查看性質中的「視圖樣板」（View Template）。</li>
+<li>判斷該參數是否受到樣板控制。</li>
+<li>在課堂練習副本，可將視圖樣板設為「無」（None）後觀察哪些欄位恢復可編輯。</li>
+<li>在正式使用的檔案，應先確認既有樣板管理方式，再決定調整樣板或解除套用。</li>
+</ol>
+<p>原稿的「改成 5」依上下文整理為「無」。解除樣板可能影響原先的顯示管理，不列為所有視圖的必做步驟。</p>
+<p><strong>第二階段：建立兩個自訂分類欄位</strong></p>
+<p>課堂以共用參數（Shared Parameters）定義「主系統」「次系統」，再加入專案的視圖品類。共用參數檔提供可重複使用的定義；光建立文字檔，還不會自動在視圖出現欄位。共用參數檔放在自己寫得進去的資料夾，見<a href="#permissions">第九節</a>。</p>
+<ol>
+<li>選擇「管理 → 共用參數」，建立或選擇受管理的共用參數 TXT。</li>
+<li>建立群組，例如「視圖分類」。此群組名稱為本頁練習建議。</li>
+<li>新建「主系統」與「次系統」。課堂設定為領域「一般」（Common）、資料類型「文字」（Text）。</li>
+<li>到「管理 → 專案參數」（Project Parameters），新增參數並選擇共用參數來源。</li>
+<li>分別選取剛建立的兩個定義。</li>
+<li>將品類（Category）設為「視圖」（Views）。</li>
+<li>課堂將參數放在性質面板的「圖形」（Graphics）群組。</li>
+<li>確認後，選取一張視圖，檢查兩個欄位是否出現。</li>
+</ol>
+<p>為讓每張練習視圖分別填值，可檢查並採用實例（Instance）綁定；這是編者補充的操作檢查點，逐字稿未清楚交代該選項。</p>
+<p><strong>第三階段：設定新的瀏覽器組織</strong></p>
+<ol>
+<li>新增一個配置，例如「系統」。</li>
+<li>群組條件依序選擇「主系統 → 次系統 → 族群與類型」。</li>
+<li>確認並套用新的配置。</li>
+<li>選取練習視圖，填入主系統「電氣」、次系統「強電」。</li>
+<li>檢查視圖是否出現在預期群組。</li>
+</ol>
+<p>預期結構示例：電氣 → 強電 → 樓板平面圖 → 1F。</p>
+<p><strong>問號分類的排查順序</strong></p>
+<ol>
+<li>確認瀏覽器正在使用哪個組織配置。</li>
+<li>查看該配置依據的欄位。</li>
+<li>檢查視圖對應欄位是否空白。</li>
+<li>補值後重新檢查分類，不必先刪除重建視圖。</li>
+</ol>
+<p>依視圖自訂參數建立分類配置的概念，另對照官方說明「Organize the Project Browser」，見<a href="#mep-docs">下方 A2</a>。</p>
+
+<h3 id="mep-u9">單元 9｜正確連結 CAD 底圖</h3>
+<p><strong>學習目標</strong>：將 2D 圖面作為建模參考，確保來源、比例、定位及顯示範圍正確。用連結，不要用匯入。差異見 <a href="#step2">Step 2</a>。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>先開啟要使用底圖的目標平面視圖。</li>
+<li>選擇「插入 → 連結 CAD」（Link CAD），選擇 DWG。</li>
+<li>依底圖閱讀需求選擇色彩與圖層。</li>
+<li>確認來源幾何單位，明確設定匯入單位。</li>
+<li>若只需在目前這張視圖使用，勾選「僅目前視圖」（Current view only）。</li>
+<li>依定位約定設定定位方式，再載入。</li>
+<li>以已知距離檢查比例，並以網格或指定參考點核對位置。</li>
+<li>用「管理連結」確認來源；圖面改名或換存放位置後，重新指定並檢查。</li>
+</ol>
+<p><strong>設定檢查表</strong></p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>設定</th><th>要回答的問題</th></tr></thead>
+<tbody>
+<tr><td>色彩</td><td>保留來源顏色，還是改成黑白方便辨識？</td></tr>
+<tr><td>圖層</td><td>載入全部，還是限定已確認需要的圖層？</td></tr>
+<tr><td>匯入單位</td><td>來源幾何的一個單位實際代表 cm 還是 mm？</td></tr>
+<tr><td>僅目前視圖</td><td>底圖是否只服務這一張視圖？</td></tr>
+<tr><td>定位</td><td>是否已有原點、共用座標（Shared Coordinates）或既有約定？</td></tr>
+<tr><td>管理連結</td><td>更新時能否找到正確來源？</td></tr>
+</tbody>
+</table>
+</div>
+<p>「僅目前視圖」限制的是目前視圖，不能概括為同樓層所有視圖。未勾選時，CAD 以模型幾何方式處理，可在其他視圖中顯示，但仍受各視圖可見性等設定影響。此處依官方說明校正，見<a href="#mep-docs">下方 A3</a>。</p>
+<p>課堂教材已安排定位點，因此示範不調整定位；其他檔案不可直接套用。手動把中心放到畫面上，只適合作為練習時的暫時安排，之後仍須核對定位依據。定位選項的實際文字見 <a href="#step2">Step 2</a>。</p>
+<p><strong>完成檢查</strong></p>
+<ul class="check-static">
+<li>已知距離與來源一致。</li>
+<li>底圖與建築網格或指定參考位置相符。</li>
+<li>可以說明底圖應出現在哪張視圖，以及如何更新。</li>
+</ul>
+
+<h3 id="mep-u10">單元 10｜建立配管系統，區分線條與實體顏色</h3>
+<p><strong>學習目標</strong>：理解系統類型、圖形取代、材質與視圖設定各自控制什麼。管系統的建法另見<a href="#pipe-setup">管路設定</a>。依系統上色另見 <a href="#step8">Step 8</a>。</p>
+<p><strong>操作步驟</strong></p>
+<ol>
+<li>在專案瀏覽器的「族群」中找到「管系統」。有的畫面寫「配管系統」（Piping System）。</li>
+<li>選擇適當的既有系統類型，複製後重新命名。</li>
+<li>課堂將示例命名為「強電」；這是展示分類與配色的案例，不是電氣系統的計算資料。</li>
+<li>開啟該系統的類型性質，找到「圖形取代」（Graphic Overrides）。</li>
+<li>設定線條樣式、顏色及線粗，課堂以綠色示範。</li>
+<li>建立測試管段，指定該系統，確認線條顯示。</li>
+<li>切換詳細等級（Detail Level）及視覺型式（Visual Style），比較單線、雙線及實體顯示。課堂口述是「詳細程度」「視覺形式」。</li>
+<li>如需材質顏色，依課堂方式設定系統的材質，再檢查材質的圖形與外觀設定。</li>
+</ol>
+<p><strong>四種控制不要混用</strong></p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>控制項</th><th>課堂要觀察的結果</th></tr></thead>
+<tbody>
+<tr><td>圖形取代</td><td>線條顏色、線型及線粗</td></tr>
+<tr><td>材質</td><td>著色或外觀顯示時的表面效果</td></tr>
+<tr><td>詳細等級</td><td>元件呈現的簡化程度；管線單線／雙線效果需實際比較</td></tr>
+<tr><td>視覺型式</td><td>線條、著色等觀看方式</td></tr>
+</tbody>
+</table>
+</div>
+<p>只有邊線變綠、中間仍是其他顏色時，先檢查材質與視覺型式；不要只重改線色。不同視圖也可能受到樣板、篩選（Filters）或其他取代影響，應逐項比對。</p>
+<p><strong>線粗在哪裡改</strong></p>
+<p>課堂點法是「管理 → 其他設定 → 線粗」（Line Weights；畫面若寫「線寬」，就是同一個），並示範 1–16 號及不同比例下的設定。線粗號碼不應直接當成固定毫米數值；需要檢查適用的比例與設定表。</p>
+<p><strong>課堂替代建模案例的適用範圍</strong></p>
+<ul>
+<li>以管系統命名「強電」，不等於已建立完整電氣系統資料或計算關係。</li>
+<li>以風管表現匯流排（Busway）是講師提出的外形替代案例。錄音未展示其完整資料、計算或交付驗證流程，正式採用前須確認模型品類與交付要求。</li>
+<li>原稿對電纜架外型限制的說法未經本次核實，不據此判定 Revit 一律無法製作封閉外型。三種外型見<a href="#tray-types">電纜架型式</a>。</li>
+<li>「像 CAD 圖層」是幫助理解的比喻；Revit 系統不能只視為線色圖層。</li>
+</ul>
+
+<h3 id="mep-practice">綜合實作｜完成一份可開始建模的機電練習檔</h3>
+<p>以下作業與驗收表由編者依課程內容設計；練習名稱不屬於原課堂決議。</p>
+<ol class="quick10-list">
+<li>以適當樣板建立新專案，另存練習副本。</li>
+<li>調整面板，設定長度單位。</li>
+<li>連結建築模型，核對位置與來源。</li>
+<li>使用複製/監視取得需要的樓層與網格。</li>
+<li>建立所需樓層平面圖及一張天花板平面圖。</li>
+<li>加入主系統、次系統欄位，設定瀏覽器組織並填值。</li>
+<li>在指定平面視圖連結一張 CAD 底圖，檢查已知尺寸及定位。</li>
+<li>建立一個練習系統與短測試管段，比較線條及材質顏色。</li>
+<li>儲存成果，記下尚待確認的版本、座標或模型內容問題。</li>
+</ol>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>驗收項目</th><th>通過標準</th></tr></thead>
+<tbody>
+<tr><td>檔案與來源</td><td>練習成果可開啟，來源檔可追溯</td></tr>
+<tr><td>專案單位</td><td>能解釋 cm 與 mm 切換後的數值</td></tr>
+<tr><td>模型連結</td><td>正確來源已載入，位置可核對</td></tr>
+<tr><td>樓層與網格</td><td>名稱、高程／位置符合參考模型</td></tr>
+<tr><td>平面視圖</td><td>能從瀏覽器找到並開啟指定視圖</td></tr>
+<tr><td>視圖分類</td><td>主系統與次系統有值，群組符合設定</td></tr>
+<tr><td>CAD 底圖</td><td>比例正確，定位及顯示範圍符合用途</td></tr>
+<tr><td>系統配色</td><td>能解釋邊線顏色與表面顏色的差別</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="mep-quiz">自我測驗</h3>
+<p>先作答，再展開看參考答案。</p>
+<details class="trouble-item">
+<summary>1. 複製了樓層，為什麼瀏覽器仍沒有該樓層平面圖？</summary>
+<div class="step-body"><p>樓層基準與平面視圖不同；依本課程流程，到「視圖 → 平面視圖」另行建立。</p></div>
+</details>
+<details class="trouble-item">
+<summary>2. CAD 底圖縮小十倍，第一步查什麼？</summary>
+<div class="step-body"><p>確認來源幾何單位與匯入單位，再以已知距離驗證。</p></div>
+</details>
+<details class="trouble-item">
+<summary>3. 視圖參數呈灰色，一定是軟體出錯嗎？</summary>
+<div class="step-body"><p>先檢查視圖樣板是否控制該參數，再確認其他限制。</p></div>
+</details>
+<details class="trouble-item">
+<summary>4. 瀏覽器出現「???」，應先刪掉視圖重建嗎？</summary>
+<div class="step-body"><p>先檢查組織配置及用來分類的欄位是否空白。</p></div>
+</details>
+<details class="trouble-item">
+<summary>5. 複製/監視可以讓我方模型自動跟著對方完成所有修改嗎？</summary>
+<div class="step-body"><p>不能。監視提醒變更，仍須協調檢查。</p></div>
+</details>
+<details class="trouble-item">
+<summary>6. 「僅目前視圖」是不是同一樓層全部視圖都會看到？</summary>
+<div class="step-body"><p>不是，它限制在目前視圖。</p></div>
+</details>
+<details class="trouble-item">
+<summary>7. 管線只有邊線變色，應再查哪裡？</summary>
+<div class="step-body"><p>材質、視覺型式，及視圖是否有其他圖形控制。</p></div>
+</details>
+<details class="trouble-item">
+<summary>8. 已建立共用參數 TXT，為什麼視圖還沒有欄位？</summary>
+<div class="step-body"><p>還需在專案加入對應定義，並綁定到視圖品類。</p></div>
+</details>
+
+<h3 id="mep-trouble">快速排查表</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>現象</th><th>優先檢查</th></tr></thead>
+<tbody>
+<tr><td>找不到性質或專案瀏覽器</td><td>視圖 → 使用者介面</td></tr>
+<tr><td>快速鍵沒反應</td><td>英文輸入、目前命令狀態、快速鍵設定</td></tr>
+<tr><td>模型連結失敗</td><td>檔案版本、錯誤訊息、來源是否可獨立開啟</td></tr>
+<tr><td>樓層複製後無法正常操作</td><td>是否已完成選取並退出複製/監視模式</td></tr>
+<tr><td>平面圖似乎不見</td><td>是否已建立、是否在其他瀏覽器分類</td></tr>
+<tr><td>分類欄位不能改</td><td>視圖樣板及相關參數控制</td></tr>
+<tr><td>主／次系統沒有出現</td><td>專案參數來源、品類是否綁定視圖</td></tr>
+<tr><td>底圖比例異常</td><td>來源幾何單位、匯入單位、已知距離</td></tr>
+<tr><td>底圖更新後沒變</td><td>連結或匯入、來源檔名與存放位置、重新載入結果</td></tr>
+<tr><td>邊線與表面顏色不同</td><td>圖形取代、材質、視覺型式及視圖控制</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="mep-docs">官方文件核對</h3>
+<p>本次只針對下列關鍵觀念核對官方資料，並非全功能或全課程驗證。其餘操作依逐字稿整理；介面與適用條件應在實際版本確認。</p>
+<ol>
+<li id="mep-a1"><strong>A1.</strong> <a href="https://help.autodesk.com/cloudhelp/2014/ENU/Revit/files/GUID-3B5AAC45-B5DC-48C0-8312-B90F06653F37.htm">Copying Levels for Monitoring</a>（2014 說明）：核對從連結複製樓層、多個選取的完成步驟、監視變更提示，以及後續建立平面視圖。</li>
+<li id="mep-a2"><strong>A2.</strong> <a href="https://help.autodesk.com/cloudhelp/2023/ENU/Revit-Customize/files/GUID-262456CA-E960-40E6-9993-98142225F495.htm">Video: Organize the Project Browser</a>（2023 說明，影片錄於 2018）：核對使用視圖參數建立自訂瀏覽器組織。</li>
+<li id="mep-a3"><strong>A3.</strong> <a href="https://help.autodesk.com/cloudhelp/2024/ENU/Revit-Model/files/GUID-D184A004-D0BF-44D1-9C02-99480B129CAD.htm">Import and Link Options</a>（2024 說明）：核對 CAD 色彩、圖層、匯入單位及僅目前視圖的意義。</li>
+</ol>
+
+<h3 id="mep-confirm">待確認</h3>
+<div class="warn"><strong>待確認</strong>　尚未對過這堂課的畫面。下面幾項先不要當成定論。
+<ul>
+<li>示範軟體版本。逐字稿提到 2027；本站介面對照的是 2025.5。</li>
+<li>原課程樣板與教材的精確名稱。</li>
+<li>模型升級時遭處理的實體及其影響。</li>
+<li>樓層命名遞增案例的實際輸入內容。</li>
+<li>共用參數加入專案時的完整選項，包含類型或實例綁定。</li>
+<li>以風管表示匯流排、以管系統命名「強電」是否符合交付要求。</li>
+<li>「檔案 → 選項」裡顏色設定的實際選項名稱。</li>
+</ul>
+</div>
+
+<h3 id="mep-corrections">主要辨識校正</h3>
+<p>未能確定的語句不據以補造尺寸、指令按鍵或版本結論。原稿對編號備份的名稱與版本有矛盾，因此改寫為保留原始副本、另存升級成果。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>原稿常見形式</th><th>本頁用語</th></tr></thead>
+<tbody>
+<tr><td>Ribbon／Ruby／Libit／Rabbit 等</td><td>依上下文整理為 Revit；談介面時為功能區（Ribbon）</td></tr>
+<tr><td>CAT／KAT</td><td>CAD</td></tr>
+<tr><td>公里，且同時提到 millimeter</td><td>公厘 mm</td></tr>
+<tr><td>柔程線／螺旋線</td><td>樓層線</td></tr>
+<tr><td>廣格線／住位線</td><td>網格（Grid）</td></tr>
+<tr><td>信子欄等</td><td>性質面板</td></tr>
+<tr><td>視圖樣板選 5</td><td>依上下文整理為「無」</td></tr>
+<tr><td>電器／牆墊</td><td>依上下文整理為電氣／強電</td></tr>
+<tr><td>共享座標、視覺形式、詳細程度、多重選取、軸網、配管系統</td><td>對齊本站 2025.5 用詞：共用座標、視覺型式、詳細等級、多個、網格、管系統</td></tr>
+</tbody>
+</table>
+</div>
+</div></div>
+<p class="note">本頁依課堂逐字稿整理，部分用語依語境推定。</p>
 </section>
 
 <section id="video-notes" class="section">
