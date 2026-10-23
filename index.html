@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現與教學影片操作筆記。">
+<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群與教學影片操作筆記。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -203,6 +203,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 .table-scroll table{margin:0}
 .fig{margin:16px 0; padding:16px; background:var(--bg-muted); border:1px solid var(--border); border-radius:16px}
 .fig figcaption{font-size:14px; color:var(--text-muted); margin-top:10px}
+.fig svg{width:100%; height:auto; display:block}
 .ui-grid{display:grid; grid-template-columns:168px 1fr 180px; grid-template-rows:auto auto minmax(128px,1fr) auto; gap:8px}
 .ug{background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:10px 12px; font-weight:800; font-size:15px; line-height:1.35}
 .ug span{display:block; font-weight:500; color:var(--text-muted); font-size:13px; margin-top:4px}
@@ -310,6 +311,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#mep-intro" data-keywords="機電入門 樣板 配管樣板 衛工 性質 專案瀏覽器 專案單位 連結 Revit Link Revit 管理連結 複製 監視 Copy Monitor 樓層 Level 網格 Grid 平面視圖 瀏覽器組織 共用參數 主系統 次系統 連結 CAD 僅目前視圖 管系統 配管 圖形取代 線粗 線寬 視覺型式">從建立專案到管線配色</a></li>
     <li class="toc-group">Revit 相機、彩現與穿越</li>
     <li><a href="#cam-intro" data-keywords="相機 Camera 彩現 Render 曝光 Exposure 穿越 Walkthrough 關鍵影格 並排 影格 FPS 9-1 9-2 9-3 9-4 展示相機 草圖 視覺型式 描影">從靜態構圖到動畫輸出</a></li>
+    <li class="toc-group">電纜線架旁側拉下</li>
+    <li><a href="#side-drop" data-keywords="旁側拉下 連接片 垂直三通 側偏距 淨間隙 連接件 Connector 電纜架配件 Cable Tray Fitting 擠出 Extrusion 工作平面 鏡射 Mirror 族群類型 Flex 繪製電纜架">旁側拉下連接片族群製作</a></li>
     <li class="toc-group">Revit 操作 · 教學影片</li>
     <li><a href="#video-notes" data-keywords="教學影片 操作筆記 第39片 第40片 第44片 第45片 專案匯出族群 另存資源庫 Save as Library 連結 CAD Link CAD 給水 對齊 Align 釘選 Pin 關閉隱藏的視窗 Close Inactive Views 干涉檢查 Interference Check 展示 重新整理 可見性 圖形取代 Visibility Graphics 篩選器 Filters VV VG 系統類型 CW 模型品類">Revit 教學影片操作筆記</a></li>
     <li class="toc-group">資料與限制</li>
@@ -340,6 +343,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="note">機電實務與品管：<a href="#materials">管材與線材</a>、<a href="#electrical">電氣與緊急供電</a>、<a href="#elv">弱電與中央監控</a>、<a href="#plumbing-qc">給排水</a>、<a href="#fire">消防</a>、<a href="#hvac">空調</a>、<a href="#elevator">電梯</a>、<a href="#mep-iface">介面整合</a>、<a href="#review">設計圖說審查</a>、<a href="#defects">常見施工缺失</a>、<a href="#site-terms">工地用語</a>。</div>
 <div class="note">機電入門課：<a href="#mep-intro">從建立專案到管線系統配色</a>（<a href="#mep-u1">樣板</a>、<a href="#mep-u4">連結模型</a>、<a href="#mep-u6">樓層</a>、<a href="#mep-u9">連結 CAD</a>、<a href="#mep-u10">配管配色</a>，單元 1–10）。</div>
 <div class="note">相機與彩現：<a href="#cam-intro">從靜態構圖到動畫輸出</a>（<a href="#cam-u1">9-1 建立相機</a>、<a href="#cam-u2">9-2 初步彩現</a>、<a href="#cam-u4">9-4-1 穿越</a>、<a href="#cam-u6">9-4-3 輸出動畫</a>）。</div>
+<div class="note">電纜線架族群：<a href="#side-drop">旁側拉下連接片族群製作</a>（<a href="#side-drop-offset">側偏距</a>、<a href="#side-drop-plate">兩片連接片</a>、<a href="#side-drop-flex">族內變形</a>、<a href="#side-drop-project">三端接合</a>）。</div>
 <div class="note">教學影片：<a href="#video-notes">Revit 教學影片操作筆記</a>（<a href="#video-39">第 39 片：專案匯出族群</a>、<a href="#video-40">第 40 片：連結 CAD 給水底圖</a>、<a href="#video-44">第 44 片：干涉檢查</a>、<a href="#video-45">第 45 片：視圖篩選</a>）。</div>
 <div class="bento">
 <div class="b-card b-span-8 orange">
@@ -388,6 +392,12 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <h3>從靜態構圖到動畫輸出</h3>
 <p>6 段影片：9-1 建立相機、9-2 與 9-3 彩現、9-4 穿越動畫。步驟附各段時間碼。</p>
 <a href="#cam-intro">查看講義 →</a>
+</div>
+<div class="b-card b-span-12 orange">
+<div class="k">電纜線架族群</div>
+<h3>旁側拉下連接片族群製作</h3>
+<p>以廠商提供的垂直三通族群為起點。側偏距、兩片連接片、族內變形與三端接合分開驗收。頁內有等角示意。</p>
+<a href="#side-drop">查看講義 →</a>
 </div>
 <div class="b-card b-span-12 orange">
 <div class="k">教學影片</div>
@@ -1685,6 +1695,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p>上行管、下行管可以各做一個標籤族群，或在同一個標籤裡用可見性切換。電纜架標籤的載入與問號處理見<a href="#tags">第七節</a>。</p>
 <h3>族群庫可以按用途分資料夾</h3>
 <p>只記類別，不記某一包庫的路徑：給水、排水、消防水另件、泡沫、消防箱、燈具、空調、衛工裝置；電氣設備、動力、照明、緊急照明、開關、插座、廣播喇叭、弱電、感知器、火警、電信與資訊插座、撒水頭、污排水、氣體、專用設備。載入時仍走插入 → 載入族群。</p>
+<p>電纜線架要從垂直三通改成旁側拉下連接片，見<a href="#side-drop">電纜線架旁側拉下連接片族群製作</a>。</p>
 <p class="verdict"><strong>驗收</strong>：族群品類正確，載入後出現在預期的指令裡；改一個尺寸參數，幾何和連接件一起變。</p>
 </section>
 
@@ -2923,6 +2934,378 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </div>
 </div></div>
 <p class="note">本頁依教學影片逐字稿整理，部分用語依語境推定。</p>
+</section>
+
+<section id="side-drop" class="section">
+<h2><span class="eyebrow">電纜線架族群</span>電纜線架旁側拉下連接片族群製作</h2>
+<div class="step-card"><div class="step-body">
+<p>這一節以<strong>廠商提供的電纜線架垂直三通族群（.rfa）</strong>為候選起點，改成旁側拉下。目標是主線架維持水平通過，垂直分支位於主線架側板外側，分支兩根側樑沿主線長向排列，再用兩片連接片銜接。先完成定位與接合測試，再考慮孔洞與螺栓。</p>
+<p>Revit 品類名稱是電纜架（Cable Tray；現場也稱電纜線架）。指令路徑用「系統 → 電氣 → 電纜架」。畫面用詞與本站其他章節差一個字時，以 Revit 2025.5 繁體中文實際顯示為準。</p>
+<div class="warn"><strong>尚未實機驗證。</strong>本頁是建議操作流程，還沒有在 Revit 裡走完。候選族群沒有附在本頁，不能確認它內部的約束、參數或連接件（Connector）數量。把「只要移動分支」當成已經驗證過的改法，會在後面的尺寸測試才爆開。</div>
+
+<h3 id="side-drop-outcomes">學完後應能完成什麼</h3>
+<ul>
+<li>另存工作副本，原檔留著。</li>
+<li>用 X／Y／Z 與側偏距把下引分支放到側板外側。</li>
+<li>先讓參考平面變形，再把幾何鎖上去。</li>
+<li>做出兩片無孔連接片，上半鎖主線外側板，下半壓住分支側樑。</li>
+<li>族內變形、三端接合、左右側鏡射分開記錄，不併成一句「已完成」。</li>
+</ul>
+
+<h3 id="side-drop-fig">目標長什麼樣子</h3>
+<figure class="fig">
+<svg class="sd-svg" viewBox="0 0 860 500" role="img" aria-labelledby="side-drop-fig-title">
+<title id="side-drop-fig-title">旁側拉下連接片</title>
+<style>
+  .sd-svg text { font-family: "Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif; }
+  .sd-svg .title { font-size: 22px; font-weight: 800; fill: var(--text); }
+  .sd-svg .sub { font-size: 13px; font-weight: 700; fill: var(--text-muted); }
+  .sd-svg .label { font-size: 14px; font-weight: 800; fill: var(--text); }
+  .sd-svg .hint { font-size: 12px; font-weight: 700; fill: var(--text-muted); }
+  .sd-svg .leader { stroke: var(--text-faint); stroke-width: 1.2; fill: none; }
+  .sd-svg .rail.far { fill: var(--text); opacity: .92; }
+  .sd-svg .rail.top { fill: var(--text); opacity: .78; }
+  .sd-svg .rail.side { fill: var(--text); opacity: .92; }
+  .sd-svg .rail.front { fill: var(--text); opacity: .62; }
+  .sd-svg .rung.far, .sd-svg .rung.side { fill: var(--text-faint); }
+  .sd-svg .rung.top { fill: var(--text-muted); opacity: .55; }
+  .sd-svg .rung.front { fill: var(--text-faint); }
+  .sd-svg .drop.far, .sd-svg .drop.side { fill: #1e3a8a; }
+  .sd-svg .drop.top { fill: #1d4ed8; }
+  .sd-svg .drop.front { fill: #2563eb; }
+  .sd-svg .drung.far, .sd-svg .drung.side { fill: #60a5fa; }
+  .sd-svg .drung.top { fill: #93c5fd; }
+  .sd-svg .drung.front { fill: #bfdbfe; }
+  .sd-svg .plate { fill: var(--accent); }
+  .sd-svg .pedge { fill: #c2410c; }
+  .sd-svg polygon { stroke: var(--border-strong); stroke-width: .6; stroke-linejoin: round; }
+</style>
+<polygon class="rail far" points="149.6,246.6 614.0,220.8 614.0,123.3 149.6,149.1"/>
+<polygon class="rail top" points="138.6,154.7 603.0,128.9 614.0,123.3 149.6,149.1"/>
+<polygon class="rail side" points="603.0,226.4 614.0,220.8 614.0,123.3 603.0,128.9"/>
+<polygon class="rail front" points="138.6,252.2 603.0,226.4 603.0,128.9 138.6,154.7"/>
+<polygon class="rung far" points="155.9,238.8 179.6,237.5 179.6,227.5 155.9,228.8"/>
+<polygon class="rung top" points="119.6,247.3 143.3,245.9 179.6,227.5 155.9,228.8"/>
+<polygon class="rung side" points="143.3,255.9 179.6,237.5 179.6,227.5 143.3,245.9"/>
+<polygon class="rung front" points="119.6,257.3 143.3,255.9 143.3,245.9 119.6,247.3"/>
+<polygon class="rung far" points="233.6,234.5 257.4,233.1 257.4,223.1 233.6,224.5"/>
+<polygon class="rung top" points="197.3,242.9 221.1,241.6 257.4,223.1 233.6,224.5"/>
+<polygon class="rung side" points="221.1,251.6 257.4,233.1 257.4,223.1 221.1,241.6"/>
+<polygon class="rung front" points="197.3,252.9 221.1,251.6 221.1,241.6 197.3,242.9"/>
+<polygon class="rung far" points="311.4,230.1 335.2,228.8 335.2,218.8 311.4,220.1"/>
+<polygon class="rung top" points="275.1,238.6 298.9,237.3 335.2,218.8 311.4,220.1"/>
+<polygon class="rung side" points="298.9,247.3 335.2,228.8 335.2,218.8 298.9,237.3"/>
+<polygon class="rung front" points="275.1,248.6 298.9,247.3 298.9,237.3 275.1,238.6"/>
+<polygon class="rung far" points="389.2,225.8 412.9,224.5 412.9,214.5 389.2,215.8"/>
+<polygon class="rung top" points="352.9,234.3 376.6,233.0 412.9,214.5 389.2,215.8"/>
+<polygon class="rung side" points="376.6,243.0 412.9,224.5 412.9,214.5 376.6,233.0"/>
+<polygon class="rung front" points="352.9,244.3 376.6,243.0 376.6,233.0 352.9,234.3"/>
+<polygon class="rung far" points="466.9,221.5 490.7,220.2 490.7,210.2 466.9,211.5"/>
+<polygon class="rung top" points="430.6,230.0 454.4,228.7 490.7,210.2 466.9,211.5"/>
+<polygon class="rung side" points="454.4,238.7 490.7,220.2 490.7,210.2 454.4,228.7"/>
+<polygon class="rung front" points="430.6,240.0 454.4,238.7 454.4,228.7 430.6,230.0"/>
+<polygon class="rung far" points="544.7,217.2 568.4,215.9 568.4,205.9 544.7,207.2"/>
+<polygon class="rung top" points="508.4,225.7 532.1,224.3 568.4,205.9 544.7,207.2"/>
+<polygon class="rung side" points="532.1,234.3 568.4,215.9 568.4,205.9 532.1,224.3"/>
+<polygon class="rung front" points="508.4,235.7 532.1,234.3 532.1,224.3 508.4,225.7"/>
+<polygon class="rail far" points="102.3,270.7 566.7,244.9 566.7,147.4 102.3,173.2"/>
+<polygon class="rail top" points="88.0,180.5 552.4,154.7 566.7,147.4 102.3,173.2"/>
+<polygon class="rail side" points="552.4,252.2 566.7,244.9 566.7,147.4 552.4,154.7"/>
+<polygon class="rail front" points="88.0,278.0 552.4,252.2 552.4,154.7 88.0,180.5"/>
+<polygon class="drop far" points="228.2,461.7 260.6,459.9 260.6,262.4 228.2,264.2"/>
+<polygon class="drop top" points="205.1,276.0 237.5,274.2 260.6,262.4 228.2,264.2"/>
+<polygon class="drop side" points="237.5,471.7 260.6,459.9 260.6,262.4 237.5,274.2"/>
+<polygon class="drop front" points="205.1,473.5 237.5,471.7 237.5,274.2 205.1,276.0"/>
+<polygon class="drop far" points="347.0,455.1 379.4,453.3 379.4,255.8 347.0,257.6"/>
+<polygon class="drop top" points="323.9,269.4 356.3,267.6 379.4,255.8 347.0,257.6"/>
+<polygon class="drop side" points="356.3,465.1 379.4,453.3 379.4,255.8 356.3,267.6"/>
+<polygon class="drop front" points="323.9,466.9 356.3,465.1 356.3,267.6 323.9,269.4"/>
+<polygon class="drung far" points="256.2,334.6 342.6,329.8 342.6,314.8 256.2,319.6"/>
+<polygon class="drung top" points="240.8,327.5 327.2,322.7 342.6,314.8 256.2,319.6"/>
+<polygon class="drung side" points="327.2,337.7 342.6,329.8 342.6,314.8 327.2,322.7"/>
+<polygon class="drung front" points="240.8,342.5 327.2,337.7 327.2,322.7 240.8,327.5"/>
+<polygon class="drung far" points="256.2,399.6 342.6,394.8 342.6,379.8 256.2,384.6"/>
+<polygon class="drung top" points="240.8,392.5 327.2,387.7 342.6,379.8 256.2,384.6"/>
+<polygon class="drung side" points="327.2,402.7 342.6,394.8 342.6,379.8 327.2,387.7"/>
+<polygon class="drung front" points="240.8,407.5 327.2,402.7 327.2,387.7 240.8,392.5"/>
+<polygon class="pedge" points="194.3,321.6 194.3,189.1 211.6,188.1 211.6,171.9 212.1,167.6 213.5,163.6 215.7,160.1 218.6,157.4 222.0,155.6 225.7,154.8 223.5,154.9 227.1,155.3 230.5,156.7 233.4,159.1 235.7,162.4 237.1,166.2 237.5,170.4 237.5,186.7 254.8,185.7 254.8,318.2"/>
+<polygon class="pedge" points="186.6,325.5 186.6,193.0 194.3,189.1 194.3,321.6"/>
+<polygon class="pedge" points="186.6,193.0 203.9,192.0 211.6,188.1 194.3,189.1"/>
+<polygon class="pedge" points="203.9,192.0 203.9,175.8 211.6,171.9 211.6,188.1"/>
+<polygon class="pedge" points="203.9,175.8 204.4,171.5 212.1,167.6 211.6,171.9"/>
+<polygon class="pedge" points="204.4,171.5 205.8,167.5 213.5,163.6 212.1,167.6"/>
+<polygon class="pedge" points="205.8,167.5 208.0,164.1 215.7,160.1 213.5,163.6"/>
+<polygon class="pedge" points="208.0,164.1 210.9,161.3 218.6,157.4 215.7,160.1"/>
+<polygon class="pedge" points="210.9,161.3 214.3,159.5 222.0,155.6 218.6,157.4"/>
+<polygon class="pedge" points="214.3,159.5 218.0,158.7 225.7,154.8 222.0,155.6"/>
+<polygon class="pedge" points="218.0,158.7 215.8,158.9 223.5,154.9 225.7,154.8"/>
+<polygon class="pedge" points="215.8,158.9 219.4,159.2 227.1,155.3 223.5,154.9"/>
+<polygon class="pedge" points="219.4,159.2 222.8,160.6 230.5,156.7 227.1,155.3"/>
+<polygon class="pedge" points="222.8,160.6 225.7,163.1 233.4,159.1 230.5,156.7"/>
+<polygon class="pedge" points="225.7,163.1 228.0,166.3 235.7,162.4 233.4,159.1"/>
+<polygon class="pedge" points="228.0,166.3 229.4,170.2 237.1,166.2 235.7,162.4"/>
+<polygon class="pedge" points="229.4,170.2 229.8,174.3 237.5,170.4 237.1,166.2"/>
+<polygon class="pedge" points="229.8,174.3 229.8,190.6 237.5,186.7 237.5,170.4"/>
+<polygon class="pedge" points="229.8,190.6 247.1,189.6 254.8,185.7 237.5,186.7"/>
+<polygon class="pedge" points="247.1,189.6 247.1,322.1 254.8,318.2 254.8,185.7"/>
+<polygon class="pedge" points="247.1,322.1 186.6,325.5 194.3,321.6 254.8,318.2"/>
+<polygon class="plate" points="186.6,325.5 186.6,193.0 203.9,192.0 203.9,175.8 204.4,171.5 205.8,167.5 208.0,164.1 210.9,161.3 214.3,159.5 218.0,158.7 215.8,158.9 219.4,159.2 222.8,160.6 225.7,163.1 228.0,166.3 229.4,170.2 229.8,174.3 229.8,190.6 247.1,189.6 247.1,322.1"/>
+<polygon class="pedge" points="313.1,315.0 313.1,182.5 330.4,181.5 330.4,165.2 330.9,161.0 332.3,157.0 334.5,153.5 337.4,150.8 340.8,149.0 344.5,148.2 342.3,148.3 345.9,148.7 349.3,150.1 352.2,152.5 354.5,155.8 355.9,159.6 356.3,163.8 356.3,180.1 373.6,179.1 373.6,311.6"/>
+<polygon class="pedge" points="305.4,318.9 305.4,186.4 313.1,182.5 313.1,315.0"/>
+<polygon class="pedge" points="305.4,186.4 322.7,185.4 330.4,181.5 313.1,182.5"/>
+<polygon class="pedge" points="322.7,185.4 322.7,169.2 330.4,165.2 330.4,181.5"/>
+<polygon class="pedge" points="322.7,169.2 323.2,164.9 330.9,161.0 330.4,165.2"/>
+<polygon class="pedge" points="323.2,164.9 324.6,160.9 332.3,157.0 330.9,161.0"/>
+<polygon class="pedge" points="324.6,160.9 326.8,157.5 334.5,153.5 332.3,157.0"/>
+<polygon class="pedge" points="326.8,157.5 329.7,154.7 337.4,150.8 334.5,153.5"/>
+<polygon class="pedge" points="329.7,154.7 333.1,152.9 340.8,149.0 337.4,150.8"/>
+<polygon class="pedge" points="333.1,152.9 336.8,152.1 344.5,148.2 340.8,149.0"/>
+<polygon class="pedge" points="336.8,152.1 334.6,152.3 342.3,148.3 344.5,148.2"/>
+<polygon class="pedge" points="334.6,152.3 338.2,152.6 345.9,148.7 342.3,148.3"/>
+<polygon class="pedge" points="338.2,152.6 341.6,154.0 349.3,150.1 345.9,148.7"/>
+<polygon class="pedge" points="341.6,154.0 344.5,156.5 352.2,152.5 349.3,150.1"/>
+<polygon class="pedge" points="344.5,156.5 346.8,159.7 354.5,155.8 352.2,152.5"/>
+<polygon class="pedge" points="346.8,159.7 348.2,163.6 355.9,159.6 354.5,155.8"/>
+<polygon class="pedge" points="348.2,163.6 348.6,167.7 356.3,163.8 355.9,159.6"/>
+<polygon class="pedge" points="348.6,167.7 348.6,184.0 356.3,180.1 356.3,163.8"/>
+<polygon class="pedge" points="348.6,184.0 365.9,183.0 373.6,179.1 356.3,180.1"/>
+<polygon class="pedge" points="365.9,183.0 365.9,315.5 373.6,311.6 373.6,179.1"/>
+<polygon class="pedge" points="365.9,315.5 305.4,318.9 313.1,315.0 373.6,311.6"/>
+<polygon class="plate" points="305.4,318.9 305.4,186.4 322.7,185.4 322.7,169.2 323.2,164.9 324.6,160.9 326.8,157.5 329.7,154.7 333.1,152.9 336.8,152.1 334.6,152.3 338.2,152.6 341.6,154.0 344.5,156.5 346.8,159.7 348.2,163.6 348.6,167.7 348.6,184.0 365.9,183.0 365.9,315.5"/>
+
+<text class="title" x="24" y="34">旁側拉下連接片</text>
+<text class="sub" x="24" y="56">水平主線通過。一側外側垂直下引。兩片連接片上半鎖外側板，下半壓住分支側樑。</text>
+<line class="leader" x1="24" y1="92" x2="120" y2="150"/>
+<text class="label" x="24" y="86">主線梯架</text>
+<line class="leader" x1="24" y1="188" x2="100" y2="220"/>
+<text class="label" x="24" y="182">外側板</text>
+<line class="leader" x1="500" y1="78" x2="230" y2="130"/>
+<text class="label" x="508" y="74">圓角凸耳</text>
+<text class="hint" x="508" y="94">略高於主線頂部</text>
+<text class="hint" x="508" y="112">建模先用矩形</text>
+<line class="leader" x1="640" y1="188" x2="360" y2="210"/>
+<text class="label" x="648" y="182">連接片</text>
+<text class="hint" x="648" y="202">上半鎖外側板</text>
+<text class="hint" x="648" y="220">下半壓住側樑</text>
+<line class="leader" x1="24" y1="330" x2="160" y2="318"/>
+<text class="label" x="24" y="324">下緣低於主線底部</text>
+<line class="leader" x1="640" y1="400" x2="370" y2="430"/>
+<text class="label" x="648" y="394">下引梯架</text>
+<text class="hint" x="648" y="414">兩根側樑沿主線長向</text>
+
+</svg>
+<figcaption>旁側拉下連接片。灰是水平主線梯架，藍是外側的垂直下引梯架，橙是兩片連接片。上半貼在主線外側板，下半壓住分支兩根側樑；下緣低於主線底部，上緣是略高於主線頂部的圓角凸耳。顏色只為辨認，不是材質。建模時連接片先用矩形。</figcaption>
+</figure>
+<p>方向基準：<strong>X</strong> 是主線長向，<strong>Y</strong> 是主線橫向，<strong>Z</strong> 是高程。主線中心當作 Y＝0。下引連接件的軸向朝下，分支寬度沿 X。平面和立面要一起看。</p>
+
+<h3 id="side-drop-start">1　開始前先確認</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>項目</th><th>作法</th></tr></thead>
+<tbody>
+<tr><td>工作副本</td><td>用 Revit 2025 開啟候選族群，立刻另存（Save As）<code>電纜線架－旁側拉下_測試.rfa</code>。原檔保留。</td></tr>
+<tr><td>測試專案</td><td>另建空白專案。先用寬 300 mm、高 100 mm 的線架測試。這是測試尺寸，不是配件實品尺寸。</td></tr>
+<tr><td>版本</td><td>要交付 2025 使用，就從 2025 開始做。2025 儲存的檔可以在 2025 與 2027 開啟。用 2027 儲存之後，不能再當作 2025 的交付檔。</td></tr>
+<tr><td>完成範圍</td><td>外形、參數變形、接合分開打勾。三項都過，才另存正式版。</td></tr>
+</tbody>
+</table>
+</div>
+<p>候選族若是較舊格式，用 2025 開啟通常會升級。整理時曾以 2020 這類舊格式舉例，本頁沒有該檔，不把某一個舊版號當成已經打開核對過的結論。看到升級提示時，先保留原檔，再在升級後的工作副本上改。</p>
+
+<h3 id="side-drop-check">2　檢查候選族與參數骨架</h3>
+<h3 id="side-drop-open">2.1　打開族群編輯器</h3>
+<p>檔案 → 開啟 → 族群（File → Open → Family），開啟工作副本。依序看參考樓層平面、前後左右立面，以及 3D。介面名稱會隨語言與版本略有不同。</p>
+<h3 id="side-drop-record">2.2　記錄原有功能</h3>
+<p>開啟族群類別與參數（Family Category and Parameters），以及族群類型（Family Types）。抄下類別、組件類型（Part Type）、每個參數是類型（Type）還是實例（Instance）、公式、現有類型值。對話方塊若實際出現「梯形多通道」這類名稱，先保留；還沒看到之前，不要自己假定它叫這個。</p>
+<h3 id="side-drop-connectors">2.3　辨認三個接合方向</h3>
+<p>在 3D 逐一選取電纜架連接件，記錄主線兩端與下引端的位置、朝向、寬高，以及參數關聯。正常的三向候選應有三個對應接合端，仍要以實際檔案確認。下引那一個連接件要在分支底端面，而且朝下。這一步在改位置之前就做，不要等到載入專案才第一次看。</p>
+<h3 id="side-drop-skeleton">2.4　確認分支怎麼被控制</h3>
+<p>用 Tab 區分擠出（Extrusion）、掃掠（Sweep）、巢狀族群、參考平面（Reference Plane）與連接件。先改一項既有尺寸，看哪些物件跟著動，再還原。這時還不要刪掉整組約束，也不要一次拖動全部構件。</p>
+<p class="warn"><strong>檢查門檻。</strong>下引方向或斷面方向與目標不同，或分支不能與主線分開定位時，停止把分支往外推。接下來要重建分支的參考骨架。不能沿用「只差移到外側」這個結論。</p>
+<p><strong>建議參數。</strong>下面是本頁的代號，不代表候選族已經有這些名字。先做一張「實際名稱 → 本頁代號」對照，再決定要不要新增。同一個尺寸不要做成兩個參數。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>代號</th><th>定義</th><th>本頁建議</th></tr></thead>
+<tbody>
+<tr><td>主寬 Wm</td><td>主線架寬度。先確認既有寬度是內淨寬還是外廓。</td><td>沿用既有參數，記下類型或實例。</td></tr>
+<tr><td>主高</td><td>主線架高度。連接片高要比它大。</td><td>沿用既有參數。</td></tr>
+<tr><td>分支寬 Wb</td><td>下引兩根側樑的間距，方向沿主線長向 X。</td><td>沿用或新增。測試起點 300 mm。</td></tr>
+<tr><td>分支高 Hb</td><td>下引斷面的高度方向，應沿主線橫向 Y。</td><td>沿用或新增。測試起點 100 mm。</td></tr>
+<tr><td>側偏距 E</td><td>主線中心到下引斷面中心的橫向距離。</td><td>新增。類型或實例必須和主寬相同。</td></tr>
+<tr><td>淨間隙 G</td><td>主線最外表面到下引構件最近表面的距離。</td><td>新增。測試可從 0 開始。</td></tr>
+<tr><td>連接片厚</td><td>板厚。</td><td>新增，類型參數。測試預設 3 mm，不是實品厚度。</td></tr>
+<tr><td>連接片高</td><td>板在 Z 向的高度，要大於主高。</td><td>新增，類型參數。主高 100 mm 時，測試預設 300 mm。</td></tr>
+<tr><td>連接片材質</td><td>板的材質（Material）。</td><td>新增材質參數，先指定容易辨認的顏色。</td></tr>
+</tbody>
+</table>
+</div>
+<p>板寬、上搭接、下搭接依型錄或核定尺寸填。尺寸還沒核定時，模型先留無孔矩形，並註記「示意」。側偏距若和主寬一個是類型、一個是實例，公式會被拒絕。</p>
+
+<h3 id="side-drop-offset">3　把下引分支定位到側板外側</h3>
+<h3 id="side-drop-axis">3.1　建立方向基準</h3>
+<p>X 為主線長向，Y 為主線橫向，Z 為高程。主線中心是 Y＝0。下引連接件軸向朝下，分支寬度方向沿 X。用平面與立面一起檢查。</p>
+<h3 id="side-drop-plane">3.2　建立側偏參考平面</h3>
+<p>在平面圖新增「分支中心」參考平面，讓它平行於主線長向。主線中心和分支中心之間若已有舊標註，刪掉的是那道標註，參考平面留著。再用對齊標註（Aligned Dimension，快捷鍵 <code>DI</code>）標這段距離，標籤指定「側偏距」。</p>
+<p>標註跳到另一側時，改從要的那一側標；數值允許時也可以加負號。先做右側版本。左側留到專案裡用鏡射（Mirror）測試。先不要用負長度公式做左側。</p>
+<h3 id="side-drop-formula">3.3　用實際外廓計算側偏距</h3>
+<p>先量出兩段距離：</p>
+<ul>
+<li><strong>A</strong>：主線中心到所選那一側最外表面。</li>
+<li><strong>B</strong>：下引斷面中心到靠主線那一側最外表面。</li>
+</ul>
+<p>目標中心距是 <strong>E ＝ A ＋ G ＋ B</strong>。A、B 要含側樑凸緣或其他突出物。</p>
+<p>只有確認 Wm 與 Hb 都是完整外廓尺寸，而且中心對稱，才把公式簡化成 <strong>E ＝ Wm／2 ＋ G ＋ Hb／2</strong>。用到「分支高／2」之前，先在平面量分支斷面，確認高度方向確實沿主線橫向。舊的「主寬／2 ＋ 分支側板厚 ＋ 間隙」沒有寫定位基準，不能直接套。</p>
+<h3 id="side-drop-flex-skeleton">3.4　先讓參考骨架變形</h3>
+<p>先改 Wm、Wb、Hb 與 E，確認參考平面的位置對。再用對齊（Align，快捷鍵 <code>AL</code>）把分支草圖對到控制平面並鎖住。主線兩端仍留在原中心線。兩個都會移動的實體，不要互相鎖住。</p>
+<p>主線下方若有一段斜的過渡板，旁側拉下用不到。可以刪除，或用可見性/圖形取代（Visibility/Graphics Overrides）先關掉。刪除前先確認沒有別的幾何鎖在它上面。</p>
+<h3 id="side-drop-sync">3.5　同步調整分支連接件</h3>
+<p>連接件若附在分支端面上，端面移動之後要確認它有跟著走。連接件若放在工作平面（Work Plane）上，檢查該平面的位置與尺寸關聯。選取連接件，用性質旁的參數關聯按鈕，確認寬對 Wb、高對 Hb。</p>
+<p class="verdict"><strong>關卡。</strong>下引端的位置、方向、斷面寬高都對了，才做連接片。修改既有端面讓連接件失效時，先還原，再依原族的主次連接件配置修。不要一次刪掉並重建全部連接件。</p>
+
+<h3 id="side-drop-plate">4　建立兩片連接片</h3>
+<p>先做無孔的簡化板。兩片分別對應下引梯架的兩根側樑，沿 X 分開。參考平面控制板的位置、寬度與上下搭接。依目標接觸面決定要不要折彎。兩片板放在主線架的左右兩側，不能代替這個構造。</p>
+<ul>
+<li>上半鎖在主線外側板。</li>
+<li>下半壓住分支的兩根側樑。</li>
+<li>下緣低於主線架底部，所以連接片高要大於主高。主高變大時，再測一次仍壓得到。</li>
+<li>上緣的目標是略高於主線頂部的圓角凸耳。建模先用矩形，出詳圖再修輪廓。</li>
+</ul>
+<h3 id="side-drop-extrude">4.1　擠出</h3>
+<ol>
+<li>建立 → 工作平面 → 設定（Create → Work Plane → Set），工作平面設在主線外側板那一面。</li>
+<li>建立 → 擠出（Create → Extrusion）。畫封閉矩形。</li>
+<li>左右邊鎖到參考平面：分支中心 ± 分支寬／2。鎖參考平面，不鎖幾何邊緣。</li>
+<li>矩形階段的上邊鎖主線頂部的參考平面。下邊鎖「連接片高」那道參考平面。</li>
+<li>擠出終點關聯「連接片厚」。長到內側時，把深度改成負值，或翻轉。</li>
+</ol>
+<p>第二片請重畫，不要複製，也不要鏡射。複製容易把固定座標和舊鎖點一起帶過去。複製後再重新約束是另一種做法，尚未在實機驗證；若仍要複製，複製完要立刻用對齊鎖回控制用的參考平面。只複製到固定座標不算完成。本頁採用重畫。</p>
+<h3 id="side-drop-material">4.2　材質與搭接</h3>
+<p>選取板件，材質關聯到「連接片材質」。先指定容易辨認的顏色，確認位置後再換實際材質。平面、立面、3D 的可見性與細節等級都看一次。</p>
+<p>在剖面或立面量上下搭接、兩板間距、主分支淨距。G 大於零時，板的折彎或跨接形狀要能跨過這段距離。把平板拉長，不代表構造成立。</p>
+<h3 id="side-drop-holes">4.3　孔與螺栓最後才加</h3>
+<p>板厚、孔徑、孔距、邊距、折彎都有核定資料之後，再用空心擠出（Void Extrusion）切孔，並加入螺栓示意。資料還沒有時，保留無孔模型，註記「示意」。空心切割也會拖慢專案，所以這一步延後。不要自己填加工尺寸或承載能力。</p>
+
+<h3 id="side-drop-flex">5　族內變形（Flex）測試</h3>
+<p>在族群類型裡一次只改一項，按套用，看參考平面、幾何和連接件是否一起動。下表的數字是建議測試值，不是產品的供應範圍。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>測試</th><th>操作</th><th>通過條件</th></tr></thead>
+<tbody>
+<tr><td>主寬</td><td>300 → 450 → 600 → 300 mm</td><td>分支隨外側基準移動；主線兩端保持對中。</td></tr>
+<tr><td>分支寬</td><td>300 → 450 → 300 mm</td><td>兩片板隨分支側樑移動；分支寬度仍沿 X。</td></tr>
+<tr><td>分支斷面高度</td><td>100 → 150 → 100 mm</td><td>外廓、連接件與間隙一起更新。</td></tr>
+<tr><td>主高</td><td>100 → 150 → 100 mm</td><td>連接片下緣仍低於主線架底部，下半仍壓得到側樑。連接片高不大於主高時，這項不會過。</td></tr>
+<tr><td>淨間隙</td><td>0 → 10 → 0 mm</td><td>沒有穿插；板形仍連得到兩側接觸面。</td></tr>
+<tr><td>恢復基準</td><td>全部回到初始值，儲存後重開</td><td>沒有約束錯誤、幾何遺失或參數失效。</td></tr>
+</tbody>
+</table>
+</div>
+<p>主高和分支高若在候選族裡是同一個參數，改一次就要同時看主線外廓和分支斷面。失敗時記下參數名稱與錯誤訊息，再還原。不要直接接受「移除約束」來把錯誤訊息消掉。</p>
+
+<h3 id="side-drop-use">6　族的用途要先分清楚</h3>
+<p>本流程的目標是帶主線兩端與下引端的整組三向配件。若只要兩片板做數量統計，幾何可以放在連接處，但不會因此產生主線架到分支的邏輯連接。兩種成果用不同的接合驗收，不能共用同一句「接得上」。</p>
+
+<h3 id="side-drop-project">7　載入專案與三端接合驗收</h3>
+<h3 id="side-drop-load">7.1　載入空白測試專案</h3>
+<p>使用載入到專案（Load into Project；畫面若寫「載入至專案」，就是同一個）。到系統 → 電氣 → 電纜架配件（Cable Tray Fitting）選取測試族群。先在獨立區域放置。方向不對時按空白鍵（Spacebar）旋轉，選要接的那一側。不要直接覆寫正式工程裡的原族。</p>
+<h3 id="side-drop-draw">7.2　建立三端測試配置</h3>
+<p>主線兩端與下引端各自接出線架。連接件上按右鍵，若有「繪製電纜架」（Draw Cable Tray），就從連接件起畫。沒有這個指令時，改用電纜架工具，並確認端點有捕捉。下引段要在立面或 3D 裡確認是垂直的。</p>
+<p>測通、以後會重複用的組合，可以用修改 → 建立群組（Create Group）收成一組。群組是專案裡的編排，不是族群通過的條件。</p>
+<h3 id="side-drop-logic">7.3　檢查邏輯接合</h3>
+<p>逐端選取，看端點狀態，以及斷開、連接是否可用。把配件輕輕移動，看線架有沒有跟著走，只能當輔助。輔助現象單獨成立，不算接合通過。要用 Revit API 讀取 Connector 的連接關係時，那一步不在必要流程裡，見<a href="#permissions">公司電腦權限</a>。</p>
+<h3 id="side-drop-mirror">7.4　分別測試左右側與尺寸變更</h3>
+<p>先測右側，再用鏡射測左側，並改主寬與分支寬。鏡射後看下引斷面有沒有翻 90°、板有沒有穿插、線架有沒有斷開。左側失敗時，先保留單側可用的版本。</p>
+<p>不要先保證類型性質會自動放上「多通道」配件。先完成手動放置與接合。能不能自動置入，要另外用該族的組件類型和實際繪製行為驗證。電纜架沒有佈線偏好，配件是在類型性質裡指定，見 <a href="#step9">Step 9</a>。</p>
+
+<h3 id="side-drop-deliver">8　交付檢查</h3>
+<p>驗收記錄分開填：Revit 版本、族群名稱、主線尺寸、分支尺寸、側偏距。再分開填外形、族內變形、三端接合、左右側測試、尚未通過的事項。通過之後另存正式版，例如 <code>電纜線架－旁側拉下.rfa</code>。測試失敗的副本不能取代原族，也不能取代候選族。</p>
+<ul class="check-static">
+<li>外形：主線水平通過，下引在側板外側，兩片板的上下關係與圖一致</li>
+<li>族內變形：上表每一列都試過，失敗有記錄並已還原</li>
+<li>三端接合：主線兩端與下引端都有實際連接狀態</li>
+<li>左右側：右側可用；左側鏡射的結果有分開記錄</li>
+<li>孔與螺栓：尚未核定的加工尺寸仍標示意</li>
+</ul>
+<p>側偏構造與 E ＝ A ＋ G ＋ B 是建議的建模方法，要用族內測試驗證。操作依據見下面三份 Autodesk 說明。</p>
+
+<h3 id="side-drop-quiz">自我測驗</h3>
+<p>先作答，再展開看參考答案。</p>
+<details class="trouble-item">
+<summary>1. 把分支拖到外側，就算這次修改完成了嗎？</summary>
+<div class="step-body"><p>還沒有。候選族的約束尚未在實機確認。下引方向或斷面不對，或分支不能獨立定位時，要停下來重建參考骨架。</p></div>
+</details>
+<details class="trouble-item">
+<summary>2. 側偏距什麼時候可以寫成主寬／2 ＋ 淨間隙 ＋ 分支高／2？</summary>
+<div class="step-body"><p>主寬和分支高都是完整外廓、中心對稱，而且已經在平面確認分支的高度方向沿主線橫向。其他情況用 E ＝ A ＋ G ＋ B。</p></div>
+</details>
+<details class="trouble-item">
+<summary>3. 側偏距的公式被拒絕，先查什麼？</summary>
+<div class="step-body"><p>側偏距和主寬是不是一個類型、一個實例。兩種混在同一個公式裡會被拒。</p></div>
+</details>
+<details class="trouble-item">
+<summary>4. 第二片連接片為什麼要重畫？</summary>
+<div class="step-body"><p>複製和鏡射容易把固定座標與舊鎖點一起帶過去。重畫後，左右邊鎖參考平面，不鎖幾何邊緣。</p></div>
+</details>
+<details class="trouble-item">
+<summary>5. 連接片高為什麼要比主高大？</summary>
+<div class="step-body"><p>下緣要低於主線架底部，下半還要壓到分支側樑。主高加大之後要再測一次，確認仍然壓得到。</p></div>
+</details>
+<details class="trouble-item">
+<summary>6. 圓角凸耳要在第一版就做好嗎？</summary>
+<div class="step-body"><p>上緣的目標是略高於主線頂部的圓角凸耳。建模先用矩形，出詳圖再修輪廓。</p></div>
+</details>
+<details class="trouble-item">
+<summary>7. 外觀貼上了，接合就通過了嗎？</summary>
+<div class="step-body"><p>還沒有。要看端口位置、法向、尺寸，以及實際的連接或斷開狀態。輕輕移動配件只是輔助。</p></div>
+</details>
+<details class="trouble-item">
+<summary>8. 鏡射到左側失敗時，怎麼交付？</summary>
+<div class="step-body"><p>先留下單側可用的版本。外形、變形、接合、左右側分開記錄。測試失敗的副本不能取代原族。</p></div>
+</details>
+<details class="trouble-item">
+<summary>9. 用較新版本存檔，還能交給 2025 嗎？</summary>
+<div class="step-body"><p>要交 2025，就從 2025 製作。2025 儲存的檔可以在 2025 和 2027 開啟。2027 儲存過的檔不能再當作 2025 的交付檔。</p></div>
+</details>
+<details class="trouble-item">
+<summary>10. 螺栓孔為什麼先不做？</summary>
+<div class="step-body"><p>孔徑、孔距、邊距和折彎還沒核定時，不要填加工尺寸。空心切割也會拖慢專案。先留無孔，並註記示意。</p></div>
+</details>
+
+<h3 id="side-drop-trouble">常見問題</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>現象</th><th>優先檢查</th></tr></thead>
+<tbody>
+<tr><td>側偏距公式被拒，或類型與實例混用</td><td>側偏距改成和主寬同一種：都是類型，或都是實例。</td></tr>
+<tr><td>限制條件不滿足，或改尺寸報約束錯誤</td><td>舊標註還在、尺寸重複、固定座標、參數互相衝突、兩個實體會一起動卻鎖在一起。先還原，不要直接接受「移除約束」。</td></tr>
+<tr><td>板有移動，端口留在原地</td><td>連接件的宿主、工作平面與參數關聯。下引連接件要在分支底端面且朝下。先還原，不要一次刪掉全部連接件。</td></tr>
+<tr><td>下引線架轉了 90°</td><td>連接件的斷面方向，以及寬、高分別關聯哪一個參數。只看箭頭朝下不夠。</td></tr>
+<tr><td>外觀貼合，但接不上</td><td>端口位置、法向、連接件類別、寬高，以及實際的連接狀態。</td></tr>
+<tr><td>連接片長在內側</td><td>擠出方向。終點改負值，或翻轉。</td></tr>
+<tr><td>2025 開不了這個族群</td><td>可能已被 2027 這類較新版本存過，不能再當作 2025 的檔。</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="side-drop-docs">官方文件</h3>
+<p>下面三份用來對照約束、放置連接件，以及電纜架配件怎麼加進專案。側偏構造與公式仍以本頁的族內測試為準。</p>
+<ol>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Revit-Customize/files/GUID-26CE1E00-72C1-49D6-9295-A59F50BAA0EF.htm">Constrain Family Geometry</a>（2025）：幾何怎麼鎖到參考平面。</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-Customize/files/GUID-BE4F1954-1049-46EC-BCB2-D03D27B4C77A.htm">Place a Connector</a>（2026）：放置連接件。</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2023/ENU/Revit-MEPEng/files/GUID-F88D8921-5F1E-4FE2-B2A8-1ACBFCC6286A.htm">Add Cable Tray Fittings</a>（2023）：把電纜架配件加進專案。</li>
+</ol>
+
+<h3 id="side-drop-confirm">待確認</h3>
+<div class="warn"><strong>待確認</strong>　這份流程尚未在 Revit 實機走完。下面幾項以打開檔案後的畫面為準。
+<ul>
+<li>候選族實際的參數名稱、公式、連接件數量，以及有沒有斜向過渡板。</li>
+<li>連接片的板厚、孔徑、孔距、邊距、折彎。沒有型錄或核定尺寸時維持示意。</li>
+<li>族群類型裡是否出現「梯形多通道」，以及類型性質能不能自動放上配件。</li>
+<li>繁中按鈕若和本頁差一個字，以 Revit 2025.5 畫面為準。族群的一般做法另見<a href="#family">族群製作</a>。</li>
+</ul>
+</div>
+</div></div>
+<p class="note">本頁綜合操作建議與審閱補充。候選族群的內部約束尚未實機核對；與較早筆記不一致時，以本頁較保守的說法為準。</p>
 </section>
 
 <section id="video-notes" class="section">
