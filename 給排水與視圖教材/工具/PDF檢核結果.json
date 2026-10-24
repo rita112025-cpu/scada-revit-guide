@@ -1,0 +1,37 @@
+[
+  {
+    "file": "00_閱讀指南.pdf",
+    "pages": 2,
+    "extracted_characters": 1414,
+    "links": 0,
+    "all_paragraphs_and_cells_verified": true
+  },
+  {
+    "file": "01_給排水建模操作教材.pdf",
+    "pages": 49,
+    "extracted_characters": 11918,
+    "links": 0,
+    "all_paragraphs_and_cells_verified": true
+  },
+  {
+    "file": "02_族群電氣與視圖管理教材.pdf",
+    "pages": 13,
+    "extracted_characters": 10955,
+    "links": 0,
+    "all_paragraphs_and_cells_verified": true
+  },
+  {
+    "file": "03_術語與操作校正表.pdf",
+    "pages": 10,
+    "extracted_characters": 7829,
+    "links": 259,
+    "all_paragraphs_and_cells_verified": true
+  },
+  {
+    "file": "04_練習與驗收.pdf",
+    "pages": 4,
+    "extracted_characters": 2816,
+    "links": 0,
+    "all_paragraphs_and_cells_verified": true
+  }
+]
