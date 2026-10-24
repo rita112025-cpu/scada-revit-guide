@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群與教學影片操作筆記。">
+<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群、教學影片操作筆記，以及 AutoCAD 圖層置頂與專案族群轉存 .rfa。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -161,7 +161,7 @@ pre{background:var(--code-bg); padding:16px; border-radius:12px; overflow:auto; 
 .step-body p{margin:12px 0}
 .verdict{background:var(--verdict-bg); border:1px solid var(--verdict-border); padding:14px 16px; border-radius:12px; margin-top:16px; font-size:16px}
 .warn{background:var(--warn-bg); border:1px solid var(--warn-border); padding:12px 16px; border-radius:12px; margin:14px 0; font-size:16px}
-.warn ul{margin:8px 0 0; padding-left:1.2em}
+.warn ul, .note ul{margin:8px 0 0; padding-left:1.2em}
 .note{background:var(--note-bg); border:1px solid var(--border); padding:12px 16px; border-radius:12px; margin:14px 0; font-size:16px}
 .example-box{background:var(--bg-muted); border:1px dashed var(--border-strong); padding:14px 16px; border-radius:12px; margin:14px 0; font-family:Consolas,"Cascadia Mono",monospace; font-size:15px}
 table.compare, table.mapping-table{width:100%; border-collapse:collapse; margin:14px 0; font-size:16px; background:var(--bg-card); border-radius:12px; overflow:hidden; border:1px solid var(--border)}
@@ -291,7 +291,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#conduit-size" data-keywords="EMT 電管 標稱尺寸 內徑 外徑 CNS 薄鋼管 RNC 彎曲半徑">電管尺寸</a></li>
     <li><a href="#pipe-setup" data-keywords="配管系統設定 佈線偏好 管區段 給水 排水 PVC 斜度 配件 管系統 圖形取代 材料 細緻 粗略 粗糙 SP WP VP CW HW 存水彎 清潔口">管路設定</a></li>
     <li><a href="#pipe-draw" data-keywords="管段繪製技巧 立管 斜T 空白鍵 建立類似 佈線解決方案 佈線解法 衛工 衛浴 對齊 排水 套用 線架構 線框">管段繪製技巧</a></li>
-    <li><a href="#family" data-keywords="族群製作 族群樣板 參考平面 參考線 掃掠 連接件 管接點 斜T 標籤 類型目錄 載入族群">族群製作</a></li>
+    <li><a href="#family" data-keywords="族群製作 族群樣板 參考平面 參考線 掃掠 連接件 管接點 斜T 標籤 類型目錄 載入族群 轉存 rfa 另存新檔 資源庫">族群製作</a></li>
+    <li><a href="#save-rfa" data-keywords="實務小技巧 轉存 rfa 另存新檔 Save As 資源庫 Library 族群 Family 所有族群 專案瀏覽器 右鍵儲存 可載入族群 系統族群 電纜架配件 儲存族群">轉存成 .rfa</a></li>
     <li><a href="#sheets" data-keywords="圖紙與出圖 圖紙出圖 圖框 視圖樣板 明細表 定點高程 修訂 圖紙">圖紙與出圖</a></li>
     <li><a href="#arch-model" data-keywords="建築建模基礎 網格 結構柱 結構梁 樓板 牆 門窗 樓梯 屋頂 地形 彩現 篩選">建築建模基礎</a></li>
     <li><a href="#mep-model" data-keywords="灑水 配電盤 迴路 插座 燈具 風管 電氣設定 衛浴 衛工 軟風管">機電建模重點</a></li>
@@ -316,7 +317,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li class="toc-group">Revit 操作 · 教學影片</li>
     <li><a href="#video-notes" data-keywords="教學影片 操作筆記 第39片 第40片 第44片 第45片 專案匯出族群 另存資源庫 Save as Library 連結 CAD Link CAD 給水 對齊 Align 釘選 Pin 關閉隱藏的視窗 Close Inactive Views 干涉檢查 Interference Check 展示 重新整理 可見性 圖形取代 Visibility Graphics 篩選器 Filters VV VG 系統類型 CW 模型品類">Revit 教學影片操作筆記</a></li>
     <li class="toc-group">資料與限制</li>
-    <li><a href="#mapping">八、路由欄位對應</a></li>
+    <li><a href="#mapping" data-keywords="AutoCAD 路由 欄位對應 ROUTE_ID">八、路由欄位對應</a></li>
+    <li><a href="#layer-front" data-keywords="實務小技巧 AutoCAD MEP QSELECT 快速選取 DRAWORDER 繪製順序 REGEN 重生 WIPEOUT 遮蔽 XREF 外部參考 HY-SCADA-TRAY 圖層 最前面 最上方 置頂">圖層顯示在最前面</a></li>
     <li><a href="#permissions">九、公司電腦權限</a></li>
     <li><a href="#verify">十、畫面再對一下</a></li>
   </ol>
@@ -345,6 +347,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="note">相機與彩現：<a href="#cam-intro">從靜態構圖到動畫輸出</a>（<a href="#cam-u1">9-1 建立相機</a>、<a href="#cam-u2">9-2 初步彩現</a>、<a href="#cam-u4">9-4-1 穿越</a>、<a href="#cam-u6">9-4-3 輸出動畫</a>）。</div>
 <div class="note">電纜線架族群：<a href="#side-drop">旁側拉下連接片族群製作</a>（<a href="#side-drop-offset">側偏距</a>、<a href="#side-drop-plate">兩片連接片</a>、<a href="#side-drop-flex">族內變形</a>、<a href="#side-drop-project">三端接合</a>）。</div>
 <div class="note">教學影片：<a href="#video-notes">Revit 教學影片操作筆記</a>（<a href="#video-39">第 39 片：專案匯出族群</a>、<a href="#video-40">第 40 片：連結 CAD 給水底圖</a>、<a href="#video-44">第 44 片：干涉檢查</a>、<a href="#video-45">第 45 片：視圖篩選</a>）。</div>
+<div class="note">實務小技巧：<a href="#layer-front">AutoCAD 圖層顯示在最前面</a>、<a href="#save-rfa">把專案族群轉存成 .rfa</a>。步驟分別寫在 <a href="#mapping">AutoCAD 路由</a>與<a href="#family">族群製作</a>。</div>
 <div class="bento">
 <div class="b-card b-span-8 orange">
 <div class="k">開始前</div>
@@ -573,7 +576,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p>2025 繁中介面與說明文件用「族群」。本站較早步驟若寫「族」「載入族」「族類型」，指的是同一件事：族群、載入族群、族群類型（Family Types）。</p>
 <h3>三種族群</h3>
 <ul>
-<li><strong>系統族群（System Family）</strong>：牆、樓板、管、風管、電纜架。軟體預先定義，不能存成外部 .rfa，只能在專案裡複製類型。</li>
+<li><strong>系統族群（System Family）</strong>：牆、樓板、管、風管、電纜架。軟體預先定義，不能存成外部 .rfa，只能在專案裡複製類型。可載入族群怎麼存出去，見<a href="#save-rfa">把專案裡的族群轉存成 .rfa</a>。</li>
 <li><strong>可載入族群（Loadable Family）</strong>：門窗、衛工裝置、配電盤、標籤。在 .rfa 裡做好，再載入專案。最常自己改的是這一種。</li>
 <li><strong>內建族群（In-Place Family）</strong>：只活在這個專案，不能拿到別的檔用。留給極少見、不會重複的特殊元件。能做成可載入族群就不要用內建。</li>
 </ul>
@@ -1675,7 +1678,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 
 <section id="family" class="section">
 <h2><span class="eyebrow">族群</span>族群製作</h2>
-<p>能用現成可載入族群就不要重做。要自己做時，先選對族群樣板（.rft），再定品類。品類選錯，以後載入專案不會出現在對的指令底下，標籤和明細表也對不上。</p>
+<p>能用現成可載入族群就不要重做。要自己做時，先選對族群樣板（.rft），再定品類。品類選錯，以後載入專案不會出現在對的指令底下，標籤和明細表也對不上。專案裡已經載入的族群要存成 .rfa，見下面「<a href="#save-rfa">把專案裡的族群轉存成 .rfa</a>」。</p>
 <h3>樣板怎麼選</h3>
 <ul>
 <li>門：公制門。</li>
@@ -1696,6 +1699,12 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <h3>族群庫可以按用途分資料夾</h3>
 <p>只記類別，不記某一包庫的路徑：給水、排水、消防水另件、泡沫、消防箱、燈具、空調、衛工裝置；電氣設備、動力、照明、緊急照明、開關、插座、廣播喇叭、弱電、感知器、火警、電信與資訊插座、撒水頭、污排水、氣體、專用設備。載入時仍走插入 → 載入族群。</p>
 <p>電纜線架要從垂直三通改成旁側拉下連接片，見<a href="#side-drop">電纜線架旁側拉下連接片族群製作</a>。</p>
+<h3 id="save-rfa">把專案裡的族群轉存成 .rfa</h3>
+<p>專案裡已經載入的可載入族群，可以存成 .rfa，拿到別的專案再用。</p>
+<p><strong>存單一個。</strong>在專案瀏覽器（Project Browser）的「族群」底下找到它（例如「電纜架配件」），按右鍵 →「儲存」（Save），選資料夾，即存成 .rfa。</p>
+<p><strong>一次存全部。</strong>檔案（File）→ 另存新檔（Save As）→ 資源庫（Library）→ 族群（Family）。「要儲存的族群」（Family to save）選「&lt;所有族群&gt;」（All Families），或指定一個，再選資料夾。教學影片筆記寫的「另存資源庫」是同一條路徑。畫面若把資源庫顯示成「庫」，也是這個項目。</p>
+<p><strong>在族群編輯器中做的族群。</strong>直接另存新檔 → 族群。</p>
+<div class="note"><strong>補充</strong>：只有可載入族群（Loadable Family，例如電纜架配件）能存出 .rfa。系統族群（System Family，例如電纜架本身的類型）不會被存出。內建族群（In-Place Family）同樣留在這個專案裡。用 Revit 2025 存出的 .rfa，舊版 Revit 打不開。</div>
 <p class="verdict"><strong>驗收</strong>：族群品類正確，載入後出現在預期的指令裡；改一個尺寸參數，幾何和連接件一起變。</p>
 </section>
 
@@ -3341,6 +3350,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>使用獨立資料夾收納，避免匯出檔案與其他資料混在一起。</li>
 <li>01:01–01:11 講師提醒：交付專案檔時，也需考慮檔案內族群可被他人另存使用。</li>
 <li>逐字稿中「所有元件都能帶走」是講師的口語說明；本筆記不據此推定所有 Revit 元件類別皆可透過同一功能匯出。</li>
+<li>單一個族群也可以在專案瀏覽器按右鍵「儲存」。系統族群存不出去，以及 Revit 2025 存出的 .rfa 舊版打不開，見<a href="#save-rfa">把專案裡的族群轉存成 .rfa</a>。「另存資源庫」與「檔案 → 另存新檔 → 資源庫 → 族群」是同一個指令。</li>
 </ul>
 <div class="warn"><strong>待核對</strong>
 <ul>
@@ -3446,7 +3456,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 
 <section id="mapping" class="section">
 <h2><span class="eyebrow">資料架構，尚未自動同步</span>八、AutoCAD 路由與 Revit 欄位</h2>
-<p class="note">這是以後對欄位用的建議，不是已經做好的同步。AutoCAD MEP 的指令維持英文，例如 <code>STYLEMANAGER</code>、<code>CABLETRAYPREFERENCES</code>；這張表沒有要在 AutoCAD 裡下這些指令。</p>
+<p class="note">這是以後對欄位用的建議，不是已經做好的同步。下面這張對應表沒有要在 AutoCAD 裡下指令。型式指令若之後要查，名稱維持英文，例如 <code>STYLEMANAGER</code>、<code>CABLETRAYPREFERENCES</code>。要把某一圖層的物件顯示到最前面，見本節「<a href="#layer-front">圖層物件顯示在最前面</a>」。</p>
 <div class="table-scroll">
 <table class="mapping-table">
 <thead><tr><th>路由端欄位</th><th>意思</th><th>Revit 側</th></tr></thead>
@@ -3470,6 +3480,31 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <span>Revit 共用參數</span><span class="arrow">→</span>
 <span>明細表</span><span class="arrow">→</span>
 <span>數量清單</span>
+</div>
+<h3 id="layer-front">圖層物件顯示在最前面</h3>
+<p>AutoCAD MEP 裡，某一圖層的物件被其他線蓋住時，可以把該圖層全部放到最前面。下面以圖層 <code>HY-SCADA-TRAY</code> 為例。這是通用圖層名，換成圖面上的圖層即可。這一小節的指令用繁中介面名稱，第一次附上要輸入的英文指令。</p>
+<ol>
+<li>輸入快速選取（QSELECT）→ Enter。</li>
+<li>設定對話框：
+<ul>
+<li>套用至（Apply to）：整個圖面（Entire drawing）</li>
+<li>物件類型（Object type）：多重（Multiple）</li>
+<li>性質（Properties）：圖層（Layer）</li>
+<li>運算子（Operator）：等於（Equals）</li>
+<li>值（Value）：<code>HY-SCADA-TRAY</code></li>
+</ul>
+</li>
+<li>按確定。此時選取的是該圖層的所有物件。</li>
+<li>輸入繪製順序（DRAWORDER）→ Enter。</li>
+<li>輸入 <code>F</code>（最前面，Front；指令列若顯示最上方，就是這個）→ Enter。</li>
+<li>輸入重生（REGEN）→ Enter，更新畫面。</li>
+</ol>
+<div class="warn"><strong>注意</strong>：置頂只改變重疊處的前後順序，不會遮掉周圍線條。若要讓線架範圍內的底圖線條消失，需另用遮蔽（WIPEOUT）做遮罩。</div>
+<div class="note"><strong>補充</strong>
+<ul>
+<li>物件若在外部參考（XREF）裡，主圖的快速選取選不到。要開啟外部參考檔，再改繪製順序。</li>
+<li>若線架是 AutoCAD MEP 的電纜架物件而非一般線條，顯示設定有時會蓋過繪製順序。重生之後仍被擋住，可先往這個方向查。</li>
+</ul>
 </div>
 </section>
 
@@ -3553,6 +3588,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>匯出 NWC 的頁籤，說明文件寫「附加模組」。2025.5 畫面若寫「增益集」，就是同一個頁籤，底下仍是外部工具 → Navisworks。</li>
 <li>座標指令：報告共用座標（Report Shared Coordinates）只讀數值，指定點的座標（Specify Coordinates at Point）會改座標。繁中畫面的實際文字若差一個字，以畫面為準。</li>
 <li>NWC 匯出範圍：Navisworks 設定 → 檔案匯出器 → Revit →「匯出」，選項英文為 Entire Project、Current View、Selection。繁中畫面的選項文字（整個專案、目前視圖、選取範圍）以畫面為準，還沒在 2025.5 繁中畫面逐字對過。</li>
+<li>把族群存成 .rfa 的路徑，繁中說明是檔案 → 另存 → 資源庫 → 族群。教學影片寫「另存資源庫」。畫面若寫「另存新檔」或「庫」，指的是同一條。「要儲存的族群」裡的全部項目，說明寫「&lt;所有族群&gt;」。</li>
+<li>AutoCAD 快速選取（QSELECT）、繪製順序（DRAWORDER）、重生（REGEN）、遮蔽（WIPEOUT）的繁中名稱依說明文件。放到最前面時輸入 F；說明文件的選項叫「最上方」。快速選取對話框的欄位若差一個字，以畫面為準。</li>
 </ol>
 <p>已經用 2025.5 繁中和 2026-10-16 教材確認過的：電纜架沒有佈線偏好；切割平面低於橋架或吊架時平面不顯示；視圖樣板鎖住可見性時 <code>VG</code> 是灰的，要改樣板裡的 V/G 取代。</p>
 </section>
@@ -3651,7 +3688,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
       }
     });
   }, {rootMargin:'-20% 0px -70% 0px'});
-  document.querySelectorAll('section[id]').forEach(s=>observer.observe(s));
+  document.querySelectorAll('section[id], #layer-front, #save-rfa').forEach(s=>observer.observe(s));
 
   // Drawer
   const sidebar = document.getElementById('sidebar');
