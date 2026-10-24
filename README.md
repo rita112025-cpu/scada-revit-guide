@@ -10,6 +10,7 @@
 
 - [SCADA_REVIT_STARTUP_GUIDE.md](SCADA_REVIT_STARTUP_GUIDE.md) — 完整指南（Markdown，適合閱讀與版本控管）。
 - [index.html](index.html) — 網頁版（側欄導覽、可勾選檢查清單、字級與亮暗版）。用瀏覽器直接開啟即可。側欄「Revit 機電入門課」「Revit 相機、彩現與穿越」「電纜線架旁側拉下」「Revit 操作 · 教學影片」與首頁目錄可進對應章節。首頁「實務小技巧」可進 AutoCAD 圖層置頂與族群轉存 .rfa。
+- [給排水與視圖教材](給排水與視圖教材/00_閱讀指南.md) — 給排水與視圖教材（Revit 2025），從閱讀指南進入 00–04。
 
 ## 文件架構
 
