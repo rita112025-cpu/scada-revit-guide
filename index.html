@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群、教學影片操作筆記，以及 AutoCAD 圖層置頂與專案族群轉存 .rfa。">
+<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群、教學影片操作筆記，以及 AutoCAD 圖層置頂、線槽連結後看不到、Navisworks 快捷鍵與專案族群轉存 .rfa。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -287,6 +287,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#interference" data-keywords="干涉檢查 Interference Check 碰撞 展示 展示上次報告 重新整理 NWC NWD NWF Navisworks 碰撞偵測 Clash Detective 匯出 目前的專案">干涉檢查與 Navisworks</a></li>
     <li><a href="#nwc-nwd" data-keywords="匯出 NWC NWD NWF Navisworks NWC Export Utility SwitchBack 增益集 外部工具 附加 Append 重新整理 取得座標 指定點的座標 共用座標 測量點 專案基準點 選集樹 單位和轉換 外觀分析工具 Appearance Profiler Clash Detective 衝突測試">匯出 NWC 並整合到對方的 NWD</a></li>
     <li><a href="#export-own" data-keywords="只匯出自己的系統 NWC 目前視圖 Current View 重複建築 連結 轉換連結 匯出視圖 選集樹 隱藏 匯出紀錄">只匯出自己的系統</a></li>
+    <li><a href="#navis-keys" data-keywords="Navisworks 快捷鍵 鍵盤 Shortcut Turntable Walk Orbit Fly Clash Detective TimeLiner Ctrl Home Page Up 未驗證">Navisworks 快捷鍵</a></li>
     <li class="toc-group">Revit 操作 · 管路、族群與出圖</li>
     <li><a href="#conduit-size" data-keywords="EMT 電管 標稱尺寸 內徑 外徑 CNS 薄鋼管 RNC 彎曲半徑">電管尺寸</a></li>
     <li><a href="#pipe-setup" data-keywords="配管系統設定 佈線偏好 管區段 給水 排水 PVC 斜度 配件 管系統 圖形取代 材料 細緻 粗略 粗糙 SP WP VP CW HW 存水彎 清潔口">管路設定</a></li>
@@ -321,6 +322,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li class="toc-group">資料與限制</li>
     <li><a href="#mapping" data-keywords="AutoCAD 路由 欄位對應 ROUTE_ID">八、路由欄位對應</a></li>
     <li><a href="#layer-front" data-keywords="實務小技巧 AutoCAD MEP QSELECT 快速選取 DRAWORDER 繪製順序 REGEN 重生 WIPEOUT 遮蔽 XREF 外部參考 HY-SCADA-TRAY 圖層 最前面 最上方 置頂">圖層顯示在最前面</a></li>
+    <li><a href="#cad-link-tray" data-keywords="AutoCAD MEP 線槽 Cable Tray PROXYGRAPHICS 代理圖形 proxy graphics 連結 CAD 匯入 CAD 重新載入 管理連結 EXPLODE EXPORTTOAUTOCAD IFC 未驗證">線槽連結後看不到</a></li>
     <li><a href="#permissions">九、公司電腦權限</a></li>
     <li><a href="#verify">十、畫面再對一下</a></li>
   </ol>
@@ -351,6 +353,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="note">教學影片：<a href="#video-notes">Revit 教學影片操作筆記</a>（<a href="#video-39">第 39 片：專案匯出族群</a>、<a href="#video-40">第 40 片：連結 CAD 給水底圖</a>、<a href="#video-44">第 44 片：干涉檢查</a>、<a href="#video-45">第 45 片：視圖篩選</a>）。</div>
 <div class="note">給排水與視圖教材：<a href="#plumbing-guide">給排水與視圖教材（Revit 2025）</a>（<a href="給排水與視圖教材/00_閱讀指南.md">閱讀指南</a>、給排水建模、族群與視圖、術語校正、練習與驗收）。</div>
 <div class="note">實務小技巧：<a href="#layer-front">AutoCAD 圖層顯示在最前面</a>、<a href="#save-rfa">把專案族群轉存成 .rfa</a>。步驟分別寫在 <a href="#mapping">AutoCAD 路由</a>與<a href="#family">族群製作</a>。</div>
+<div class="note">CAD 連結與 Navisworks：<a href="#cad-link-tray">AutoCAD MEP 線槽連結到 Revit 後看不到</a>、<a href="#navis-keys">Navisworks 常用快捷鍵</a>。</div>
 <div class="bento">
 <div class="b-card b-span-8 orange">
 <div class="k">開始前</div>
@@ -1424,7 +1427,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>存 NWF，自己更新時開這份。要交付時發佈（Publish）成 NWD。</li>
 </ol>
 <p class="warn">只有 Navisworks Manage 有碰撞偵測。免費的 Navisworks Freedom 只能看 NWD，不能跑測試。必要的碰撞檢查仍是本節的干涉檢查。</p>
-<p>要把自己的 .nwc 匯出、對齊座標，再附加到對方的 .nwd，見<a href="#nwc-nwd">匯出 NWC 並整合到對方的 NWD</a>。</p>
+<p>要把自己的 .nwc 匯出、對齊座標，再附加到對方的 .nwd，見<a href="#nwc-nwd">匯出 NWC 並整合到對方的 NWD</a>。常用快捷鍵見<a href="#navis-keys">Navisworks 常用快捷鍵</a>。</p>
 </div></div>
 </section>
 
@@ -1574,6 +1577,109 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </ul>
 <p class="verdict"><strong>完成檢查</strong>：附加後選集樹只有自己的品類，沒有建築；兩份建築重疊的現象消失，隱藏紀錄已結案；匯出時的座標、匯出範圍、連結設定有寫進匯出紀錄，可以重做一次得到同樣結果。</p>
 </div></div>
+</section>
+
+<section id="navis-keys" class="section">
+<h2><span class="eyebrow">Navisworks</span>Navisworks 常用快捷鍵</h2>
+<p>依據：Autodesk 官方《<a href="https://help.autodesk.com/cloudhelp/2025/ENU/Navisworks-Quick-Start/files/GUID-E5041421-ADEA-4FB8-88FF-D59860A8E826.htm">Reference for the Default Keyboard Shortcuts</a>》（Navisworks 2025）。</p>
+<p>不同版本可能略有差異；標示「未驗證」的項目不在官方表內，請以自己的軟體為準。</p>
+<h3>導覽模式</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>快捷鍵</th><th>模式</th></tr></thead>
+<tbody>
+<tr><td><code>Ctrl+0</code></td><td>轉盤（Turntable）</td></tr>
+<tr><td><code>Ctrl+1</code></td><td>選取（Select）</td></tr>
+<tr><td><code>Ctrl+2</code></td><td>步行（Walk）</td></tr>
+<tr><td><code>Ctrl+3</code></td><td>環視（Look Around）</td></tr>
+<tr><td><code>Ctrl+4</code></td><td>縮放（Zoom）</td></tr>
+<tr><td><code>Ctrl+5</code></td><td>框選縮放（Zoom Window）</td></tr>
+<tr><td><code>Ctrl+6</code></td><td>平移（Pan）</td></tr>
+<tr><td><code>Ctrl+7</code></td><td>環繞（Orbit）</td></tr>
+<tr><td><code>Ctrl+8</code></td><td>自由環繞（Free Orbit）</td></tr>
+<tr><td><code>Ctrl+9</code></td><td>飛行（Fly）</td></tr>
+</tbody>
+</table>
+</div>
+<h3>步行／飛行中的切換</h3>
+<p>需在步行或飛行模式下才有作用。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>快捷鍵</th><th>功能</th></tr></thead>
+<tbody>
+<tr><td><code>Ctrl+D</code></td><td>開關碰撞（Collision）</td></tr>
+<tr><td><code>Ctrl+G</code></td><td>開關重力（Gravity）</td></tr>
+<tr><td><code>Ctrl+T</code></td><td>開關第三人稱（Third Person）</td></tr>
+</tbody>
+</table>
+</div>
+<h3>視圖</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>快捷鍵</th><th>功能</th></tr></thead>
+<tbody>
+<tr><td><code>Home</code></td><td>回到 Home 視點（場景視窗需為作用中）</td></tr>
+<tr><td><code>Ctrl+Shift+Home</code></td><td>將目前視圖設為 Home</td></tr>
+<tr><td><code>Ctrl+Home</code></td><td>移動相機讓整個模型入鏡</td></tr>
+<tr><td>Page Up</td><td>縮放到看見全部物件</td></tr>
+<tr><td>Page Down</td><td>縮放到選取的物件</td></tr>
+<tr><td><code>Esc</code></td><td>取消全部選取</td></tr>
+</tbody>
+</table>
+</div>
+<h3>檔案</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>快捷鍵</th><th>功能</th></tr></thead>
+<tbody>
+<tr><td><code>Ctrl+N</code></td><td>新檔（關閉目前檔案）</td></tr>
+<tr><td><code>Ctrl+O</code></td><td>開啟</td></tr>
+<tr><td><code>Ctrl+S</code></td><td>儲存</td></tr>
+<tr><td><code>Ctrl+P</code></td><td>列印</td></tr>
+<tr><td><code>Ctrl+A</code></td><td>附加（Append）模型——注意：不是全選</td></tr>
+<tr><td><code>Ctrl+M</code></td><td>合併（Merge）</td></tr>
+<tr><td><code>Ctrl+Z</code> / <code>Ctrl+Y</code></td><td>復原／重做</td></tr>
+</tbody>
+</table>
+</div>
+<h3>物件顯示與尋找</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>快捷鍵</th><th>功能</th></tr></thead>
+<tbody>
+<tr><td><code>Ctrl+H</code></td><td>隱藏／取消隱藏所選物件</td></tr>
+<tr><td><code>Ctrl+R</code></td><td>所選物件設為必要（Require）</td></tr>
+<tr><td><code>Ctrl+F</code></td><td>快速尋找（Quick Find）</td></tr>
+</tbody>
+</table>
+</div>
+<h3>開啟工具視窗</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>快捷鍵</th><th>視窗</th></tr></thead>
+<tbody>
+<tr><td><code>Ctrl+F2</code></td><td>Clash Detective（僅 Manage 版）</td></tr>
+<tr><td><code>Ctrl+F3</code></td><td>TimeLiner</td></tr>
+<tr><td><code>Ctrl+F10</code></td><td>剖面視圖（Section View）</td></tr>
+<tr><td><code>Ctrl+F11</code></td><td>儲存的視點（Saved Viewpoints）</td></tr>
+<tr><td><code>Ctrl+F12</code></td><td>選取樹（Selection Tree）</td></tr>
+</tbody>
+</table>
+</div>
+<h3>滑鼠</h3>
+<ul>
+<li>滾輪滾動：縮放。</li>
+<li>按住滾輪拖曳：平移。</li>
+<li>官方說明 Shift、Ctrl 會改變中鍵的動作；Shift＋中鍵拖曳為環繞等組合（未驗證，請實測）。</li>
+</ul>
+<h3>未驗證項目</h3>
+<p>以下常見說法不在官方預設表內，請自行在軟體中確認：</p>
+<ul>
+<li>Ctrl+C / Ctrl+V（複製／貼上）</li>
+<li>Ctrl+Shift+H（全部取消隱藏）</li>
+<li>F11（全螢幕）</li>
+<li>自訂快捷鍵的位置：應用程式按鈕 → Options → Interface → Shortcuts</li>
+</ul>
 </section>
 
 <section id="conduit-size" class="section">
@@ -3387,8 +3493,37 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <ul>
 <li>物件若在外部參考（XREF）裡，主圖的快速選取選不到。要開啟外部參考檔，再改繪製順序。</li>
 <li>若線架是 AutoCAD MEP 的電纜架物件而非一般線條，顯示設定有時會蓋過繪製順序。重生之後仍被擋住，可先往這個方向查。</li>
+<li>連結到 Revit 後線槽整段看不到，見<a href="#cad-link-tray">AutoCAD MEP 線槽連結到 Revit 後看不到</a>。</li>
 </ul>
 </div>
+</section>
+
+<section id="cad-link-tray" class="section">
+<h2><span class="eyebrow">CAD 連結</span>AutoCAD MEP 線槽連結到 Revit 後看不到</h2>
+<h3>現象</h3>
+<p>用 AutoCAD MEP 畫的電纜線槽（Cable Tray）和配件（彎頭、T 型接頭等），在 Revit 用「連結 CAD」或「匯入 CAD」放進專案後，圖面上只看得到一般的線和文字，線槽本身完全看不到。</p>
+<h3>原因</h3>
+<p>AutoCAD MEP 的線槽不是一般的線條，而是 AEC 自訂物件。Revit 不認得這種物件，只能讀取檔案裡另外存的「代理圖形」（proxy graphics），也就是這個物件長什麼樣子的一份備用圖形。</p>
+<p>如果 DWG 存檔時 <code>PROXYGRAPHICS</code> 系統變數是 0，代理圖形就不會存進檔案，Revit 就沒有東西可以畫，線槽會整個消失。</p>
+<div class="note">判斷方法：在 AutoCAD 輸入 <code>PROXYGRAPHICS</code>，如果目前的值是 0，就是這個原因。</div>
+<h3>解決步驟</h3>
+<ol>
+<li>先另存一份副本，不要直接改原檔。</li>
+<li>用 AutoCAD MEP 開啟副本，在模型空間切到俯視，確認線槽和彎頭都正常顯示。</li>
+<li>在指令列輸入 <code>PROXYGRAPHICS</code>，設成 <code>1</code>。</li>
+<li>儲存 DWG。</li>
+<li>回到 Revit，打開「管理連結」，切到「CAD 格式」頁籤，選擇這個 DWG，按「重新載入」。</li>
+<li>如果還是缺線槽，按 <code>VG</code> 打開「可見性/圖形取代」，切到「匯入的類別」，確認線槽所在的圖層已勾選開啟。</li>
+</ol>
+<div class="verdict">把 <code>PROXYGRAPHICS</code> 設成 1，存檔後在 Revit 重新載入，這組步驟已實測可用。</div>
+<h3>其他做法（第一招無效時）</h3>
+<ul>
+<li>在副本裡選取所有線槽和配件後執行 <code>EXPLODE</code>，把它們炸成一般的線或 3D 實體再存檔。缺點是炸開後就不再是線槽物件，不能再用 MEP 功能編輯。（未驗證）</li>
+<li>在 AutoCAD MEP 用 <code>EXPORTTOAUTOCAD</code> 匯出成一般的 AutoCAD 圖檔，再連結到 Revit。（未驗證）</li>
+<li>從 AutoCAD MEP 匯出 IFC，再在 Revit 連結 IFC。（未驗證）</li>
+</ul>
+<h3>小提醒</h3>
+<p>之後凡是要給 Revit 連結的 AutoCAD MEP 圖檔，存檔前都先確認 <code>PROXYGRAPHICS</code> 是 1。</p>
 </section>
 
 <section id="permissions" class="section">
