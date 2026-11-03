@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群、教學影片操作筆記，以及 AutoCAD 圖層置頂、線槽連結後看不到、Navisworks 快捷鍵與專案族群轉存 .rfa。">
+<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群、教學影片操作筆記，以及 AutoCAD 圖層置頂、線槽連結後看不到、出圖疑難排解、Navisworks 快捷鍵與專案族群轉存 .rfa。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -323,6 +323,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#mapping" data-keywords="AutoCAD 路由 欄位對應 ROUTE_ID">八、路由欄位對應</a></li>
     <li><a href="#layer-front" data-keywords="實務小技巧 AutoCAD MEP QSELECT 快速選取 DRAWORDER 繪製順序 REGEN 重生 WIPEOUT 遮蔽 XREF 外部參考 HY-SCADA-TRAY 圖層 最前面 最上方 置頂">圖層顯示在最前面</a></li>
     <li><a href="#cad-link-tray" data-keywords="AutoCAD MEP 線槽 Cable Tray PROXYGRAPHICS 代理圖形 proxy graphics 連結 CAD 匯入 CAD 重新載入 管理連結 EXPLODE EXPORTTOAUTOCAD IFC 未驗證">線槽連結後看不到</a></li>
+    <li><a href="#plot-trouble" data-keywords="AutoCAD 出圖疑難排解 PLOT PUBLISH 出圖內容 範圍 視窗 佈滿圖紙 置中出圖 ctb Lineweight 出圖物件線粗 以出圖型式出圖 MLine 多線 視埠 Custom scale ZOOM 聚合線 Global width QSELECT STYLESMANAGER 缺少 調整線粗比例 套用至配置 Display locked">出圖疑難排解</a></li>
     <li><a href="#permissions">九、公司電腦權限</a></li>
     <li><a href="#verify">十、畫面再對一下</a></li>
   </ol>
@@ -354,6 +355,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="note">給排水與視圖教材：<a href="#plumbing-guide">給排水與視圖教材（Revit 2025）</a>（<a href="給排水與視圖教材/00_閱讀指南.md">閱讀指南</a>、給排水建模、族群與視圖、術語校正、練習與驗收）。</div>
 <div class="note">實務小技巧：<a href="#layer-front">AutoCAD 圖層顯示在最前面</a>、<a href="#save-rfa">把專案族群轉存成 .rfa</a>。步驟分別寫在 <a href="#mapping">AutoCAD 路由</a>與<a href="#family">族群製作</a>。</div>
 <div class="note">CAD 連結與 Navisworks：<a href="#cad-link-tray">AutoCAD MEP 線槽連結到 Revit 後看不到</a>、<a href="#navis-keys">Navisworks 常用快捷鍵</a>。</div>
+<div class="note">AutoCAD 出圖：<a href="#plot-trouble">出圖疑難排解</a>（<a href="#plot-corner">只出現一角</a>、<a href="#plot-weight">統一線粗</a>、<a href="#plot-mline">多線變粗</a>、<a href="#plot-vscale">視埠比例</a>、<a href="#plot-pwidth">線太細</a>、<a href="#plot-publish">批次出圖</a>、<a href="#plot-missing">線粗不一致</a>、<a href="#plot-check">檢查清單</a>）。</div>
 <div class="bento">
 <div class="b-card b-span-8 orange">
 <div class="k">開始前</div>
@@ -2336,7 +2338,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>課堂以 <code>MV</code> 示範移動；使用前先切換英文輸入。</li>
 <li>自訂快速鍵可從「視圖 → 使用者介面 → 快速鍵」尋找設定。</li>
 <li>指派前檢查是否重複；練習時先保留容易辨識的按鍵。</li>
-<li>設定完成可匯出 XML；到另一台電腦使用時，再從快速鍵設定匯入。</li>
+<li>設定完成可匯出 XML；到另一部電腦使用時，再從快速鍵設定匯入。</li>
 </ol>
 <p class="note">原稿對後續自訂按鍵的字母辨識不一致，因此不列出該組合。</p>
 
@@ -3494,6 +3496,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>物件若在外部參考（XREF）裡，主圖的快速選取選不到。要開啟外部參考檔，再改繪製順序。</li>
 <li>若線架是 AutoCAD MEP 的電纜架物件而非一般線條，顯示設定有時會蓋過繪製順序。重生之後仍被擋住，可先往這個方向查。</li>
 <li>連結到 Revit 後線槽整段看不到，見<a href="#cad-link-tray">AutoCAD MEP 線槽連結到 Revit 後看不到</a>。</li>
+<li>出圖只出現一角、線粗不一或要批次出 PDF，見<a href="#plot-trouble">AutoCAD 出圖疑難排解</a>。</li>
 </ul>
 </div>
 </section>
@@ -3526,6 +3529,177 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p>之後凡是要給 Revit 連結的 AutoCAD MEP 圖檔，存檔前都先確認 <code>PROXYGRAPHICS</code> 是 1。</p>
 </section>
 
+<section id="plot-trouble" class="section">
+<h2><span class="eyebrow">AutoCAD</span>出圖疑難排解</h2>
+<p>出圖（PLOT）或批次出圖（PUBLISH）的結果和畫面上不一樣時，先對下面七種狀況。每一節都是「症狀 → 原因 → 解法步驟」。範例檔名用「平面圖.dwg」「配置 Layout1」「統一線粗.ctb」「出圖清單.dsd」，換成自己的圖檔名稱即可。改圖之前先另存，不要覆蓋原檔。</p>
+<ul>
+<li><a href="#plot-corner">1　出圖只出現一角</a></li>
+<li><a href="#plot-weight">2　統一線粗</a></li>
+<li><a href="#plot-mline">3　某條線特別粗</a></li>
+<li><a href="#plot-vscale">4　視埠比例太小</a></li>
+<li><a href="#plot-pwidth">5　某條線細過頭</a></li>
+<li><a href="#plot-publish">6　用 PUBLISH 批次出圖</a></li>
+<li><a href="#plot-missing">7　批次出圖後線粗不一致</a></li>
+<li><a href="#plot-check">檢查清單</a></li>
+</ul>
+<div class="note"><strong>畫面用詞</strong>：差一個字時，以 AutoCAD 繁體中文實際顯示為準。
+<ul>
+<li>出圖內容的「範圍」，畫面若寫「實際範圍」（Extents），選這個。不要選「圖面範圍」（Limits），那是格線界限。</li>
+<li>「視窗」畫面若寫「窗選」（Window），是同一個選項。</li>
+<li>「套用至配置」畫面若寫「將變更儲存至配置」（Apply to Layout），是同一個按鈕。</li>
+<li>「自動載入所有開啟的圖面」畫面若寫「圖檔」，是同一個勾選。</li>
+<li>Multi-sheet file 畫面若寫「多圖紙檔案」，是同一個勾選。</li>
+<li>特性面板（Ctrl+1）畫面若寫「性質」，是同一個面板。</li>
+<li>Display locked 畫面若寫「顯示鎖定」，設成「是」就是 Yes。</li>
+</ul>
+</div>
+
+<h3 id="plot-corner">1　出圖只出現一角</h3>
+<p><strong>症狀</strong></p>
+<p>預覽或印出的圖裡，內容只佔圖紙的一角，其餘是空白。</p>
+<p><strong>原因</strong></p>
+<p>出圖內容沒有選到要印的物件，而且沒有勾「佈滿圖紙」和「置中出圖」。圖面因此停在圖紙的一角，其餘留白。</p>
+<p><strong>解法步驟</strong></p>
+<ol>
+<li>輸入出圖（PLOT）→ Enter。對話框若只看到一半，按右下角箭頭展開其餘選項。</li>
+<li>出圖內容選「範圍」或「視窗」。
+<ul>
+<li>「範圍」：畫面若寫「實際範圍」（Extents），選它。不要選「圖面範圍」。</li>
+<li>「視窗」：畫面若寫「窗選」（Window），選它，再在圖面上框出要出的範圍。</li>
+</ul>
+</li>
+<li>勾選「佈滿圖紙」（Fit to paper）。</li>
+<li>勾選「置中出圖」（Center the plot）。</li>
+<li>按預覽。內容應在圖紙中央，而且不再只剩一角。確認後再出圖。</li>
+</ol>
+<div class="note">若這張配置必須用固定比例：先用上面的步驟確認內容已經在圖紙內，再取消「佈滿圖紙」，把比例改回這張圖要的比例，並保留「置中出圖」。</div>
+
+<h3 id="plot-weight">2　統一線粗</h3>
+<p><strong>症狀</strong></p>
+<p>同一張圖的線條粗細不一，希望出圖時全部用同一種線粗。</p>
+<p><strong>原因</strong></p>
+<p>顏色相關的出圖型式（.ctb）裡，Color 1～255 可以各自有不同的 Lineweight。沒有改成同一個值時，不同顏色就會印出不同線粗。出圖時若沒有勾「出圖物件線粗」和「以出圖型式出圖」，.ctb 的線粗也不會套上去。</p>
+<p><strong>解法步驟</strong></p>
+<ol>
+<li>輸入 <code>STYLESMANAGER</code> → Enter，開啟出圖型式資料夾。</li>
+<li>在這個資料夾把要改的 .ctb 複製一份，重新命名為「統一線粗.ctb」。只編輯這個新檔，不要覆蓋原來的出圖型式。</li>
+<li>雙擊「統一線粗.ctb」，開啟 ctb 編輯器（出圖型式表編輯器，Plot Style Table Editor）。在表格檢視（Table View）選取 Color 1～255：先點 Color 1，按住 Shift 再點 Color 255。</li>
+<li>把 Lineweight 設成固定值，例如 0.13，然後儲存並關閉。</li>
+<li>出圖時，出圖型式表選「統一線粗.ctb」。</li>
+<li>勾選「出圖物件線粗」。</li>
+<li>勾選「以出圖型式出圖」。</li>
+<li>預覽確認線粗一致後，按「套用至配置」，讓這個配置記住以上設定。</li>
+</ol>
+
+<h3 id="plot-mline">3　某條線特別粗</h3>
+<p><strong>症狀</strong></p>
+<p>大部分線條粗細正常，只有某一條在紙上特別粗。</p>
+<p><strong>原因</strong></p>
+<p>如果那條是 MLine（多線），它其實是兩條平行線，兩線的間距等於 Mline scale。視埠比例太小時，兩條線在紙上的距離會小到擠成一條粗線。</p>
+<p><strong>解法步驟</strong></p>
+<ol>
+<li>選取那條線。</li>
+<li>按 Ctrl+1，打開特性面板（Properties）。</li>
+<li>看物件類型是不是 MLine（多線）。</li>
+<li>若是多線，讀 Mline scale。這個數值就是兩條平行線的間距。</li>
+<li>確認是多線之後，不要在出圖型式裡把線粗調細來掩蓋。接著做<a href="#plot-vscale">下一節</a>：把視埠比例放大，或把過長的平面分段，讓兩條線在紙上分開。</li>
+<li>若物件類型不是多線，改查它是不是聚合線，以及 Global width 是否大於 0。比例較大時，大於 0 的寬度也會變成一條粗線，見<a href="#plot-pwidth">某條線細過頭</a>。</li>
+</ol>
+
+<h3 id="plot-vscale">4　視埠比例太小</h3>
+<p><strong>症狀</strong></p>
+<p>配置裡的圖縮得很小。特性面板的比例看起來是 0.0。多線會擠成粗線，有寬度的聚合線則會細到幾乎看不到。</p>
+<p><strong>原因</strong></p>
+<p>視埠比例太小。特性面板的 Custom scale 只顯示一位小數，0.002 會顯示成 0.0，但實際值仍在。平面太長、硬要塞進一個視埠時，比例就會小到這個程度。</p>
+<p><strong>解法步驟</strong></p>
+<ol>
+<li>切到要出的配置，例如「配置 Layout1」。</li>
+<li>選取視埠框（點外框，不要點到框內的圖）。</li>
+<li>看狀態列上的視埠比例，並按 Ctrl+1 看 Custom scale。狀態列的比例用來對照；特性面板顯示 0.0 時，不代表實際比例是 0。</li>
+<li>要改比例時，在特性面板改 Custom scale，或在狀態列選一個較大的比例。</li>
+<li>也可以在視埠內看整段有多大：在視埠框內連點兩下，進入視埠，輸入 <code>ZOOM</code> → Enter → <code>E</code> → Enter（縮放至實際範圍，Zoom Extents）。看完後在視埠外連點兩下，回到圖紙。</li>
+<li>平面太長就分段，不要把整段塞進同一個視埠：
+<ol>
+<li>在配置頁籤按右鍵，例如「配置 Layout1」。</li>
+<li>選「移動或複製」（Move or Copy）。</li>
+<li>勾選「建立複本」（Create a copy），按確定。</li>
+<li>每個複本進入視埠後，平移到要出的那一段，再把 Custom scale 設成同一個比例。</li>
+</ol>
+</li>
+<li>比例與位置都確定後，選取視埠框，把 Display locked 設成 Yes。畫面若寫「顯示鎖定」，設成「是」。鎖定之後不要再在視埠內縮放；要改時先設回 No。</li>
+</ol>
+
+<h3 id="plot-pwidth">5　某條線細過頭</h3>
+<p><strong>症狀</strong></p>
+<p>已經套用統一線粗的 .ctb，大多數線條正常，某幾條卻細到幾乎看不到。把視埠比例放大時，同一條又可能變得很粗。</p>
+<p><strong>原因</strong></p>
+<p>聚合線（Polyline）的 Global width 大於 0 時，出圖用的是這個寬度，不會套用 .ctb 的 Lineweight。這個寬度會再乘上視埠比例：比例很小時變得極細，比例大時變粗。</p>
+<p><strong>解法步驟</strong></p>
+<ol>
+<li>修改前先另存檔案。例如把目前圖檔另存成「平面圖.dwg」，之後只改這份，不要覆蓋原檔。</li>
+<li>輸入快速選取（QSELECT）→ Enter。</li>
+<li>設定對話框：
+<ul>
+<li>套用至（Apply to）：整個圖面（Entire drawing）</li>
+<li>物件類型（Object type）：聚合線（Polyline）</li>
+<li>性質（Properties）：Global width（整體寬度）</li>
+<li>運算子（Operator）：&gt; 大於（Greater than）</li>
+<li>值（Value）：0</li>
+</ul>
+</li>
+<li>按確定。此時選到的是 Global width 大於 0 的聚合線。</li>
+<li>按 Ctrl+1，把 Global width 改成 0。</li>
+<li>改成 0 之後，這些線才會改走出圖型式的線粗。再預覽一次。</li>
+</ol>
+
+<h3 id="plot-publish">6　用 PUBLISH 批次出圖</h3>
+<p><strong>症狀</strong></p>
+<p>配置很多，要一次出成 PDF。若直接按發佈，可能把模型空間和其他開啟中的圖面一起送出，或全部收成一個 PDF，而且每張的結果和單張預覽不一樣。</p>
+<p><strong>原因</strong></p>
+<p>發佈（PUBLISH）可以自動把所有開啟的圖面載入清單，清單裡也會包含 Model。勾了 Multi-sheet file 時，多張會收成一個檔。Page Setup 顯示 <code>&lt;Default: None&gt;</code> 時，用的是該配置已經儲存的設定；該配置若沒有按過「套用至配置」，批次會沿用未設定或舊的設定。</p>
+<p><strong>解法步驟</strong></p>
+<ol>
+<li>每張要出的配置，先在出圖對話框設好圖紙、出圖內容、出圖型式，並按「套用至配置」。</li>
+<li>輸入 <code>PUBLISH</code> → Enter。功能區的「批次出圖」就是這個指令。</li>
+<li>取消勾選「自動載入所有開啟的圖面」。若清單裡仍有其他圖面的圖紙，一併移除，只留要出的這一份。</li>
+<li>移除清單中的 Model，只保留配置。例如只留「配置 Layout1」。</li>
+<li>「發佈至」選 PDF。</li>
+<li>按「發佈選項」（Publish Options），設定輸出位置。</li>
+<li>取消勾選 Multi-sheet file，讓每一張各自存成一個檔。</li>
+<li>確認 Page Setup 欄顯示 <code>&lt;Default: None&gt;</code>。這表示使用該配置已儲存的設定，所以上面的「套用至配置」不能省。</li>
+<li>先儲存圖面，再把清單另存成 .dsd，例如「出圖清單.dsd」，下次可再載入重用。</li>
+<li>按發佈。</li>
+</ol>
+
+<h3 id="plot-missing">7　批次出圖後線粗不一致</h3>
+<p><strong>症狀</strong></p>
+<p>單張預覽的線粗是對的，用 PUBLISH 批次出圖之後，線粗和預覽不一樣。出圖對話框裡，ctb 名稱後面顯示「（缺少）」。</p>
+<p><strong>原因</strong></p>
+<p>用來開圖的程式各自有不同的出圖型式資料夾。例如一般 AutoCAD 和 AutoCAD MEP 不會共用同一個資料夾。圖檔記錄的 .ctb 若不在目前這個程式的資料夾裡，清單就會顯示「（缺少）」，出圖時套不到同一個線粗。另外若勾了「調整線粗比例」，線粗還會再跟著出圖比例縮放。</p>
+<p><strong>解法步驟</strong></p>
+<ol>
+<li>在準備拿來批次出圖的那個程式裡，輸入 <code>STYLESMANAGER</code> → Enter，開啟它的出圖型式資料夾。用這個指令開啟即可，不必自己找安裝目錄。</li>
+<li>把要用的 .ctb 複製到這個資料夾，例如「統一線粗.ctb」。</li>
+<li>回到出圖對話框，重新選取「統一線粗.ctb」，確認名稱後面不再顯示「（缺少）」。</li>
+<li>取消勾選「調整線粗比例」。</li>
+<li>按「套用至配置」。</li>
+<li>每一張要批次出圖的配置都做第 3 到第 5 步。</li>
+<li>批次出圖統一在同一個程式裡執行，不要換到另一套再開 <code>PUBLISH</code>。</li>
+</ol>
+
+<h3 id="plot-check">檢查清單</h3>
+<p>出圖前對一次。</p>
+<ul class="check-static">
+<li>出圖內容已選「範圍」或「視窗」，並已勾「佈滿圖紙」「置中出圖」。固定比例的配置在確認內容進入圖紙後，再改回該比例。</li>
+<li>統一線粗已另存成新的 .ctb（例如「統一線粗.ctb」）。Color 1～255 的 Lineweight 是同一個固定值。出圖時已勾「出圖物件線粗」「以出圖型式出圖」。</li>
+<li>特別粗的線已用 Ctrl+1 看過物件類型和 Mline scale。是多線時，已處理視埠比例，而不是只把 ctb 線粗調細。</li>
+<li>已選取視埠框，對過狀態列比例與 Custom scale。顯示 0.0 時仍核對實際值。過長平面已複製配置、分段平移。比例確定後 Display locked 為 Yes。</li>
+<li>聚合線裡 Global width 大於 0 的物件已改成 0。修改前已另存，例如「平面圖.dwg」。</li>
+<li>PUBLISH 已取消「自動載入所有開啟的圖面」，已移除 Model，只留配置。發佈至 PDF。已在發佈選項設定輸出位置，並取消 Multi-sheet file。Page Setup 為 <code>&lt;Default: None&gt;</code> 的配置都已按「套用至配置」。清單可另存成「出圖清單.dsd」。</li>
+<li>ctb 沒有顯示「（缺少）」。已用 STYLESMANAGER 把 .ctb 複製到目前程式的出圖型式資料夾，並重新選取。已取消「調整線粗比例」，再按「套用至配置」。批次出圖使用同一個程式。</li>
+</ul>
+</section>
+
 <section id="permissions" class="section">
 <h2><span class="eyebrow">硬性規則</span>九、公司電腦權限限制</h2>
 <p>公司 Windows 電腦、沒有系統管理員權限。必做和建議都不需要提權。</p>
@@ -3552,7 +3726,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>共用參數（見 Step 10，不需要系統管理員）</li>
 <li>Excel／CSV、純文字設定檔</li>
 <li>不需提權的 PowerShell／CMD、免安裝工具</li>
-<li>這台電腦已經有的 Git／Python，不要假設可以另外安裝</li>
+<li>這部電腦已經有的 Git／Python，不要假設可以另外安裝</li>
 </ol>
 <div class="table-scroll">
 <table class="compare">
@@ -3608,6 +3782,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>NWC 匯出範圍：Navisworks 設定 → 檔案匯出器 → Revit →「匯出」，選項英文為 Entire Project、Current View、Selection。繁中畫面的選項文字（整個專案、目前視圖、選取範圍）以畫面為準，還沒在 2025.5 繁中畫面逐字對過。</li>
 <li>把族群存成 .rfa 的路徑，繁中說明是檔案 → 另存 → 資源庫 → 族群。教學影片寫「另存資源庫」。畫面若寫「另存新檔」或「庫」，指的是同一條。「要儲存的族群」裡的全部項目，說明寫「&lt;所有族群&gt;」。</li>
 <li>AutoCAD 快速選取（QSELECT）、繪製順序（DRAWORDER）、重生（REGEN）、遮蔽（WIPEOUT）的繁中名稱依說明文件。放到最前面時輸入 F；說明文件的選項叫「最上方」。快速選取對話框的欄位若差一個字，以畫面為準。</li>
+<li>AutoCAD 出圖對話框的用詞見<a href="#plot-trouble">出圖疑難排解</a>。本教材寫「範圍」「視窗」「套用至配置」「自動載入所有開啟的圖面」。畫面若寫「實際範圍」「窗選」「將變更儲存至配置」，或把「圖面」寫成「圖檔」，指的是同一個選項。Multi-sheet file 畫面若寫「多圖紙檔案」，是同一個勾選。</li>
 </ol>
 <p>已經用 2025.5 繁中和 2026-10-16 教材確認過的：電纜架沒有佈線偏好；切割平面低於橋架或吊架時平面不顯示；視圖樣板鎖住可見性時 <code>VG</code> 是灰的，要改樣板裡的 V/G 取代。</p>
 </section>
