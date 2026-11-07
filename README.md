@@ -10,7 +10,7 @@
 
 - [SCADA_REVIT_STARTUP_GUIDE.md](SCADA_REVIT_STARTUP_GUIDE.md) — 完整指南（Markdown，適合閱讀與版本控管）。
 - [index.html](index.html) — 網頁版（側欄導覽、可勾選檢查清單、字級與亮暗版）。用瀏覽器直接開啟即可。側欄「Revit 機電入門課」「Revit 相機、彩現與穿越」「電纜線架旁側拉下」「Revit 操作 · 教學影片」與首頁目錄可進對應章節。首頁「實務小技巧」可進 AutoCAD 圖層置頂與族群轉存 .rfa。側欄「視圖與協調」可進 Navisworks 快捷鍵，「資料與限制」可進線槽連結後看不到與 AutoCAD 出圖疑難排解。側欄「視圖樣板與雲端檢視」可進[批次複製視圖樣板](index.html#batch-vt)與[3D 視圖雲端空白排查](index.html#viewer-blank)。
-- [給排水與視圖教材](給排水與視圖教材/00_閱讀指南.md) — 給排水與視圖教材（Revit 2025），從閱讀指南進入 00–04。
+- [給排水與視圖教材](index.html#plumbing-guide) — 給排水與視圖教材（Revit 2025）已嵌在網頁版同一套側欄／字級／暗版；從總覽進入 00–04、07。Markdown 原文仍在 [給排水與視圖教材/](給排水與視圖教材/00_閱讀指南.md)。
 - [批次複製視圖樣板](SCADA_REVIT_STARTUP_GUIDE.md#batch-copy-view-templates) — 指南內的進階節。網頁版同一節在 [index.html#batch-vt](index.html#batch-vt)。必要前提、False 乾跑、驗收與未驗證項目都在該節。
 - [3D 視圖在雲端檢視空白時的排查](SCADA_REVIT_STARTUP_GUIDE.md#viewer-blank-3d) — 指南內的排查節。網頁版同一節在 [index.html#viewer-blank](index.html#viewer-blank)。先分手動上傳與雲端發佈，再看步驟、驗收與已知限制。
 
