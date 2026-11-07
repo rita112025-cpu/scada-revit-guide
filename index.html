@@ -240,6 +240,60 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
   .ui-grid .qat,.ui-grid .ribbon,.ui-grid .props,.ui-grid .view,.ui-grid .browser,.ui-grid .vctrl,.ui-grid .status{grid-column:1; grid-row:auto}
   .flow,.tray-row,.org-row{grid-template-columns:1fr}
 }
+/* Rank 4: in-lesson sticky sub-nav + section pager (mega-sections) */
+.lesson-subnav{
+  position:sticky; top:3px; z-index:25;
+  margin:0 0 14px; padding:8px 0 10px;
+  background:color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+}
+@supports not (background:color-mix(in srgb, white 50%, transparent)){
+  .lesson-subnav{background:var(--bg)}
+}
+.lesson-subnav-label{
+  display:block; font-size:12px; font-weight:800; color:var(--text-faint);
+  margin:0 0 6px; letter-spacing:0;
+}
+.lesson-subnav-list{
+  list-style:none; margin:0; padding:0;
+  display:flex; gap:6px; flex-wrap:nowrap;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+}
+.lesson-subnav-list li{flex:0 0 auto}
+.lesson-subnav a{
+  display:block; padding:5px 10px; border-radius:999px;
+  border:1px solid var(--border); background:var(--bg-card);
+  color:var(--text-muted); font-size:13px; font-weight:700; line-height:1.35;
+  white-space:nowrap; max-width:220px; overflow:hidden; text-overflow:ellipsis;
+}
+.lesson-subnav a:hover{color:var(--text); border-color:var(--border-strong); text-decoration:none}
+.lesson-subnav a.active{
+  color:var(--text); border-color:var(--accent); background:var(--accent-soft); font-weight:800;
+}
+.section.has-lesson-nav > h3,
+.section.has-lesson-nav .step-body > h3{scroll-margin-top:72px}
+.section-pager{
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+  margin-top:28px; padding-top:20px; border-top:1px solid var(--border);
+}
+.section-pager a{
+  display:block; padding:14px 16px; border-radius:14px;
+  border:1px solid var(--border); background:var(--bg-card); color:inherit;
+  text-decoration:none; box-shadow:var(--shadow);
+  transition:border-color .15s, box-shadow .15s;
+}
+.section-pager a:hover{border-color:var(--accent); text-decoration:none}
+.section-pager .dir{display:block; font-size:12px; font-weight:800; color:var(--accent); margin-bottom:4px}
+.section-pager .ttl{display:block; font-size:15px; font-weight:800; line-height:1.4; color:var(--text)}
+.section-pager .pager-next{text-align:right}
+.section-pager .pager-placeholder{visibility:hidden; pointer-events:none}
+@media(max-width:640px){
+  .section-pager{grid-template-columns:1fr}
+  .section-pager .pager-next{text-align:left}
+  .lesson-subnav a{max-width:160px}
+}
 </style>
 </head>
 <body>
@@ -4292,14 +4346,20 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     if(!hash) return;
     const id = hash.replace(/^#/, '');
     if(!id) return;
-    const link = document.querySelector('#toc a[href="#'+CSS.escape(id)+'"]');
+    let link = document.querySelector('#toc a[href="#'+CSS.escape(id)+'"]');
+    // Deep links (in-lesson h3): keep the owning chapter group open
+    if(!link){
+      const el = document.getElementById(id);
+      const section = el && el.closest('section[id]');
+      if(section){
+        link = document.querySelector('#toc a[href="#'+CSS.escape(section.id)+'"]');
+      }
+    }
     lockScrollSpy(1400);
     if(link){
       expandOnly(link);
       tocLinks.forEach(a=>a.classList.remove('active'));
       link.classList.add('active');
-    } else {
-      expandOnly(null);
     }
   }
 
@@ -4342,16 +4402,15 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
       if(window.innerWidth<=800) closeDrawer();
     });
   });
-  // Path cards / in-page anchors outside the TOC also jump via hashchange
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    if(a.closest('#toc')) return;
-    a.addEventListener('click', ()=>{
-      const href = a.getAttribute('href');
-      if(href && href.length > 1){
-        // expand destination immediately; hashchange may be a no-op if already on that hash
-        expandForHash(href);
-      }
-    });
+  // Path cards / in-page anchors / lesson sub-nav outside the TOC (delegation covers JS-built links)
+  document.addEventListener('click', (e)=>{
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if(!a || a.closest('#toc')) return;
+    const href = a.getAttribute('href');
+    if(href && href.length > 1){
+      // expand destination immediately; hashchange may be a no-op if already on that hash
+      expandForHash(href);
+    }
   });
   onHashNavigate();
 
@@ -4416,6 +4475,118 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     });
     loadCheck();
   }
+
+  // Rank 4: sticky in-lesson sub-nav from h3 + prev/next section pager
+  const MEGA_LESSONS = ['mep-intro','cam-intro','side-drop','batch-vt','viewer-blank','plot-trouble'];
+
+  function sectionLabel(section){
+    const h2 = section && section.querySelector('h2');
+    if(!h2) return section ? section.id : '';
+    const eyeEl = h2.querySelector('.eyebrow');
+    const eye = eyeEl ? eyeEl.textContent.replace(/\s+/g,' ').trim() : '';
+    const clone = h2.cloneNode(true);
+    const eyeClone = clone.querySelector('.eyebrow');
+    if(eyeClone) eyeClone.remove();
+    const main = clone.textContent.replace(/\s+/g,' ').trim();
+    if(eye && main) return eye + ' · ' + main;
+    return eye || main || section.id;
+  }
+
+  function buildLessonOrientation(){
+    const allSections = Array.from(document.querySelectorAll('#main section[id]'));
+
+    MEGA_LESSONS.forEach(id=>{
+      const section = document.getElementById(id);
+      if(!section) return;
+      const headings = Array.from(section.querySelectorAll('h3[id]'));
+      if(!headings.length) return;
+
+      section.classList.add('has-lesson-nav');
+
+      const nav = document.createElement('nav');
+      nav.className = 'lesson-subnav';
+      nav.setAttribute('aria-label', '本節目錄');
+      const label = document.createElement('span');
+      label.className = 'lesson-subnav-label';
+      label.textContent = '本節目錄';
+      const list = document.createElement('ol');
+      list.className = 'lesson-subnav-list';
+
+      const subLinks = [];
+      headings.forEach(h3=>{
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + h3.id;
+        a.textContent = h3.textContent.replace(/\s+/g,' ').trim();
+        a.title = a.textContent;
+        li.appendChild(a);
+        list.appendChild(li);
+        subLinks.push(a);
+      });
+
+      nav.appendChild(label);
+      nav.appendChild(list);
+      const h2 = section.querySelector('h2');
+      if(h2 && h2.nextSibling){
+        section.insertBefore(nav, h2.nextSibling);
+      } else {
+        section.insertBefore(nav, section.firstChild);
+      }
+
+      const subObserver = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(!entry.isIntersecting) return;
+          const hid = entry.target.getAttribute('id');
+          subLinks.forEach(a=>{
+            const on = a.getAttribute('href') === '#' + hid;
+            a.classList.toggle('active', on);
+            if(on){
+              try{ a.scrollIntoView({block:'nearest', inline:'nearest'}); }catch(e){}
+            }
+          });
+        });
+      }, {rootMargin:'-15% 0px -70% 0px', threshold:0});
+      headings.forEach(h=>subObserver.observe(h));
+
+      // Prev / next among main column sections
+      const idx = allSections.indexOf(section);
+      const prevSec = idx > 0 ? allSections[idx - 1] : null;
+      const nextSec = idx >= 0 && idx < allSections.length - 1 ? allSections[idx + 1] : null;
+      const pager = document.createElement('nav');
+      pager.className = 'section-pager';
+      pager.setAttribute('aria-label', '相鄰章節');
+
+      if(prevSec){
+        const a = document.createElement('a');
+        a.className = 'pager-prev';
+        a.href = '#' + prevSec.id;
+        a.innerHTML = '<span class="dir">← 上一節</span><span class="ttl"></span>';
+        a.querySelector('.ttl').textContent = sectionLabel(prevSec);
+        pager.appendChild(a);
+      } else {
+        const ph = document.createElement('span');
+        ph.className = 'pager-placeholder';
+        pager.appendChild(ph);
+      }
+
+      if(nextSec){
+        const a = document.createElement('a');
+        a.className = 'pager-next';
+        a.href = '#' + nextSec.id;
+        a.innerHTML = '<span class="dir">下一節 →</span><span class="ttl"></span>';
+        a.querySelector('.ttl').textContent = sectionLabel(nextSec);
+        pager.appendChild(a);
+      } else {
+        const ph = document.createElement('span');
+        ph.className = 'pager-placeholder';
+        pager.appendChild(ph);
+      }
+
+      section.appendChild(pager);
+    });
+  }
+
+  buildLessonOrientation();
 })();
 </script>
 </body>
