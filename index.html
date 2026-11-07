@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCADA 電纜架｜Revit 2025.5 繁中入門指南</title>
-<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群、教學影片操作筆記，以及 AutoCAD 圖層置頂、線槽連結後看不到、出圖疑難排解、Navisworks 快捷鍵與專案族群轉存 .rfa。">
+<meta name="description" content="SCADA 電纜橋架與機電的 Revit 2025.5 繁體中文指南：BIM、樣板、電纜架、管路、族群、出圖，以及電氣、弱電、給排水、消防、空調與圖說審查。另含機電入門課、相機彩現、旁側拉下連接片族群、教學影片操作筆記、視圖樣板批次複製、雲端 3D 空白排查，以及 AutoCAD 圖層置頂、線槽連結後看不到、出圖疑難排解、Navisworks 快捷鍵與專案族群轉存 .rfa。">
 <style>
 :root{
   --bg: #FFFEFB;
@@ -184,6 +184,7 @@ table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid
 .card h3{margin:0 0 10px; font-size:22px}
 .card ul{margin:8px 0 0; padding-left:1.2em}
 .section h3{font-size:22px; font-weight:800; margin:26px 0 8px; scroll-margin-top:24px}
+.step-body h4{font-size:18px; font-weight:800; margin:22px 0 8px; scroll-margin-top:24px}
 .check-static{list-style:none; padding-left:0; margin:8px 0}
 .check-static li{padding:3px 0 3px 1.6em; position:relative}
 .check-static li::before{content:"☐"; position:absolute; left:0; color:var(--text-faint)}
@@ -319,6 +320,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     <li><a href="#video-notes" data-keywords="教學影片 操作筆記 第39片 第40片 第44片 第45片 專案匯出族群 另存資源庫 Save as Library 連結 CAD Link CAD 給水 對齊 Align 釘選 Pin 關閉隱藏的視窗 Close Inactive Views 干涉檢查 Interference Check 展示 重新整理 可見性 圖形取代 Visibility Graphics 篩選器 Filters VV VG 系統類型 CW 模型品類">Revit 教學影片操作筆記</a></li>
     <li class="toc-group">給排水與視圖教材</li>
     <li><a href="#plumbing-guide" data-keywords="給排水 視圖教材 衛工 配管 族群 電纜架 整合課 閱讀指南 練習 驗收 術語">給排水與視圖教材（Revit 2025）</a></li>
+    <li class="toc-group">視圖樣板與雲端檢視</li>
+    <li><a href="#batch-vt" data-keywords="批次複製 視圖樣板 View Template Dynamo CPython3 手動 Boolean 乾跑 dry-run 傳遞專案標準 Transfer Project Standards 教學樣板 Detach 從中央分離 非工作共用 Save SynchronizeWithCentral">批次複製視圖樣板</a></li>
+    <li><a href="#viewer-blank" data-keywords="Autodesk Viewer 發佈設定 Publish Settings Autodesk Docs ACC BIM 360 Forma 3D 空白 剖面框 Section Box 未選取任何集 default 3D view">3D 視圖雲端空白排查</a></li>
     <li class="toc-group">資料與限制</li>
     <li><a href="#mapping" data-keywords="AutoCAD 路由 欄位對應 ROUTE_ID">八、路由欄位對應</a></li>
     <li><a href="#layer-front" data-keywords="實務小技巧 AutoCAD MEP QSELECT 快速選取 DRAWORDER 繪製順序 REGEN 重生 WIPEOUT 遮蔽 XREF 外部參考 HY-SCADA-TRAY 圖層 最前面 最上方 置頂">圖層顯示在最前面</a></li>
@@ -353,6 +357,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <div class="note">電纜線架族群：<a href="#side-drop">旁側拉下連接片族群製作</a>（<a href="#side-drop-offset">側偏距</a>、<a href="#side-drop-plate">兩片連接片</a>、<a href="#side-drop-flex">族內變形</a>、<a href="#side-drop-project">三端接合</a>）。</div>
 <div class="note">教學影片：<a href="#video-notes">Revit 教學影片操作筆記</a>（<a href="#video-39">第 39 片：專案匯出族群</a>、<a href="#video-40">第 40 片：連結 CAD 給水底圖</a>、<a href="#video-44">第 44 片：干涉檢查</a>、<a href="#video-45">第 45 片：視圖篩選</a>）。</div>
 <div class="note">給排水與視圖教材：<a href="#plumbing-guide">給排水與視圖教材（Revit 2025）</a>（<a href="給排水與視圖教材/00_閱讀指南.md">閱讀指南</a>、給排水建模、族群與視圖、術語校正、練習與驗收）。</div>
+<div class="note">視圖樣板與雲端檢視：<a href="#batch-vt">批次複製視圖樣板</a>（<a href="#bvt-prereq">前提</a>、<a href="#bvt-steps">False 到 True</a>、<a href="#bvt-accept">驗收</a>）、<a href="#viewer-blank">3D 視圖雲端空白排查</a>（<a href="#vwr-paths">兩種服務</a>、<a href="#vwr-steps">發佈步驟</a>、<a href="#vwr-accept">驗收</a>）。</div>
 <div class="note">實務小技巧：<a href="#layer-front">AutoCAD 圖層顯示在最前面</a>、<a href="#save-rfa">把專案族群轉存成 .rfa</a>。步驟分別寫在 <a href="#mapping">AutoCAD 路由</a>與<a href="#family">族群製作</a>。</div>
 <div class="note">CAD 連結與 Navisworks：<a href="#cad-link-tray">AutoCAD MEP 線槽連結到 Revit 後看不到</a>、<a href="#navis-keys">Navisworks 常用快捷鍵</a>。</div>
 <div class="note">AutoCAD 出圖：<a href="#plot-trouble">出圖疑難排解</a>（<a href="#plot-corner">只出現一角</a>、<a href="#plot-weight">統一線粗</a>、<a href="#plot-mline">多線變粗</a>、<a href="#plot-vscale">視埠比例</a>、<a href="#plot-pwidth">線太細</a>、<a href="#plot-publish">批次出圖</a>、<a href="#plot-missing">線粗不一致</a>、<a href="#plot-check">檢查清單</a>）。</div>
@@ -421,6 +426,18 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <h3>給排水與視圖教材（Revit 2025）</h3>
 <p>給排水建模、族群與電氣、視圖管理。從閱讀指南進入 00–04。</p>
 <a href="#plumbing-guide">查看教材 →</a>
+</div>
+<div class="b-card b-span-6 orange">
+<div class="k">視圖樣板</div>
+<h3>批次複製視圖樣板</h3>
+<p>先傳遞專案標準。已有 Dynamo 圖形時，只對獨立測試檔做 False 乾跑，再 True 一次。覆寫與同步行為未重新實測。</p>
+<a href="#batch-vt">查看教材 →</a>
+</div>
+<div class="b-card b-span-6">
+<div class="k">雲端檢視</div>
+<h3>3D 視圖空白排查</h3>
+<p>先分 Autodesk Viewer 手動上傳，與 Docs／ACC／Forma 發佈。服務未確認時，發佈設定不是通用解法。</p>
+<a href="#viewer-blank">查看教材 →</a>
 </div>
 </div>
 </header>
@@ -875,6 +892,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p>建議名稱 <code>{3D}_SCADA_COORD</code>。用 <code>VG</code> 只留建築、結構、電纜架、電纜架配件、電管、電管配件、電氣設備。要看吊架再加風管附件。</p>
 <p>開 3D → 勾選剖面框（Section Box）→ 拖邊界縮小範圍。線顏色：電纜架、電纜架配件、電管、電管配件的「投影/表面 → 線」。碰撞用協同合作 → 干涉檢查（Interference Check）。左右選哪些品類、怎麼對連結檔、改完按哪裡重新整理，以及要交給別人的 NWC／NWD／NWF，見<a href="#interference">干涉檢查與 Navisworks</a>。Revit 內建的干涉檢查不用另外安裝。</p>
 <p>檢查穿梁、穿牆、穿樓板、撞風管、撞消防、撞其他橋架、空間和維修空間夠不夠。</p>
+<p class="note">這個建議名稱只用在本案的協調視圖。雲端檢視空白時，不要把視圖改名成 <code>{3D}</code> 當成解法，見<a href="#viewer-blank">3D 視圖在雲端檢視空白時的排查</a>。</p>
 <p class="verdict"><strong>驗收</strong>：剖面框縮得到單一區域，畫面只剩要協調的品類。</p>
 </div></div></section>
 
@@ -1388,7 +1406,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <ul>
 <li><strong>平面和 3D 要各建一個樣板。</strong>視圖類型不同，平面樣板不能套到 3D。3D 可另存 <code>SCADA電纜架_3D上色</code>。</li>
 <li>右鍵「取代視圖中的圖形（Override Graphics in View）→ 依元素（By Element）」改的顏色不會寫進樣板。要帶去其他視圖，用篩選上色，再把「V/G 取代篩選」勾進包括。</li>
-<li>別的專案要用：管理 → 傳遞專案標準（Transfer Project Standards）→ 勾「視圖樣板」。篩選也要帶走時，一併勾「篩選」。</li>
+<li>別的專案要用：管理 → 傳遞專案標準（Transfer Project Standards）→ 勾「視圖樣板」。篩選也要帶走時，一併勾「篩選」。多個測試檔的批次做法見<a href="#batch-vt">批次複製視圖樣板</a>；那一節的 Dynamo 路徑沒有在本站重新實測。</li>
 </ul>
 <p class="verdict"><strong>驗收</strong>：套一次後，另一張同類型平面的橋架顏色和來源視圖一致，視圖樣板仍是 &lt;無&gt;。性質裡若看得到樣板名稱，代表已綁定，之後改樣板會一起更新。</p>
 </div></div>
@@ -3432,6 +3450,383 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p class="note">本頁依教學影片機器逐字稿整理，部分用語依語境推定。</p>
 </section>
 
+<section id="batch-vt" class="section">
+<h2><span class="eyebrow">進階，非必要流程</span>批次複製視圖樣板</h2>
+<div class="step-card"><div class="step-body">
+<p>適用 <strong>Autodesk Revit 2025.5 繁體中文</strong>。若使用 Dynamo，維持 <strong>CPython3</strong>、執行模式<strong>手動（Manual）</strong>。主要做法是傳遞專案標準。Dynamo 只在你已經有自己的圖形，而且只對測試檔操作時才用。本站不附、也不新增可執行的批次改模型腳本。</p>
+<p class="warn"><strong>本文未重新實測。</strong>沒有取得圖形、腳本或 Revit 環境，因此沒有重新核對節點、連線、乾跑是否真的不開檔、篩選複製、同名篩選、覆寫重指向、略過條件或 rollback。這些標成「依提供的操作紀錄／腳本行為待核對」，不是本頁獨立驗證的結果。</p>
+<p>範例只用通用名稱：<strong>來源專案</strong>、<strong>目標測試資料夾</strong>、<code>建築模型.rvt</code>、<strong>教學樣板</strong>。檔名不能證明哪一個檔才是來源。</p>
+<h3 id="bvt-toc">本節目錄</h3>
+<ul>
+<li><a href="#bvt-goals">學習目標</a></li>
+<li><a href="#bvt-prereq">必要前提</a></li>
+<li><a href="#bvt-save">儲存與同步不是同一件事</a></li>
+<li><a href="#bvt-native">不開啟圖形的做法</a></li>
+<li><a href="#bvt-graph">圖形輸入</a></li>
+<li><a href="#bvt-steps">操作步驟</a></li>
+<li><a href="#bvt-filters">樣板、篩選與參數</a></li>
+<li><a href="#bvt-accept">驗收清單</a></li>
+<li><a href="#bvt-trouble">排錯</a></li>
+<li><a href="#bvt-limits">已知限制與未驗證項目</a></li>
+<li><a href="#bvt-sources">本節對過的官方說明</a></li>
+</ul>
+
+<h3 id="bvt-goals">學習目標</h3>
+<ol>
+<li>用傳遞專案標準，把視圖樣板帶到另一個測試專案，而不必先跑批次圖形。</li>
+<li>若已有自己的 Dynamo 圖形，只在獨立測試檔上依「False 乾跑 → 自己讀報表 → True 一次 → 改回 False 並儲存圖形」操作。</li>
+<li>把新增樣板之後的「指定視圖樣板」當成另外一步，不假設既有視圖會自動改套。</li>
+<li>指出哪些句子只是操作紀錄的回報，哪些仍未驗證。</li>
+</ol>
+
+<h3 id="bvt-prereq">必要前提</h3>
+<p><span class="badge badge-must">必做</span> 先備份，而且只碰測試檔。</p>
+<ol>
+<li>先把要練習的檔另存到自己的<strong>目標測試資料夾</strong>。範例檔名用 <code>建築模型.rvt</code>。這是通用例子，不是某一案的實際檔名。</li>
+<li>目標只能是下面其中一種：
+<ul>
+<li><strong>非工作共用</strong>的獨立檔；或</li>
+<li>已用<strong>從中央分離（Detach from Central）</strong>開啟，並另存成<strong>不連正式中央</strong>的測試副本。</li>
+</ul>
+</li>
+<li>在檔案總管複製檔案，不等於從中央分離。複製後的檔仍可能記得正式中央的位置。</li>
+<li>不要對正式中央模型做這次測試，也不要開啟仍連著正式中央的本機副本來寫入。</li>
+<li>寫入前先看目標是不是工作共用、中央路徑是不是正式中央。操作紀錄沒有顯示那次目標檔的工作共用狀態，<strong>本文未核對</strong>。獨立測試檔是前提，不是已經被確認的事實。</li>
+</ol>
+<p>從中央分離的官方做法，見 Autodesk 支援文章「How to stop worksharing in a central Revit model」：</p>
+<ol>
+<li>檔案（File）→ 開啟（Open）。</li>
+<li>選取工作共用模型。</li>
+<li>在開啟對話框勾選 <strong>Detach from Central</strong>，再按開啟。</li>
+<li>在工作對話框選<strong>捨棄工作集（Discard worksets）</strong>。支援文章說明：捨棄工作集後，這個模型不能再與其他人對原中央的編輯同步。</li>
+<li><strong>另存新檔</strong>到測試位置，並改掉預設檔名。文章註明預設名稱會在原檔名後加上 <code>_detached</code>，儲存時應改名。</li>
+</ol>
+<p class="note">選<strong>保留工作集（Preserve worksets）</strong>得到的是另一個中央模型，不是非工作共用檔。若必須走這條，仍要另存到測試位置，而且不能指回正式中央。本文沒有在 Revit 重新操作分離。</p>
+<p>來源請開<strong>來源專案</strong>：它必須是目前作用中的文件，而且「管理視圖樣板」裡真的有要複製的樣板。範例名稱用<strong>教學樣板</strong>。差一個字就是另一個樣板，例如「教學樣板 3D」不是「教學樣板」。先儲存來源，再開 Dynamo。兩次執行之間不要換成別的作用中文件。</p>
+
+<h3 id="bvt-save">儲存與同步不是同一件事</h3>
+<p>Revit API 把兩件事分開。沒有程式可讀時，不能把某個圖形裡的儲存說成同步中央。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>方法</th><th>官方說明在做什麼</th></tr></thead>
+<tbody>
+<tr><td><code>Document.Save()</code></td><td>儲存這份文件。檔案若還沒存過，要改用 SaveAs。它不是「與中央同步」這個方法。</td></tr>
+<tr><td><code>Document.SynchronizeWithCentral()</code></td><td>先把中央較新的變更載入目前工作階段，再把變更存回中央。官方寫明：即使沒有變更，也會做一次存回中央。</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-API-MainReference/files/html/8dec13b6-71f4-45d2-74e3-b109153721b5.htm">Document.Save（Revit 2026 API）</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-API-MainReference/files/html/7de73a7b-68f0-87f2-f6a9-97d824024877.htm">Document.SynchronizeWithCentral（Revit 2026 API）</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Revit-API/files/Revit_API_Developers_Guide/Advanced_Topics/Worksharing/Revit_API_Revit_API_Developers_Guide_Advanced_Topics_Worksharing_Workshared_File_Management_html.html">Workshared File Management（Revit 2025 API 開發指南）</a></li>
+</ul>
+<p class="warn">該圖形實際呼叫的是 Save、SaveAs、SynchronizeWithCentral，或都沒呼叫，<strong>具體儲存／同步行為未核對</strong>。不要依賴「圖形應該會略過中央」這種未經核對的描述來保護正式模型。</p>
+
+<h3 id="bvt-native">不開啟圖形的做法</h3>
+<p><strong>管理 → 傳遞專案標準（Transfer Project Standards）→ 勾選視圖樣板。</strong>篩選要一起帶走時，一併勾選篩選。單張視圖怎麼建立與套用，見 <a href="#view-template-color">把上色設定存成視圖樣板</a>與 <a href="#step7">Step 7</a>。傳過去之後，既有視圖仍要另外指定。</p>
+<p class="note">Dynamo 若已隨這套 Revit 安裝，可以開你自己的圖形。不要為了本節另外安裝套件或增益集。不確定權限就標【需確認權限】，見<a href="#permissions">第九節</a>。</p>
+
+<h3 id="bvt-graph">圖形輸入</h3>
+<p>下表是操作紀錄描述的輸入。節點數目、連線與程式路徑未重新核對。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>輸入</th><th>紀錄中的用途</th><th>操作時要設成</th></tr></thead>
+<tbody>
+<tr><td>資料夾路徑（Directory Path）</td><td>目標資料夾</td><td>你的目標測試資料夾</td></tr>
+<tr><td>程式碼區塊（Code Block）</td><td>樣板名稱清單</td><td><code>["教學樣板"];</code></td></tr>
+<tr><td>布林（Boolean）</td><td>False 為乾跑，True 為寫入</td><td>預設與平時都維持 <strong>False</strong>。若打開時已是 True，先改回 False，再按執行</td></tr>
+<tr><td>Python Script</td><td>主程式</td><td>引擎用 CPython3。本站不改寫、也不提供這段程式</td></tr>
+<tr><td>Watch</td><td>結果文字</td><td>節點若被裁切，拉大或縮小比例，讀完整路徑</td></tr>
+</tbody>
+</table>
+</div>
+<p>執行模式維持<strong>手動</strong>。不要改成自動。操作紀錄寫：程式碼區塊若是 <code>[]</code>，意圖是複製全部樣板，搭配 True 風險高。這個行為本文未核對。不要用空清單，只寫要複製的名稱。</p>
+
+<h3 id="bvt-steps">操作步驟</h3>
+<h4>A. 準備來源</h4>
+<ol>
+<li>開啟含<strong>教學樣板</strong>的來源專案，讓它保持為作用中文件。</li>
+<li><strong>視圖 → 視圖樣板 → 管理視圖樣板</strong>，確認清單裡有這個名稱。</li>
+<li>可點該樣板的 <strong>V/G 取代篩選</strong>，看篩選是否啟用。篩選條件不要自行腦補，見下一節。</li>
+<li>儲存來源專案。</li>
+</ol>
+<h4>B. 乾跑：Boolean 維持 False</h4>
+<ol>
+<li>開啟你自己的圖形。確認是手動模式、CPython3。</li>
+<li>資料夾路徑指向目標測試資料夾。</li>
+<li>程式碼區塊設成 <code>["教學樣板"];</code></li>
+<li>Boolean 設為 <strong>False</strong>。</li>
+<li>按執行，閱讀 Watch 的完整文字。</li>
+<li>操作紀錄在乾跑時回報類似 <code>Source templates (1): 教學樣板</code>，以及每個目標一筆 <code>DRY RUN</code>，並記載乾跑不會開啟或修改目標。<strong>原操作紀錄回報成功，本文未重新實測。</strong></li>
+<li>若出現 <code>[NOT FOUND in source]</code>：名稱不符，或作用中文件不是含該樣板的來源。</li>
+<li>你自己讀完、認為方向正確之後，<strong>Boolean 仍為 False 時先儲存圖形</strong>。</li>
+<li>兩次執行之間不要切換作用中文件。</li>
+</ol>
+<h4>C. 寫入一次：Boolean 改 True</h4>
+<ol>
+<li>來源仍是作用中文件。把 Boolean 改成 <strong>True</strong>。</li>
+<li><strong>只執行一次。</strong></li>
+<li>操作紀錄回報：數個目標走新增路徑，結果為 OK、added。覆寫（overwritten）沒有出現在該次紀錄。<strong>本文未重新實測。</strong></li>
+<li>不要在還沒做完下一步時關掉 Dynamo。</li>
+</ol>
+<h4>D. 立刻改回安全設定</h4>
+<ol>
+<li>Boolean <strong>改回 False</strong>。</li>
+<li><strong>儲存圖形</strong>，避免下次打開就處於寫入狀態。</li>
+</ol>
+<h4>E. 在目標視圖指定樣板</h4>
+<p>新增進來的樣板不會自動指定給既有視圖。官方「Assign a View Template」是另外一步：在專案瀏覽器選取視圖，於性質面板的 View Template 指定樣板，視圖才和樣板建立連結。</p>
+<ol>
+<li>開啟測試目標。再次確認它不是正式中央，也不是仍連正式中央的本機副本。</li>
+<li>選一個要檢查的 3D 視圖。</li>
+<li><strong>性質 → 視圖樣板</strong>，指定<strong>教學樣板</strong>。</li>
+<li>目視是否和你在來源看過的顯示一致。操作紀錄提到該次樣板有綠色圖形覆寫；那是該次內容的描述，不是每份樣板都應該是綠色。</li>
+<li>確認之後再儲存這個測試檔。這是你打開測試檔、手動指定樣板之後的儲存，不是在執行狀態不明時去存檔。</li>
+</ol>
+<p class="note">操作紀錄另寫：目標若已有同名樣板，程式意圖會重指向既有視圖的樣板關聯。<strong>覆寫路徑尚未實測。</strong>仍以性質面板上的視圖樣板為準。</p>
+
+<h3 id="bvt-filters">樣板、篩選與參數</h3>
+<p>操作紀錄記載「教學樣板」當時看得到，而且「此樣板指定的視圖數目」可以是 0。還沒指定給任何視圖時，這個數字是 0 屬正常。本文沒有重新打開該樣板。</p>
+<p>紀錄提到兩個已啟用的篩選名稱範例：「教學樣板」與「教學樣板_電氣設備」，以及綠色圖形覆寫。篩選的類別、謂詞與比對值，紀錄標為未深入檢查。<strong>本文不補寫條件，也不把這些名稱當成每個專案的必要欄位。</strong>紀錄曾提到使用者參數如「服務內容」「備註」，同樣只是該次文字裡出現過的例子。</p>
+<p>依操作紀錄、程式行為仍待核對的兩點：</p>
+<ul>
+<li>目標元件要已有對應參數，篩選才有機會命中。紀錄寫圖形不會替元件填參數值。</li>
+<li>紀錄描述複製時若目標已有同名篩選，會沿用目標既有定義，不會更新目標篩選的內容。</li>
+</ul>
+
+<h3 id="bvt-accept">驗收清單</h3>
+<ul class="check-static">
+<li>已備份；練習檔在目標測試資料夾，檔名是自己取的測試名稱</li>
+<li>目標是非工作共用獨立檔，或已分離並另存、不連正式中央</li>
+<li>沒有用檔案總管複製來代替分離</li>
+<li>沒有對正式中央寫入</li>
+<li>來源是作用中文件，管理視圖樣板看得到「教學樣板」，來源已儲存</li>
+<li>程式碼區塊是 <code>["教學樣板"];</code>，不是空清單</li>
+<li>Boolean 先為 False，手動執行；Watch 全文自己讀過。乾跑是否真的不開檔，本文未重新實測</li>
+<li>False 狀態下已儲存圖形</li>
+<li>Boolean 只改 True 執行一次</li>
+<li>已改回 False，並再儲存圖形</li>
+<li>在目標的 3D 視圖手動指定樣板之後才目視</li>
+<li>覆寫、同名篩選、參數綁定、工作共用狀態、rollback，都還沒當成通過</li>
+</ul>
+
+<h3 id="bvt-trouble">排錯</h3>
+<p><strong>報表出現 <code>[NOT FOUND in source]</code></strong>（訊息文字來自操作紀錄）</p>
+<ul>
+<li>名稱是否正好是「教學樣板」。</li>
+<li>作用中文件是不是含該樣板的來源專案。</li>
+<li>圖形若被重設，重新選資料夾與名稱，Boolean 先維持 False。</li>
+</ul>
+<p><strong><code>NO TARGET</code> 或找不到檔</strong>（訊息文字來自操作紀錄）</p>
+<ul>
+<li>資料夾裡要有準備處理的 <code>.rvt</code>。</li>
+<li>空資料夾不會有目標。錯誤原文以 Watch 的完整文字為準。</li>
+<li>Watch 常被裁切時，拉大節點或調整縮放。</li>
+</ul>
+<p><strong>執行好像停住，看不出完成或失敗</strong></p>
+<ol>
+<li>不要再按執行，也不要先改成 True。</li>
+<li>用 Alt+Tab 看有沒有被對話框擋住。</li>
+<li>不要只用 CPU 使用率判斷完成或失敗。</li>
+<li>狀態不明時，不要為了「解除卡住」而儲存模型，也不要結束 Revit 或相關行程。</li>
+<li>等 Dynamo 明確跑完，或明確顯示錯誤，再決定下一步。</li>
+<li>強制結束可能失去尚未儲存的資料。本教材不把結束行程寫成處理步驟。</li>
+</ol>
+<p><strong>寫入後畫面沒有變化</strong></p>
+<ul>
+<li>新增的樣板不會自動套到目前視圖。到性質面板指定。</li>
+<li>覆寫路徑會不會改既有視圖的樣板關聯，尚未實測。</li>
+<li>元件參數不符合篩選時，不會出現你預期的顏色。不要假設圖形會自動填參數。</li>
+</ul>
+
+<h3 id="bvt-limits">已知限制與未驗證項目</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>項目</th><th>狀態</th></tr></thead>
+<tbody>
+<tr><td>圖形結構、節點連線、乾跑是否真的不開啟目標</td><td>依提供的操作紀錄／腳本行為待核對。不是獨立驗證的通過</td></tr>
+<tr><td>乾跑，以及新增樣板的路徑</td><td>原操作紀錄回報在數個目標成功。本文未重新實測</td></tr>
+<tr><td>同名樣板覆寫，以及視圖樣板重指向</td><td>未驗證</td></tr>
+<tr><td>同名篩選衝突時是否沿用目標定義</td><td>依提供的操作紀錄／腳本行為待核對</td></tr>
+<tr><td>略過來源自身、已開啟檔、連結、中央路徑、備份檔、版本不符等條件</td><td>依提供的操作紀錄／腳本行為待核對。不要靠這段描述保護正式中央</td></tr>
+<tr><td>參數定義、綁定與數值</td><td>未驗證。紀錄寫圖形不填值，程式未核對</td></tr>
+<tr><td>目標檔是否為非工作共用</td><td>操作紀錄的畫面未顯示。本文未核對</td></tr>
+<tr><td>正式中央</td><td>禁止測試，未執行</td></tr>
+<tr><td>嚴重錯誤時的 rollback、對話框能否無人值守</td><td>未驗證</td></tr>
+<tr><td>該圖形的儲存或同步行為</td><td>未核對。Save 與 SynchronizeWithCentral 是不同 API</td></tr>
+<tr><td>篩選的類別、謂詞與比對值</td><td>未驗證。本文不臆測</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="bvt-sources">本節對過的官方說明</h3>
+<ul>
+<li><a href="https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/How-to-stop-worksharing-in-a-central-Revit-model.html">How to stop worksharing in a central Revit model</a>：分離並捨棄工作集，可得到非工作共用檔，且不能再與原中央同步。</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-API-MainReference/files/html/8dec13b6-71f4-45d2-74e3-b109153721b5.htm">Document.Save</a> 與 <a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-API-MainReference/files/html/7de73a7b-68f0-87f2-f6a9-97d824024877.htm">SynchronizeWithCentral</a>：儲存文件，與同步中央，是兩個方法。</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Revit-Customize/files/GUID-A9C36610-6853-433D-AFB5-639090BD017F.htm">View Templates（Revit 2025）</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-Customize/files/GUID-04997596-563C-4F09-B623-A77A320A8B65.htm">Assign a View Template（Revit 2026）</a>：指定樣板才會把視圖和樣板連起來。</li>
+</ul>
+<p class="note">同一節的 Markdown：<a href="SCADA_REVIT_STARTUP_GUIDE.md#batch-copy-view-templates">批次複製視圖樣板</a>。</p>
+</div></div>
+</section>
+
+<section id="viewer-blank" class="section">
+<h2><span class="eyebrow">雲端檢視</span>3D 視圖在雲端檢視空白時的排查</h2>
+<div class="step-card"><div class="step-body">
+<p>適用 <strong>Revit 2025.5 繁體中文</strong>。這一節處理「Revit 裡看得到 3D，上傳或發佈之後畫面是空白」。本站沒有重新上傳，也沒有在雲端看過結果，<strong>不能把本節讀成上傳驗收已通過</strong>。</p>
+<p class="warn">先分清服務。服務還沒確認時，不要把「協同合作 → 發佈設定」當成所有 Viewer 的通用解法。</p>
+<h3 id="vwr-toc">本節目錄</h3>
+<ul>
+<li><a href="#vwr-goals">學習目標</a></li>
+<li><a href="#vwr-prereq">必要前提</a></li>
+<li><a href="#vwr-paths">兩種服務</a></li>
+<li><a href="#vwr-not-rules">不要當成普遍規則的三句話</a></li>
+<li><a href="#vwr-steps">雲端協作發佈時的步驟</a></li>
+<li><a href="#vwr-no-set">「未選取任何集」</a></li>
+<li><a href="#vwr-section">剖面框</a></li>
+<li><a href="#vwr-permission">沒有權限時</a></li>
+<li><a href="#vwr-accept">驗收清單</a></li>
+<li><a href="#vwr-trouble">排錯</a></li>
+<li><a href="#vwr-limits">已知限制</a></li>
+<li><a href="#vwr-sources">本節對過的官方說明</a></li>
+</ul>
+
+<h3 id="vwr-goals">學習目標</h3>
+<ol>
+<li>分辨 <strong>Autodesk Viewer 手動上傳</strong>，以及 <strong>Autodesk Docs／BIM 360／Autodesk Construction Cloud／Forma Data Management</strong> 這類雲端協作發佈。</li>
+<li>服務未確認時，不把發佈設定當成唯一解法。</li>
+<li>用專案裡已經看得到模型的 3D 視圖，依實際流程去選；其他視圖保留，不刪除、不改名。</li>
+<li>分得清哪些句子有官方說明，哪些只依操作紀錄的視窗文字，尚未實測雲端結果。</li>
+</ol>
+
+<h3 id="vwr-prereq">必要前提</h3>
+<ol>
+<li>先寫下這次的入口：網址或對方指定的位置，是 <a href="https://viewer.autodesk.com/">viewer.autodesk.com</a> 的手動上傳，還是 Docs、BIM 360、ACC 或 Forma 的雲端專案。寫不出來，就不要先改發佈設定。</li>
+<li>在 Revit 打開準備給人看的那個 3D 視圖，確認模型看得到。這裡若已經是空的，先查視圖本身，不必先怪雲端。</li>
+<li>不要為了排查而刪除視圖、改視圖名稱，或把別的視圖改成某個固定名字。</li>
+<li>練習仍用測試檔或已獲准發佈的檔。不要拿未獲准的正式模型試上傳。</li>
+</ol>
+
+<h3 id="vwr-paths">兩種服務</h3>
+<h4>A. Autodesk Viewer：手動上傳檔案</h4>
+<p>官方「Getting Started」寫：Autodesk Viewer 是瀏覽器裡的免費檢視。登入後在 Design Views 頁面按 <strong>Upload new file</strong> 上傳。Viewer 會把設計檔轉成可檢視的結果；分享出去的人不能藉此編輯原始檔。</p>
+<p>「Supported File Types」列出 <strong>RVT</strong>，註明適用 <strong>Revit 2015 或之後</strong>的檔案。</p>
+<p class="warn">這兩頁沒有寫「發佈設定（Publish Settings）」會決定手動上傳後看得到哪些視圖。手動上傳後空白時，不要把協同合作裡的發佈設定當成已經證實的解法。可先確認：上傳的是剛剛儲存的那份 <code>.rvt</code>、Revit 裡同一個 3D 看得到模型、轉換完成後再重新整理頁面。發佈設定與這條手動上傳的關係，標成<strong>待確認</strong>。</p>
+<h4>B. 雲端協作發佈：Docs、BIM 360、ACC、Forma</h4>
+<p>官方「Select Views and Sheets to Publish to the Cloud」是給<strong>發佈到雲端的模型</strong>用的。Revit 2025 與 2026 的英文說明寫：</p>
+<ul>
+<li>發佈到雲端時，預設會發佈 <strong>default 3D view（預設 3D 視圖）</strong>以及所有 <strong>2D 圖紙</strong>。</li>
+<li>要改發佈哪些視圖或圖紙，用 <strong>Publish Settings</strong>。</li>
+<li>路徑：<strong>Collaborate tab → Manage Models panel → Publish Settings</strong>。</li>
+<li>用 <strong>Show in List</strong> 依類型篩選清單，再用 Include 欄的核取方塊選視圖或圖紙。</li>
+<li>上方也要勾選準備發佈的那個<strong>集（set）</strong>的 Include。</li>
+<li><strong>Save &amp; Close</strong> 儲存對發佈集的變更。</li>
+<li>2025 與 2026 的這篇在下一步寫：使用 <strong>Synchronize with Central</strong> 更新變更，再把模型最新版本發佈到 <strong>Autodesk Docs</strong>。</li>
+<li>2027 的同一篇改成：工作共用模型才使用 Synchronize with Central，發佈目的地寫成 Forma Data Management。</li>
+</ul>
+<p class="note">2025 說明沒有把「同步」限定寫成只有工作共用才做。非工作共用的檔沒有中央可同步。請先看檔案是不是工作共用：是，才做同步；不是，不要為了對齊這句說明而去啟用工作共用。本文沒有在 2025.5 實機點過這個對話框。</p>
+<p>Autodesk 支援文章「Sheets or Views are not available to view in BIM 360 or Autodesk Forma Data Management」把「圖紙或視圖在 BIM 360 或 Forma 看不到」的原因寫成：發佈設定裡沒有選到圖紙、視圖或正確的視圖集。文章涵蓋直接上傳到 BIM 360，以及透過 Revit 雲端工作共用發佈。這條是<strong>這些雲端服務</strong>的官方排查路徑，不是 Autodesk Viewer 手動上傳說明裡的步驟。</p>
+<p>繁中按鈕：本站其他章把 Collaborate 寫成「協同合作」。操作紀錄的畫面用詞是「協作」與「發佈設定」，清單篩選寫「在清單中展示」。2025.5 繁中是否一字不差，<strong>本文未實機核對</strong>，以你的畫面為準。見<a href="#verify">第十節</a>。</p>
+
+<h3 id="vwr-not-rules">不要當成普遍規則的三句話</h3>
+<ul>
+<li>視圖一定要叫 <code>{3D}</code>。</li>
+<li><code>{3D}</code> 不能改名。</li>
+<li>只勾預設視圖，空白就會解決。</li>
+</ul>
+<p>這三句不是已證實的普遍規則。官方寫的是「default 3D view」這個預設 3D 視圖，會在沒有另選時一併發佈。說明沒有要求名稱必須維持大括號，也沒有寫不能改名。專案裡若已經有看得到模型的 3D 視圖，就用那個視圖，依這次的發佈流程去選。其他視圖保留。</p>
+<p class="note">操作紀錄裡某次清單出現過數個 3D 視圖。那是該次畫面，不是教材的必要條件。本頁不列出必須存在的視圖名稱。本站 <a href="#step12">Step 12</a> 的 <code>{3D}_SCADA_COORD</code> 只是協調視圖的建議名稱，同樣不是雲端檢視的必要條件。</p>
+
+<h3 id="vwr-steps">雲端協作發佈時的步驟</h3>
+<p>只有在已經確認服務是 Docs、BIM 360、ACC 或 Forma 這類雲端協作時，才走這一段。</p>
+<ol>
+<li>在 Revit 打開要發佈的 3D 視圖，確認模型看得到。若這裡就是空的，先做剖面框一節。</li>
+<li>開啟發佈設定。英文說明的路徑是 Collaborate → Manage Models → Publish Settings。繁中以畫面為準。</li>
+<li>用 Show in List（操作紀錄的畫面用詞是「在清單中展示」）篩出 3D 視圖。下拉的繁中文字未在 2025.5 逐字核對。</li>
+<li>勾選那個在 Revit 裡已經看得到模型的 3D 視圖。需要一併發佈的其他視圖可以留著。不要為了對照某次紀錄而取消其他視圖。</li>
+<li>確認上方的發佈集本身有勾 Include。只勾視圖、沒勾集，官方步驟還沒做完。</li>
+<li>按 <strong>Save &amp; Close（儲存並關閉）</strong>。</li>
+<li>若這是工作共用模型，再 <strong>Synchronize with Central（與中央同步）</strong>。非工作共用就不要為了這一步去開工作共用。</li>
+<li>發佈模型的最新版本。2025／2026 說明的目的地用詞是 Autodesk Docs。Ctrl+S 只是儲存 Revit 檔，不等於發佈到雲端。</li>
+<li>到雲端頁面看這次結果。本文沒有重新發佈，不能代替這一步驗收。</li>
+</ol>
+<p>若下一步其實是 Autodesk Viewer 的手動上傳：在 Revit 儲存你要上傳的那份檔，再從 Design Views 上傳該 <code>.rvt</code>。不要把上面的發佈設定步驟當成這條路徑已證實的修法。</p>
+
+<h3 id="vwr-no-set">「未選取任何集」</h3>
+<p>操作紀錄的視窗文字是：「您尚未選取要發佈的集。只有預設的 3D 視圖和 2D 圖紙會發佈到雲端。」</p>
+<p>紀錄對按鈕的解釋是：確定＝接受上述預設；取消＝回到發佈設定。<strong>這只依來源文字解釋，未實測雲端結果。</strong></p>
+<p>官方說明的方向一致：沒有另選時，預設會發佈 default 3D view 與所有 2D 圖紙。按鈕按下之後，雲端實際出現哪些視圖，本文未實測。若你要的不是預設 3D 視圖，回到發佈設定，勾選正確的集與視圖。</p>
+
+<h3 id="vwr-section">剖面框</h3>
+<p>官方 3D 視圖性質寫明：剖面框（Section Box）是一個 3D 範圍，用來限制該視圖顯示的幾何。範圍邊緣切到的元件會以切割樣式顯示。</p>
+<p>因此，若 <strong>Revit 裡這個 3D 已經是空的或幾乎沒有模型</strong>，先檢查性質面板的剖面框：確認沒有把模型切到視圖外面，或取消勾選後再看一次，然後儲存。這個判斷來自剖面框的產品說明。</p>
+<p class="note">若 Revit 裡看得到、只有上傳或發佈後空白，剖面框仍可列入待查，因為發佈出去的是該視圖的內容。<strong>它是不是這次空白的原因，本文未實測。</strong>不要為了這一步刪除或改名視圖。</p>
+
+<h3 id="vwr-permission">沒有權限時</h3>
+<p>沒有上傳或編輯權限時，把<strong>完整錯誤訊息</strong>交給 Autodesk 專案管理者或資訊單位。權限是整個專案、某個資料夾、某個檔案，還是某個檢視功能，沒有完整訊息就不能判斷。本文不臆測原因。</p>
+<p>你若不能上傳：在本機確認 3D 視圖看得到模型、檔案已儲存，再交給有權限的人。對方上傳或發佈之後，直接看雲端畫面。</p>
+<p>官方寫 Save &amp; Close 會儲存對發佈集的變更；工作共用模型還要同步後再發佈。這些設定是否一定跟著你另存的檔案交給下一位上傳者，<strong>本文未實測</strong>。</p>
+
+<h3 id="vwr-accept">驗收清單</h3>
+<ul class="check-static">
+<li>已寫下這次是 Autodesk Viewer 手動上傳，還是 Docs／BIM 360／ACC／Forma 發佈</li>
+<li>服務未確認時，沒有把發佈設定當成唯一解法</li>
+<li>Revit 裡選定的 3D 視圖看得到模型</li>
+<li>沒有刪除其他視圖，也沒有為了排查而改名</li>
+<li>沒有把「必須叫 <code>{3D}</code>」或「只勾預設視圖」當成條件</li>
+<li>若是雲端協作：視圖與發佈集都有勾，已 Save &amp; Close；工作共用模型有同步，並已發佈最新版本</li>
+<li>若是手動上傳：上傳的是已儲存的 <code>.rvt</code>；發佈設定的效果標成待確認</li>
+<li>「未選取任何集」只依視窗文字理解；雲端結果另看實際畫面</li>
+<li>雲端是否顯示 3D，由實際畫面驗收。本頁未實測，不算通過</li>
+</ul>
+
+<h3 id="vwr-trouble">排錯</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>現象</th><th>先查</th><th>先不要做</th></tr></thead>
+<tbody>
+<tr><td>還不知道是哪一種檢視</td><td>看入口是 viewer.autodesk.com，還是 Docs／ACC／Forma</td><td>不要先改發佈設定並視為已解決</td></tr>
+<tr><td>Revit 的 3D 就是空的</td><td>剖面框、可見性、視圖樣板</td><td>不要刪視圖，也不要改名成 <code>{3D}</code></td></tr>
+<tr><td>Revit 看得到，手動上傳後空白</td><td>是否上傳剛儲存的檔、轉換是否完成</td><td>不要把發佈設定當成已證實解法</td></tr>
+<tr><td>Revit 看得到，雲端發佈後沒有該 3D</td><td>發佈集是否勾選、視圖是否在集內、是否已發佈最新版本</td><td>不要只按 Ctrl+S 就當作已發佈</td></tr>
+<tr><td>出現「未選取任何集」</td><td>讀完整句；需要特定視圖就回設定勾集</td><td>不要假設按確定後雲端一定有你要的視圖</td></tr>
+<tr><td>權限錯誤</td><td>保留完整訊息給管理者</td><td>不要猜是哪個層級的權限</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="vwr-limits">已知限制</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>項目</th><th>狀態</th></tr></thead>
+<tbody>
+<tr><td>手動上傳到 Autodesk Viewer 時，發佈設定是否有效</td><td>Viewer 的 Getting Started 與支援格式頁未記載。待確認，不是通用解法</td></tr>
+<tr><td>視圖必須命名為 <code>{3D}</code>、不能改名、只勾預設視圖就能解決</td><td>不是已證實的規則</td></tr>
+<tr><td>操作紀錄裡出現過的視圖名稱</td><td>只是該次畫面，不是必要條件。本頁不列出清單</td></tr>
+<tr><td>「未選取任何集」按下之後的雲端結果</td><td>只依來源文字解釋，未實測</td></tr>
+<tr><td>2025.5 繁中「協作／協同合作」「在清單中展示」是否與畫面一字不差</td><td>未實機核對</td></tr>
+<tr><td>發佈設定是否隨另存檔交給下一位上傳者</td><td>未實測</td></tr>
+<tr><td>上傳或發佈後雲端是否顯示 3D</td><td>未實測</td></tr>
+<tr><td>剖面框是否造成「只在雲端空白」</td><td>未實測。Revit 視圖本身被剖面框切掉時，依官方說明該視圖會少掉範圍外的幾何</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="vwr-sources">本節對過的官方說明</h3>
+<ul>
+<li><a href="https://help.autodesk.com/cloudhelp/ENU/ADSKVIEWER-Help/files/ADSKVIEWER_Help_GettingStarted_html.html">Autodesk Viewer：Getting Started</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/ENU/ADSKVIEWER-Help/files/ADSKVIEWER_Help_SupportedFileTypes_html.html">Autodesk Viewer：Supported File Types</a>（RVT 適用 Revit 2015 或之後）</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Revit-Cloud/files/GUID-09FBF9E2-6ECF-447D-8FA8-12AB16495BC3.htm">Select Views and Sheets to Publish to the Cloud（Revit 2025）</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-Cloud/files/GUID-09FBF9E2-6ECF-447D-8FA8-12AB16495BC3.htm">同一篇（Revit 2026）</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2027/ENU/Revit-Cloud/files/GUID-A2444193-FCE8-4219-A590-62CA2B8B5C5D.htm">Publish Cloud Models（Revit 2027）</a>：預設只發佈 default 3D view 與 2D 圖紙；其餘視圖要改 Publish Settings。</li>
+<li><a href="https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Sheets-and-Views-are-not-published-or-viewable-on-BIM360-Docs-via-browser.html">Sheets or Views are not available to view in BIM 360 or Autodesk Forma Data Management</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Revit-DocumentPresent/files/GUID-5492CCEA-EDE1-4C2E-B828-6D7077465441.htm">3D View Instance Properties（Revit 2025）</a>：Section Box 限制該 3D 視圖顯示的幾何。</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-DocumentPresent/files/GUID-BC219BE7-2917-47A8-9596-71C6C01659CF.htm">Change the Extents of a 3D View（Revit 2026）</a></li>
+</ul>
+<p class="note">同一節的 Markdown：<a href="SCADA_REVIT_STARTUP_GUIDE.md#viewer-blank-3d">3D 視圖在雲端檢視空白時的排查</a>。</p>
+</div></div>
+</section>
+
 <section id="plumbing-guide" class="section">
 <h2><span class="eyebrow">給排水與視圖</span>給排水與視圖教材（Revit 2025）</h2>
 <p>給排水建模、族群與電氣、視圖管理的操作教材。下列文件是 Markdown，先看閱讀指南的順序，再依 01 到 04 練習。</p>
@@ -3748,6 +4143,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <tr><td>電管大小、佈線偏好、電氣設定、機械設定</td><td>否</td><td>都在專案裡。樣板與查找表請放自己可寫的資料夾，不要改安裝目錄</td></tr>
 <tr><td>10　參數</td><td>否</td><td>參數檔放在自己寫得進去的路徑</td></tr>
 <tr><td>15　工作共用</td><td>否（要網路資料夾讀寫，不是系統管理員）</td><td>不確定就標【需確認權限】</td></tr>
+<tr><td>批次複製視圖樣板</td><td>主要方案否；Dynamo 圖形不列入必要流程</td><td>先用傳遞專案標準。不要為了該節另外安裝套件。見<a href="#batch-vt">批次複製視圖樣板</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -3783,6 +4179,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>把族群存成 .rfa 的路徑，繁中說明是檔案 → 另存 → 資源庫 → 族群。教學影片寫「另存資源庫」。畫面若寫「另存新檔」或「庫」，指的是同一條。「要儲存的族群」裡的全部項目，說明寫「&lt;所有族群&gt;」。</li>
 <li>AutoCAD 快速選取（QSELECT）、繪製順序（DRAWORDER）、重生（REGEN）、遮蔽（WIPEOUT）的繁中名稱依說明文件。放到最前面時輸入 F；說明文件的選項叫「最上方」。快速選取對話框的欄位若差一個字，以畫面為準。</li>
 <li>AutoCAD 出圖對話框的用詞見<a href="#plot-trouble">出圖疑難排解</a>。本教材寫「範圍」「視窗」「套用至配置」「自動載入所有開啟的圖面」。畫面若寫「實際範圍」「窗選」「將變更儲存至配置」，或把「圖面」寫成「圖檔」，指的是同一個選項。Multi-sheet file 畫面若寫「多圖紙檔案」，是同一個勾選。</li>
+<li>發佈設定的頁籤，英文說明寫 Collaborate tab → Manage Models → Publish Settings。本站其他章把 Collaborate 寫成「協同合作」。操作紀錄的畫面用詞是「協作」與「發佈設定」，清單篩選寫「在清單中展示」。2025.5 繁中若差一個字，以畫面為準。這條還沒在 2025.5 實機逐字對過，見<a href="#viewer-blank">3D 視圖在雲端檢視空白時的排查</a>。</li>
 </ol>
 <p>已經用 2025.5 繁中和 2026-10-16 教材確認過的：電纜架沒有佈線偏好；切割平面低於橋架或吊架時平面不顯示；視圖樣板鎖住可見性時 <code>VG</code> 是灰的，要改樣板裡的 V/G 取代。</p>
 </section>
