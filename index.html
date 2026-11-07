@@ -25,8 +25,8 @@
   --warn-border: #FDE68A;
   --note-bg: #EFF6FF;
   --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
-  --radius: 24px;
-  --radius-sm: 14px;
+  --radius: 16px;
+  --radius-sm: 12px;
 }
 [data-theme="dark"]{
   --bg: #0A0A0B;
@@ -54,13 +54,13 @@ body{
   font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;
   background: var(--bg);
   color: var(--text);
-  font-size:20px;
-  line-height:1.9;
-  letter-spacing:0.02em;
+  font-size:19px;
+  line-height:1.85;
+  letter-spacing:0;
   transition: background .25s, color .25s;
 }
-html[data-font="small"] body{font-size:18px}
-html[data-font="standard"] body{font-size:20px}
+html[data-font="small"] body{font-size:17px}
+html[data-font="standard"] body{font-size:19px}
 html[data-font="large"] body{font-size:22px}
 html[data-font="xlarge"] body{font-size:24px}
 
@@ -88,76 +88,83 @@ pre{background:var(--code-bg); padding:16px; border-radius:12px; overflow:auto; 
 #sidebar:hover::-webkit-scrollbar-thumb{background:rgba(120,120,120,.35)}
 #sidebar::-webkit-scrollbar-button{display:none; width:0; height:0}
 [data-theme="dark"] #sidebar:hover::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16)}
-.sidebar-header{margin-bottom:20px}
-.sidebar-title{font-size:26px; font-weight:900; line-height:1.15; margin:0}
-.sidebar-version{font-size:13px; color:var(--text-muted); margin-top:6px; letter-spacing:.08em}
+.sidebar-header{margin-bottom:12px}
+.sidebar-title{font-size:22px; font-weight:900; line-height:1.2; margin:0}
+.sidebar-version{font-size:12px; color:var(--text-muted); margin-top:4px}
 #tocSearch{
-  width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card); color:var(--text);
-  font-size:15px; margin:12px 0 16px;
+  width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--bg-card); color:var(--text);
+  font-size:14px; margin:10px 0 8px;
 }
 .toc{list-style:none; padding:0; margin:0}
-.toc li{margin:2px 0}
-.toc a{display:block; padding:10px 12px; border-radius:10px; color:var(--text-muted); font-size:17px; line-height:1.5; border-left:3px solid transparent}
+.toc > li{margin:2px 0}
+.toc a{display:block; padding:7px 10px; border-radius:8px; color:var(--text-muted); font-size:15px; line-height:1.45; border-left:3px solid transparent}
 .toc a:hover{background:var(--bg-card); color:var(--text); text-decoration:none}
 .toc a.active{background:var(--bg-card); color:var(--text); border-left-color:var(--accent); font-weight:700; box-shadow:var(--shadow)}
-.toc-group{font-size:14px; font-weight:700; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em; padding:16px 12px 6px}
-.toc ol{list-style:none; padding-left:8px}
+.toc-acc{list-style:none; margin:4px 0}
+.toc-acc details{border-radius:8px}
+.toc-acc summary.toc-group{
+  list-style:none; cursor:pointer; user-select:none;
+  font-size:13px; font-weight:700; color:var(--text-faint);
+  text-transform:none; letter-spacing:0;
+  padding:10px 10px 6px; display:flex; align-items:center; justify-content:space-between; gap:8px;
+}
+.toc-acc summary.toc-group::-webkit-details-marker{display:none}
+.toc-acc summary.toc-group::after{content:"▸"; font-size:11px; color:var(--text-faint); transition:transform .15s}
+.toc-acc details[open] > summary.toc-group::after{transform:rotate(90deg)}
+.toc-acc .toc-panel{list-style:none; padding:0 0 4px 4px; margin:0}
 .toc-warn a{color:#D97706}
 [data-theme="dark"] .toc-warn a{color:#FBBF24}
-.sidebar-footer{margin-top:24px; padding-top:16px; border-top:1px solid var(--border); font-size:14px}
+.sidebar-controls{
+  display:flex; gap:4px; flex-wrap:wrap; align-items:center;
+  margin-top:12px; padding-top:12px; border-top:1px solid var(--border);
+}
+.sidebar-controls .btn{padding:4px 9px; font-size:12px; border-radius:8px}
+.sidebar-footer{margin-top:12px; padding-top:12px; border-top:1px solid var(--border); font-size:13px}
 /* main */
 #main{flex:1; min-width:0}
 .content{max-width:1020px; margin:0 auto; padding:48px 40px 120px}
-.page-header{margin-bottom:32px}
-.page-header h1{font-size:56px; font-weight:900; line-height:1.12; letter-spacing:-.02em; margin:0 0 16px}
-.lede{font-size:22px; color:var(--text-muted); line-height:1.7; margin:0 0 18px}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:44px; font-weight:900; line-height:1.15; letter-spacing:0; margin:0 0 12px}
+.lede{font-size:19px; color:var(--text-muted); line-height:1.7; margin:0 0 14px}
 .badge-row{display:flex; gap:8px; flex-wrap:wrap; margin:12px 0}
 .badge{font-size:13px; font-weight:700; padding:4px 10px; border-radius:999px; border:1px solid var(--border)}
 .badge-must{background:var(--accent); color:white; border-color:var(--accent)}
 .badge-suggest{background:var(--bg-card); color:var(--text)}
 .badge-policy{background:var(--bg-muted); color:var(--text-muted)}
-.perm-banner{background:var(--note-bg); border:1px solid var(--border); padding:14px 18px; border-radius:14px; font-size:16px; margin-top:16px}
+.perm-banner{background:var(--note-bg); border:1px solid var(--border); padding:12px 16px; border-radius:12px; font-size:15px; margin-top:14px}
 .toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin:18px 0 28px}
 .toolbar-left{display:flex; gap:8px}
 .btn{border:1px solid var(--border); background:var(--bg-card); color:var(--text); padding:8px 14px; border-radius:999px; font-size:14px; font-weight:600; cursor:pointer}
 .btn:hover{border-color:var(--border-strong)}
 .btn.active{background:var(--text); color:var(--bg)}
 .btn-accent{background:var(--accent); color:white; border-color:var(--accent)}
-/* bento grid */
-.bento{ display:grid; grid-template-columns:repeat(12,1fr); gap:12px; margin:24px 0 40px}
-.b-card{
-  background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:20px; 
-  transition: transform .15s, border-color .15s, box-shadow .15s, background .25s;
-  position:relative; overflow:hidden;
+/* path chooser (replaces dense hero notes + bento) */
+.paths-intro{font-size:15px; font-weight:700; color:var(--text-muted); margin:22px 0 10px}
+.paths{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:0 0 36px}
+.path-card{
+  display:block; background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:16px 18px;
+  color:inherit; text-decoration:none;
+  transition: border-color .15s, box-shadow .15s, transform .15s, background .25s;
 }
-.b-card:hover{transform:translateY(-2px); border-color:var(--border-strong); box-shadow:var(--shadow)}
-.b-card.orange:hover{border-color:var(--accent)}
-.b-card .k{font-size:12px; font-weight:800; letter-spacing:.1em; color:var(--text-faint); text-transform:uppercase; margin-bottom:8px}
-.b-card .big{font-size:40px; font-weight:900; line-height:1; margin:6px 0}
-.b-card .num{font-size:56px; font-weight:900; color:var(--border-strong); line-height:1}
-[data-theme="dark"] .b-card .num{color:#3F3F46}
-.b-card h3{font-size:20px; font-weight:800; margin:8px 0 6px}
-.b-card p, .b-card li{font-size:15px; line-height:1.6; color:var(--text-muted)}
-.b-span-8{grid-column:span 8}
-.b-span-4{grid-column:span 4}
-.b-span-6{grid-column:span 6}
-.b-span-3{grid-column:span 3}
-.b-span-12{grid-column:span 12}
-.b-span-2{grid-column:span 2}
-@media(max-width:1100px){ .b-span-8,.b-span-4,.b-span-6,.b-span-3{grid-column:span 6} .b-span-2{grid-column:span 3} }
-@media(max-width:640px){ .bento{grid-template-columns:repeat(6,1fr)} .b-span-8,.b-span-4,.b-span-6,.b-span-3,.b-span-12{grid-column:span 6} .b-span-2{grid-column:span 3} }
+a.path-card:hover, .path-card:hover{border-color:var(--accent); box-shadow:var(--shadow); text-decoration:none; transform:translateY(-1px)}
+.path-card .k{font-size:12px; font-weight:800; color:var(--accent); margin-bottom:6px; letter-spacing:0; text-transform:none}
+.path-card h3{font-size:18px; font-weight:800; margin:0 0 6px; line-height:1.35}
+.path-card p{font-size:14px; line-height:1.55; color:var(--text-muted); margin:0}
+.path-card .go{display:inline-block; margin-top:10px; font-size:13px; font-weight:700; color:var(--accent)}
+.path-card a{font-weight:700}
+@media(max-width:640px){ .paths{grid-template-columns:1fr} }
 
 /* sections - card */
-.section{scroll-margin-top:90px; margin-bottom:48px}
-.section h2{font-size:38px; font-weight:800; line-height:1.2; margin:96px 0 18px}
-.section h2 .eyebrow{display:block; font-size:12px; font-weight:800; letter-spacing:.12em; color:var(--accent); margin-bottom:8px; text-transform:uppercase}
+.section{scroll-margin-top:72px; margin-bottom:36px}
+.section h2{font-size:1.7rem; font-weight:800; line-height:1.3; margin:48px 0 14px}
+.section h2 .eyebrow{display:block; font-size:12px; font-weight:800; letter-spacing:0; color:var(--accent); margin-bottom:6px; text-transform:none}
 .step-card{
-  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:36px; margin-bottom:20px;
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px; margin-bottom:14px;
   box-shadow:var(--shadow); transition:background .25s, border-color .25s;
 }
-.step-top{display:flex; gap:16px; align-items:flex-start; margin-bottom:16px; flex-wrap:wrap}
-.step-no{font-size:56px; font-weight:900; color:var(--border-strong); line-height:.9; min-width:72px}
-.step-title{font-size:26px; font-weight:800; line-height:1.25; flex:1; min-width:240px}
+.step-top{display:flex; gap:12px; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap}
+.step-no{font-size:2rem; font-weight:900; color:var(--border-strong); line-height:.95; min-width:48px}
+.step-title{font-size:1.25rem; font-weight:800; line-height:1.3; flex:1; min-width:200px}
 .step-body p{margin:12px 0}
 .verdict{background:var(--verdict-bg); border:1px solid var(--verdict-border); padding:14px 16px; border-radius:12px; margin-top:16px; font-size:16px}
 .warn{background:var(--warn-bg); border:1px solid var(--warn-border); padding:12px 16px; border-radius:12px; margin:14px 0; font-size:16px}
@@ -177,7 +184,7 @@ table.compare td, table.mapping-table td{padding:10px 12px; border-top:1px solid
 .checklist li.done{opacity:.6; text-decoration:line-through; background:var(--bg-muted)}
 .checklist-toolbar{display:flex; justify-content:space-between; align-items:center; margin:12px 0}
 .two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px}
-@media(max-width:800px){ .two-col{grid-template-columns:1fr} .content{padding:28px 18px 100px} .page-header h1{font-size:38px} #sidebar{position:fixed; left:0; top:0; transform:translateX(-100%); transition:transform .25s; width:86%; max-width:360px; height:100dvh} #sidebar.open{transform:translateX(0)} .scrim{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:40; display:none} .scrim.open{display:block} }
+@media(max-width:800px){ .two-col{grid-template-columns:1fr} .content{padding:28px 18px 100px} .page-header h1{font-size:32px} #sidebar{position:fixed; left:0; top:0; transform:translateX(-100%); transition:transform .25s; width:86%; max-width:360px; height:100dvh} #sidebar.open{transform:translateX(0)} .scrim{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:40; display:none} .scrim.open{display:block} }
 .nav-toggle{position:fixed; left:16px; bottom:20px; z-index:60; width:52px; height:52px; border-radius:999px; background:var(--text); color:var(--bg); border:none; display:none; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.25)}
 @media(max-width:800px){ .nav-toggle{display:flex} }
 .card{background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:20px 22px}
@@ -198,7 +205,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 .trouble-item .step-body{padding:0 18px 16px}
 .btn-reset{border:1px solid var(--border); background:var(--bg-card); color:var(--text); padding:8px 14px; border-radius:999px; font-weight:700; cursor:pointer}
 .checklist-progress{font-weight:800; color:var(--accent)}
-.kicker{display:inline-block; font-size:13px; font-weight:800; letter-spacing:.06em; color:var(--accent); margin-bottom:8px}
+.kicker{display:inline-block; font-size:13px; font-weight:800; letter-spacing:0; color:var(--accent); margin-bottom:8px}
 .step-body li{margin:6px 0}
 .table-scroll{overflow-x:auto; margin:14px 0}
 .table-scroll table{margin:0}
@@ -238,99 +245,177 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
   <div class="sidebar-header">
     <p class="sidebar-title">SCADA 電纜架<br>Revit 入門</p>
     <p class="sidebar-version">Revit 2025.5 繁中</p>
-    <input id="tocSearch" placeholder="搜尋章節 / Step…" />
-    <div class="toolbar-left" style="margin-bottom:8px">
-      <button class="btn" id="fontMinus">A-</button>
-      <button class="btn active" id="fontStd">標準</button>
-      <button class="btn" id="fontPlus">A+</button>
-      <button class="btn" id="themeToggle">🌙 暗版</button>
-    </div>
+    <input id="tocSearch" placeholder="搜尋章節 / Step…" aria-label="搜尋章節" />
   </div>
   <ol class="toc" id="toc">
     <li><a href="#start">0. 新建或接手判斷</a></li>
-    <li class="toc-group">Revit 操作 · 觀念</li>
-    <li><a href="#bim" data-keywords="BIM 觀念與流程 LOD 生命週期 樣板 數量 干涉 Navisworks 誤解 竣工 維護 BMP 建置計畫書 迷思">BIM 觀念</a></li>
-    <li><a href="#ui" data-keywords="Revit 介面與檔案基本觀念 頁籤 功能區 性質 專案瀏覽器 視圖控制列 快速存取 狀態列 選項列 rvt rte rfa rft 族群 族 類型參數 實例參數 內建 系統族群 可載入 連結 匯入 釘選 釘住">Revit 介面</a></li>
-    <li><a href="#template" data-keywords="專案樣板與起始設定 樣板 Mechanical Electrical Plumbing Systems MetricCHT 專案單位 樓層 視圖範圍 建築設計樣板 物件型式">專案樣板</a></li>
-    <li><a href="#mep-org" data-keywords="給水 排水 消防 空調 弱電 送風 回風 外氣 排氣 冰水">機電系統分工</a></li>
-    <li class="toc-group">Revit 操作 · 起手式</li>
-    <li><a href="#step1">Step 1　專案單位</a></li>
-    <li><a href="#step2">Step 2　連結模型</a></li>
-    <li><a href="#step3">Step 3　共用座標</a></li>
-    <li><a href="#step4">Step 4　樓層與網格</a></li>
-    <li><a href="#step5">Step 5　工作視圖</a></li>
-    <li><a href="#step6">Step 6　視圖範圍</a></li>
-    <li><a href="#step7" data-keywords="視圖樣板 領域 次領域 從目前視圖建立樣板">Step 7　視圖樣板</a></li>
-    <li><a href="#step8">Step 8　篩選與上色</a></li>
-    <li><a href="#step9">Step 9　電纜架類型</a></li>
-    <li><a href="#tray-types" data-keywords="梯型 梯式 槽式 實底 電纜架外型 Ladder">電纜架型式</a></li>
-    <li><a href="#step10">Step 10　SCADA 參數</a></li>
-    <li><a href="#step11">Step 11　明細表</a></li>
-    <li><a href="#step12" data-keywords="3D 協調 剖面框 干涉檢查 Interference Check">Step 12　3D 協調視圖</a></li>
-    <li><a href="#step13">Step 13　品質檢查視圖</a></li>
-    <li><a href="#step14" data-keywords="瀏覽器組織 領域 次領域">Step 14　瀏覽器組織</a></li>
-    <li><a href="#step15">Step 15　工作共用</a></li>
-    <li><a href="#quick10">二、起手 10 步</a></li>
-    <li><a href="#checklist">三、建模檢查清單</a></li>
-    <li class="toc-group">Revit 操作 · 電纜架實作</li>
-    <li><a href="#scope" data-keywords="交付範圍 細設 施工 深化 元件 Tray 電管 拉線箱 獨立吊架 共同吊支架 文件規定 參照 待確認 依據 BMP SoW">交付範圍</a></li>
-    <li><a href="#draw">四、電纜架繪製</a></li>
-    <li><a href="#hanger">五、梯型吊架</a></li>
-    <li><a href="#hanger-code">五、吊架間距法規</a></li>
-    <li><a href="#trouble">六、放了看不到</a></li>
-    <li><a href="#vg-locked">六、VG 被樣板鎖住</a></li>
-    <li><a href="#tags">七、電纜架標籤</a></li>
-    <li><a href="#elevation" data-keywords="高程 換算 跨樓層 升降 FFL SFL 完成面 結構面 絕對高程 相對高程 中間高程 底高程 頂高程 垂直段 剖面 定點高程 高程基準">高程換算與跨樓層</a></li>
-    <li><a href="#pullbox" data-keywords="拉線箱 接線盒 pull box junction box Tray 轉電管 連接件 族群 電管配件 電氣設備 簡化箱體 進出線">拉線箱與 Tray 轉電管</a></li>
-    <li class="toc-group">Revit 操作 · 視圖與協調</li>
-    <li><a href="#discipline" data-keywords="領域 次領域 Discipline Sub-Discipline 電氣 機械 衛工 協調 半色調 瀏覽器組織 建築 結構 視圖標籤">領域與次領域</a></li>
-    <li><a href="#view-template-color" data-keywords="視圖樣板 View Template 從目前視圖建立樣板 套用樣板性質 包括 V/G 取代模型 V/G 取代篩選 上色 SCADA電纜架_平面上色 傳遞專案標準">上色存成視圖樣板</a></li>
-    <li><a href="#interference" data-keywords="干涉檢查 Interference Check 碰撞 展示 展示上次報告 重新整理 NWC NWD NWF Navisworks 碰撞偵測 Clash Detective 匯出 目前的專案">干涉檢查與 Navisworks</a></li>
-    <li><a href="#nwc-nwd" data-keywords="匯出 NWC NWD NWF Navisworks NWC Export Utility SwitchBack 增益集 外部工具 附加 Append 重新整理 取得座標 指定點的座標 共用座標 測量點 專案基準點 選集樹 單位和轉換 外觀分析工具 Appearance Profiler Clash Detective 衝突測試">匯出 NWC 並整合到對方的 NWD</a></li>
-    <li><a href="#export-own" data-keywords="只匯出自己的系統 NWC 目前視圖 Current View 重複建築 連結 轉換連結 匯出視圖 選集樹 隱藏 匯出紀錄">只匯出自己的系統</a></li>
-    <li><a href="#navis-keys" data-keywords="Navisworks 快捷鍵 鍵盤 Shortcut Turntable Walk Orbit Fly Clash Detective TimeLiner Ctrl Home Page Up 未驗證">Navisworks 快捷鍵</a></li>
-    <li class="toc-group">Revit 操作 · 管路、族群與出圖</li>
-    <li><a href="#conduit-size" data-keywords="EMT 電管 標稱尺寸 內徑 外徑 CNS 薄鋼管 RNC 彎曲半徑">電管尺寸</a></li>
-    <li><a href="#pipe-setup" data-keywords="配管系統設定 佈線偏好 管區段 給水 排水 PVC 斜度 配件 管系統 圖形取代 材料 細緻 粗略 粗糙 SP WP VP CW HW 存水彎 清潔口">管路設定</a></li>
-    <li><a href="#pipe-draw" data-keywords="管段繪製技巧 立管 斜T 空白鍵 建立類似 佈線解決方案 佈線解法 衛工 衛浴 對齊 排水 套用 線架構 線框">管段繪製技巧</a></li>
-    <li><a href="#family" data-keywords="族群製作 族群樣板 參考平面 參考線 掃掠 連接件 管接點 斜T 標籤 類型目錄 載入族群 轉存 rfa 另存新檔 資源庫">族群製作</a></li>
-    <li><a href="#save-rfa" data-keywords="實務小技巧 轉存 rfa 另存新檔 Save As 資源庫 Library 族群 Family 所有族群 專案瀏覽器 右鍵儲存 可載入族群 系統族群 電纜架配件 儲存族群">轉存成 .rfa</a></li>
-    <li><a href="#sheets" data-keywords="圖紙與出圖 圖紙出圖 圖框 視圖樣板 明細表 定點高程 修訂 圖紙">圖紙與出圖</a></li>
-    <li><a href="#arch-model" data-keywords="建築建模基礎 網格 結構柱 結構梁 樓板 牆 門窗 樓梯 屋頂 地形 彩現 篩選">建築建模基礎</a></li>
-    <li><a href="#mep-model" data-keywords="灑水 配電盤 迴路 插座 燈具 風管 電氣設定 衛浴 衛工 軟風管">機電建模重點</a></li>
-    <li class="toc-group">機電實務與品管</li>
-    <li><a href="#materials" data-keywords="機電管材、線材與設備 管材 線材 EMT RSG HDPE PVC XLPE 匯流排 CAT6 光纖 CNS GIP">管材與線材</a></li>
-    <li><a href="#electrical" data-keywords="電氣與緊急供電 接地 斷路器 配電盤 發電機 UPS 變壓器 漏電 電表">電氣與緊急供電</a></li>
-    <li><a href="#elv" data-keywords="弱電與中央監控 弱電 CCTV 中央監控 電信 同軸 高架地板 SCADA 監視">弱電與中央監控</a></li>
-    <li><a href="#plumbing-qc" data-keywords="給排水衛生 給排水 試壓 建築技術規則 自來水 下水道 蓄水池 馬桶">給排水衛生</a></li>
-    <li><a href="#fire" data-keywords="消防 防火區劃 撒水 灑水 火警 偵煙 防火門 填塞 廣播">消防</a></li>
-    <li><a href="#hvac" data-keywords="空調 冰水 VRF 風管 TAB 冷媒 等效圓管 保溫">空調</a></li>
-    <li><a href="#elevator" data-keywords="電梯 機坑 無機房 緊急電源 機房">電梯</a></li>
-    <li><a href="#mep-iface" data-keywords="建築與機電介面整合 介面整合 配電室 管道間 天花板 預埋 吊掛 淨高">介面整合</a></li>
-    <li><a href="#review" data-keywords="設計圖說審查 審查 圖說 適法 綠建築 預算 機水電">設計圖說審查</a></li>
-    <li><a href="#defects" data-keywords="常見施工缺失 缺失 套圖 分電箱 碰撞 開門 預留">常見施工缺失</a></li>
-    <li><a href="#site-terms" data-keywords="工地用語對照 台語 天端 閥 不鏽鋼 預留 樑 樓板 洩水 錨定 天花板 矽利康 公分">工地用語對照</a></li>
-    <li class="toc-group">Revit 機電入門課</li>
-    <li><a href="#mep-intro" data-keywords="機電入門 樣板 配管樣板 衛工 性質 專案瀏覽器 專案單位 連結 Revit Link Revit 管理連結 複製 監視 Copy Monitor 樓層 Level 網格 Grid 平面視圖 瀏覽器組織 共用參數 主系統 次系統 連結 CAD 僅目前視圖 管系統 配管 圖形取代 線粗 線寬 視覺型式">從建立專案到管線配色</a></li>
-    <li class="toc-group">Revit 相機、彩現與穿越</li>
-    <li><a href="#cam-intro" data-keywords="相機 Camera 彩現 Render 曝光 Exposure 穿越 Walkthrough 關鍵影格 並排 影格 FPS 9-1 9-2 9-3 9-4 展示相機 草圖 視覺型式 描影">從靜態構圖到動畫輸出</a></li>
-    <li class="toc-group">電纜線架旁側拉下</li>
-    <li><a href="#side-drop" data-keywords="旁側拉下 連接片 垂直三通 側偏距 淨間隙 連接件 Connector 電纜架配件 Cable Tray Fitting 擠出 Extrusion 工作平面 鏡射 Mirror 族群類型 Flex 繪製電纜架">旁側拉下連接片族群製作</a></li>
-    <li class="toc-group">Revit 操作 · 教學影片</li>
-    <li><a href="#video-notes" data-keywords="教學影片 操作筆記 第39片 第40片 第44片 第45片 專案匯出族群 另存資源庫 Save as Library 連結 CAD Link CAD 給水 對齊 Align 釘選 Pin 關閉隱藏的視窗 Close Inactive Views 干涉檢查 Interference Check 展示 重新整理 可見性 圖形取代 Visibility Graphics 篩選器 Filters VV VG 系統類型 CW 模型品類">Revit 教學影片操作筆記</a></li>
-    <li class="toc-group">給排水與視圖教材</li>
-    <li><a href="#plumbing-guide" data-keywords="給排水 視圖教材 衛工 配管 族群 電纜架 整合課 閱讀指南 練習 驗收 術語">給排水與視圖教材（Revit 2025）</a></li>
-    <li class="toc-group">視圖樣板與雲端檢視</li>
-    <li><a href="#batch-vt" data-keywords="批次複製 視圖樣板 View Template Dynamo CPython3 手動 Boolean 乾跑 dry-run 傳遞專案標準 Transfer Project Standards 教學樣板 Detach 從中央分離 非工作共用 Save SynchronizeWithCentral">批次複製視圖樣板</a></li>
-    <li><a href="#viewer-blank" data-keywords="Autodesk Viewer 發佈設定 Publish Settings Autodesk Docs ACC BIM 360 Forma 3D 空白 剖面框 Section Box 未選取任何集 default 3D view">3D 視圖雲端空白排查</a></li>
-    <li class="toc-group">資料與限制</li>
-    <li><a href="#mapping" data-keywords="AutoCAD 路由 欄位對應 ROUTE_ID">八、路由欄位對應</a></li>
-    <li><a href="#layer-front" data-keywords="實務小技巧 AutoCAD MEP QSELECT 快速選取 DRAWORDER 繪製順序 REGEN 重生 WIPEOUT 遮蔽 XREF 外部參考 HY-SCADA-TRAY 圖層 最前面 最上方 置頂">圖層顯示在最前面</a></li>
-    <li><a href="#cad-link-tray" data-keywords="AutoCAD MEP 線槽 Cable Tray PROXYGRAPHICS 代理圖形 proxy graphics 連結 CAD 匯入 CAD 重新載入 管理連結 EXPLODE EXPORTTOAUTOCAD IFC 未驗證">線槽連結後看不到</a></li>
-    <li><a href="#plot-trouble" data-keywords="AutoCAD 出圖疑難排解 PLOT PUBLISH 出圖內容 範圍 視窗 佈滿圖紙 置中出圖 ctb Lineweight 出圖物件線粗 以出圖型式出圖 MLine 多線 視埠 Custom scale ZOOM 聚合線 Global width QSELECT STYLESMANAGER 缺少 調整線粗比例 套用至配置 Display locked">出圖疑難排解</a></li>
-    <li><a href="#permissions">九、公司電腦權限</a></li>
-    <li><a href="#verify">十、畫面再對一下</a></li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">Revit 操作 · 觀念</summary>
+        <ol class="toc-panel">
+          <li><a href="#bim" data-keywords="BIM 觀念與流程 LOD 生命週期 樣板 數量 干涉 Navisworks 誤解 竣工 維護 BMP 建置計畫書 迷思">BIM 觀念</a></li>
+          <li><a href="#ui" data-keywords="Revit 介面與檔案基本觀念 頁籤 功能區 性質 專案瀏覽器 視圖控制列 快速存取 狀態列 選項列 rvt rte rfa rft 族群 族 類型參數 實例參數 內建 系統族群 可載入 連結 匯入 釘選 釘住">Revit 介面</a></li>
+          <li><a href="#template" data-keywords="專案樣板與起始設定 樣板 Mechanical Electrical Plumbing Systems MetricCHT 專案單位 樓層 視圖範圍 建築設計樣板 物件型式">專案樣板</a></li>
+          <li><a href="#mep-org" data-keywords="給水 排水 消防 空調 弱電 送風 回風 外氣 排氣 冰水">機電系統分工</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details open data-default-open="true">
+        <summary class="toc-group">Revit 操作 · 起手式</summary>
+        <ol class="toc-panel">
+          <li><a href="#step1">Step 1　專案單位</a></li>
+          <li><a href="#step2">Step 2　連結模型</a></li>
+          <li><a href="#step3">Step 3　共用座標</a></li>
+          <li><a href="#step4">Step 4　樓層與網格</a></li>
+          <li><a href="#step5">Step 5　工作視圖</a></li>
+          <li><a href="#step6">Step 6　視圖範圍</a></li>
+          <li><a href="#step7" data-keywords="視圖樣板 領域 次領域 從目前視圖建立樣板">Step 7　視圖樣板</a></li>
+          <li><a href="#step8">Step 8　篩選與上色</a></li>
+          <li><a href="#step9">Step 9　電纜架類型</a></li>
+          <li><a href="#tray-types" data-keywords="梯型 梯式 槽式 實底 電纜架外型 Ladder">電纜架型式</a></li>
+          <li><a href="#step10">Step 10　SCADA 參數</a></li>
+          <li><a href="#step11">Step 11　明細表</a></li>
+          <li><a href="#step12" data-keywords="3D 協調 剖面框 干涉檢查 Interference Check">Step 12　3D 協調視圖</a></li>
+          <li><a href="#step13">Step 13　品質檢查視圖</a></li>
+          <li><a href="#step14" data-keywords="瀏覽器組織 領域 次領域">Step 14　瀏覽器組織</a></li>
+          <li><a href="#step15">Step 15　工作共用</a></li>
+          <li><a href="#quick10">二、起手 10 步</a></li>
+          <li><a href="#checklist">三、建模檢查清單</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">Revit 操作 · 電纜架實作</summary>
+        <ol class="toc-panel">
+          <li><a href="#scope" data-keywords="交付範圍 細設 施工 深化 元件 Tray 電管 拉線箱 獨立吊架 共同吊支架 文件規定 參照 待確認 依據 BMP SoW">交付範圍</a></li>
+          <li><a href="#draw">四、電纜架繪製</a></li>
+          <li><a href="#hanger">五、梯型吊架</a></li>
+          <li><a href="#hanger-code">五、吊架間距法規</a></li>
+          <li><a href="#trouble">六、放了看不到</a></li>
+          <li><a href="#vg-locked">六、VG 被樣板鎖住</a></li>
+          <li><a href="#tags">七、電纜架標籤</a></li>
+          <li><a href="#elevation" data-keywords="高程 換算 跨樓層 升降 FFL SFL 完成面 結構面 絕對高程 相對高程 中間高程 底高程 頂高程 垂直段 剖面 定點高程 高程基準">高程換算與跨樓層</a></li>
+          <li><a href="#pullbox" data-keywords="拉線箱 接線盒 pull box junction box Tray 轉電管 連接件 族群 電管配件 電氣設備 簡化箱體 進出線">拉線箱與 Tray 轉電管</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">Revit 操作 · 視圖與協調</summary>
+        <ol class="toc-panel">
+          <li><a href="#discipline" data-keywords="領域 次領域 Discipline Sub-Discipline 電氣 機械 衛工 協調 半色調 瀏覽器組織 建築 結構 視圖標籤">領域與次領域</a></li>
+          <li><a href="#view-template-color" data-keywords="視圖樣板 View Template 從目前視圖建立樣板 套用樣板性質 包括 V/G 取代模型 V/G 取代篩選 上色 SCADA電纜架_平面上色 傳遞專案標準">上色存成視圖樣板</a></li>
+          <li><a href="#interference" data-keywords="干涉檢查 Interference Check 碰撞 展示 展示上次報告 重新整理 NWC NWD NWF Navisworks 碰撞偵測 Clash Detective 匯出 目前的專案">干涉檢查與 Navisworks</a></li>
+          <li><a href="#nwc-nwd" data-keywords="匯出 NWC NWD NWF Navisworks NWC Export Utility SwitchBack 增益集 外部工具 附加 Append 重新整理 取得座標 指定點的座標 共用座標 測量點 專案基準點 選集樹 單位和轉換 外觀分析工具 Appearance Profiler Clash Detective 衝突測試">匯出 NWC 並整合到對方的 NWD</a></li>
+          <li><a href="#export-own" data-keywords="只匯出自己的系統 NWC 目前視圖 Current View 重複建築 連結 轉換連結 匯出視圖 選集樹 隱藏 匯出紀錄">只匯出自己的系統</a></li>
+          <li><a href="#navis-keys" data-keywords="Navisworks 快捷鍵 鍵盤 Shortcut Turntable Walk Orbit Fly Clash Detective TimeLiner Ctrl Home Page Up 未驗證">Navisworks 快捷鍵</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">Revit 操作 · 管路、族群與出圖</summary>
+        <ol class="toc-panel">
+          <li><a href="#conduit-size" data-keywords="EMT 電管 標稱尺寸 內徑 外徑 CNS 薄鋼管 RNC 彎曲半徑">電管尺寸</a></li>
+          <li><a href="#pipe-setup" data-keywords="配管系統設定 佈線偏好 管區段 給水 排水 PVC 斜度 配件 管系統 圖形取代 材料 細緻 粗略 粗糙 SP WP VP CW HW 存水彎 清潔口">管路設定</a></li>
+          <li><a href="#pipe-draw" data-keywords="管段繪製技巧 立管 斜T 空白鍵 建立類似 佈線解決方案 佈線解法 衛工 衛浴 對齊 排水 套用 線架構 線框">管段繪製技巧</a></li>
+          <li><a href="#family" data-keywords="族群製作 族群樣板 參考平面 參考線 掃掠 連接件 管接點 斜T 標籤 類型目錄 載入族群 轉存 rfa 另存新檔 資源庫">族群製作</a></li>
+          <li><a href="#save-rfa" data-keywords="實務小技巧 轉存 rfa 另存新檔 Save As 資源庫 Library 族群 Family 所有族群 專案瀏覽器 右鍵儲存 可載入族群 系統族群 電纜架配件 儲存族群">轉存成 .rfa</a></li>
+          <li><a href="#sheets" data-keywords="圖紙與出圖 圖紙出圖 圖框 視圖樣板 明細表 定點高程 修訂 圖紙">圖紙與出圖</a></li>
+          <li><a href="#arch-model" data-keywords="建築建模基礎 網格 結構柱 結構梁 樓板 牆 門窗 樓梯 屋頂 地形 彩現 篩選">建築建模基礎</a></li>
+          <li><a href="#mep-model" data-keywords="灑水 配電盤 迴路 插座 燈具 風管 電氣設定 衛浴 衛工 軟風管">機電建模重點</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">機電實務與品管</summary>
+        <ol class="toc-panel">
+          <li><a href="#materials" data-keywords="機電管材、線材與設備 管材 線材 EMT RSG HDPE PVC XLPE 匯流排 CAT6 光纖 CNS GIP">管材與線材</a></li>
+          <li><a href="#electrical" data-keywords="電氣與緊急供電 接地 斷路器 配電盤 發電機 UPS 變壓器 漏電 電表">電氣與緊急供電</a></li>
+          <li><a href="#elv" data-keywords="弱電與中央監控 弱電 CCTV 中央監控 電信 同軸 高架地板 SCADA 監視">弱電與中央監控</a></li>
+          <li><a href="#plumbing-qc" data-keywords="給排水衛生 給排水 試壓 建築技術規則 自來水 下水道 蓄水池 馬桶">給排水衛生</a></li>
+          <li><a href="#fire" data-keywords="消防 防火區劃 撒水 灑水 火警 偵煙 防火門 填塞 廣播">消防</a></li>
+          <li><a href="#hvac" data-keywords="空調 冰水 VRF 風管 TAB 冷媒 等效圓管 保溫">空調</a></li>
+          <li><a href="#elevator" data-keywords="電梯 機坑 無機房 緊急電源 機房">電梯</a></li>
+          <li><a href="#mep-iface" data-keywords="建築與機電介面整合 介面整合 配電室 管道間 天花板 預埋 吊掛 淨高">介面整合</a></li>
+          <li><a href="#review" data-keywords="設計圖說審查 審查 圖說 適法 綠建築 預算 機水電">設計圖說審查</a></li>
+          <li><a href="#defects" data-keywords="常見施工缺失 缺失 套圖 分電箱 碰撞 開門 預留">常見施工缺失</a></li>
+          <li><a href="#site-terms" data-keywords="工地用語對照 台語 天端 閥 不鏽鋼 預留 樑 樓板 洩水 錨定 天花板 矽利康 公分">工地用語對照</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">Revit 機電入門課</summary>
+        <ol class="toc-panel">
+          <li><a href="#mep-intro" data-keywords="機電入門 樣板 配管樣板 衛工 性質 專案瀏覽器 專案單位 連結 Revit Link Revit 管理連結 複製 監視 Copy Monitor 樓層 Level 網格 Grid 平面視圖 瀏覽器組織 共用參數 主系統 次系統 連結 CAD 僅目前視圖 管系統 配管 圖形取代 線粗 線寬 視覺型式">從建立專案到管線配色</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">Revit 相機、彩現與穿越</summary>
+        <ol class="toc-panel">
+          <li><a href="#cam-intro" data-keywords="相機 Camera 彩現 Render 曝光 Exposure 穿越 Walkthrough 關鍵影格 並排 影格 FPS 9-1 9-2 9-3 9-4 展示相機 草圖 視覺型式 描影">從靜態構圖到動畫輸出</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">電纜線架旁側拉下</summary>
+        <ol class="toc-panel">
+          <li><a href="#side-drop" data-keywords="旁側拉下 連接片 垂直三通 側偏距 淨間隙 連接件 Connector 電纜架配件 Cable Tray Fitting 擠出 Extrusion 工作平面 鏡射 Mirror 族群類型 Flex 繪製電纜架">旁側拉下連接片族群製作</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">Revit 操作 · 教學影片</summary>
+        <ol class="toc-panel">
+          <li><a href="#video-notes" data-keywords="教學影片 操作筆記 第39片 第40片 第44片 第45片 專案匯出族群 另存資源庫 Save as Library 連結 CAD Link CAD 給水 對齊 Align 釘選 Pin 關閉隱藏的視窗 Close Inactive Views 干涉檢查 Interference Check 展示 重新整理 可見性 圖形取代 Visibility Graphics 篩選器 Filters VV VG 系統類型 CW 模型品類">Revit 教學影片操作筆記</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">給排水與視圖教材</summary>
+        <ol class="toc-panel">
+          <li><a href="#plumbing-guide" data-keywords="給排水 視圖教材 衛工 配管 族群 電纜架 整合課 閱讀指南 練習 驗收 術語">給排水與視圖教材（Revit 2025）</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">視圖樣板與雲端檢視</summary>
+        <ol class="toc-panel">
+          <li><a href="#batch-vt" data-keywords="批次複製 視圖樣板 View Template Dynamo CPython3 手動 Boolean 乾跑 dry-run 傳遞專案標準 Transfer Project Standards 教學樣板 Detach 從中央分離 非工作共用 Save SynchronizeWithCentral">批次複製視圖樣板</a></li>
+          <li><a href="#viewer-blank" data-keywords="Autodesk Viewer 發佈設定 Publish Settings Autodesk Docs ACC BIM 360 Forma 3D 空白 剖面框 Section Box 未選取任何集 default 3D view">3D 視圖雲端空白排查</a></li>
+        </ol>
+      </details>
+    </li>
+    <li class="toc-acc">
+      <details>
+        <summary class="toc-group">資料與限制</summary>
+        <ol class="toc-panel">
+          <li><a href="#mapping" data-keywords="AutoCAD 路由 欄位對應 ROUTE_ID">八、路由欄位對應</a></li>
+          <li><a href="#layer-front" data-keywords="實務小技巧 AutoCAD MEP QSELECT 快速選取 DRAWORDER 繪製順序 REGEN 重生 WIPEOUT 遮蔽 XREF 外部參考 HY-SCADA-TRAY 圖層 最前面 最上方 置頂">圖層顯示在最前面</a></li>
+          <li><a href="#cad-link-tray" data-keywords="AutoCAD MEP 線槽 Cable Tray PROXYGRAPHICS 代理圖形 proxy graphics 連結 CAD 匯入 CAD 重新載入 管理連結 EXPLODE EXPORTTOAUTOCAD IFC 未驗證">線槽連結後看不到</a></li>
+          <li><a href="#plot-trouble" data-keywords="AutoCAD 出圖疑難排解 PLOT PUBLISH 出圖內容 範圍 視窗 佈滿圖紙 置中出圖 ctb Lineweight 出圖物件線粗 以出圖型式出圖 MLine 多線 視埠 Custom scale ZOOM 聚合線 Global width QSELECT STYLESMANAGER 缺少 調整線粗比例 套用至配置 Display locked">出圖疑難排解</a></li>
+          <li><a href="#permissions">九、公司電腦權限</a></li>
+          <li><a href="#verify">十、畫面再對一下</a></li>
+        </ol>
+      </details>
+    </li>
   </ol>
+  <div class="sidebar-controls" aria-label="閱讀設定">
+    <button class="btn" id="fontMinus" type="button">A-</button>
+    <button class="btn active" id="fontStd" type="button">標準</button>
+    <button class="btn" id="fontPlus" type="button">A+</button>
+    <button class="btn" id="themeToggle" type="button">🌙 暗版</button>
+  </div>
   <div class="sidebar-footer">
     <a href="SCADA_REVIT_STARTUP_GUIDE.md">完整 Markdown 版 →</a><br>
     <span style="color:var(--text-faint); font-size:12px">技術內容以正式文件為準</span>
@@ -348,97 +433,37 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <span class="badge badge-policy">視公司流程而定</span>
 </div>
 <p class="perm-banner">權限前提：公司電腦、一般使用者權限。必要流程只用 Revit 原生功能，不需要系統管理員、也不依賴 pyRevit、Dynamo、Navisworks Manage。詳見<a href="#permissions">「九、公司電腦權限」</a>。</p>
-<div class="note">教材對照：一、繪製 → <a href="#draw">第四節</a>；二、吊架 → <a href="#hanger">第五節</a>；三、看不到 → <a href="#trouble">第六節</a>；四、可見性被鎖住 → <a href="#vg-locked">VG 灰色</a>；五、間距 → <a href="#hanger-code">法規</a>；六、篩選上色 → <a href="#step8">Step 8</a>；七、標籤 → <a href="#tags">第七節</a>；十、領域 → <a href="#discipline">領域與次領域</a>；十一、上色存樣板 → <a href="#view-template-color">視圖樣板</a>；十二、碰撞 → <a href="#interference">干涉檢查與 Navisworks</a>；十三、匯出 NWC → <a href="#nwc-nwd">整合到對方的 NWD</a>。和舊步驟重複的地方已合併，點法以教材為準。</div>
-<div class="note">交付與整合補充：<a href="#scope">交付範圍</a>、<a href="#elevation">高程換算與跨樓層</a>、<a href="#pullbox">拉線箱與 Tray 轉電管</a>、<a href="#export-own">只匯出自己的系統</a>。</div>
-<div class="note">補充觀念與機電：<a href="#bim">BIM 觀念</a>、<a href="#ui">Revit 介面</a>、<a href="#template">專案樣板</a>、<a href="#mep-org">機電系統分工</a>、<a href="#tray-types">電纜架型式</a>、<a href="#conduit-size">電管尺寸</a>、<a href="#pipe-setup">管路設定</a>、<a href="#pipe-draw">管段繪製</a>、<a href="#family">族群製作</a>、<a href="#sheets">圖紙出圖</a>、<a href="#arch-model">建築建模</a>、<a href="#mep-model">機電建模重點</a>。既有步驟都保留。</div>
-<div class="note">機電實務與品管：<a href="#materials">管材與線材</a>、<a href="#electrical">電氣與緊急供電</a>、<a href="#elv">弱電與中央監控</a>、<a href="#plumbing-qc">給排水</a>、<a href="#fire">消防</a>、<a href="#hvac">空調</a>、<a href="#elevator">電梯</a>、<a href="#mep-iface">介面整合</a>、<a href="#review">設計圖說審查</a>、<a href="#defects">常見施工缺失</a>、<a href="#site-terms">工地用語</a>。</div>
-<div class="note">機電入門課：<a href="#mep-intro">從建立專案到管線系統配色</a>（<a href="#mep-u1">樣板</a>、<a href="#mep-u4">連結模型</a>、<a href="#mep-u6">樓層</a>、<a href="#mep-u9">連結 CAD</a>、<a href="#mep-u10">配管配色</a>，單元 1–10）。</div>
-<div class="note">相機與彩現：<a href="#cam-intro">從靜態構圖到動畫輸出</a>（<a href="#cam-u1">9-1 建立相機</a>、<a href="#cam-u2">9-2 初步彩現</a>、<a href="#cam-u4">9-4-1 穿越</a>、<a href="#cam-u6">9-4-3 輸出動畫</a>）。</div>
-<div class="note">電纜線架族群：<a href="#side-drop">旁側拉下連接片族群製作</a>（<a href="#side-drop-offset">側偏距</a>、<a href="#side-drop-plate">兩片連接片</a>、<a href="#side-drop-flex">族內變形</a>、<a href="#side-drop-project">三端接合</a>）。</div>
-<div class="note">教學影片：<a href="#video-notes">Revit 教學影片操作筆記</a>（<a href="#video-39">第 39 片：專案匯出族群</a>、<a href="#video-40">第 40 片：連結 CAD 給水底圖</a>、<a href="#video-44">第 44 片：干涉檢查</a>、<a href="#video-45">第 45 片：視圖篩選</a>）。</div>
-<div class="note">給排水與視圖教材：<a href="#plumbing-guide">給排水與視圖教材（Revit 2025）</a>（<a href="給排水與視圖教材/00_閱讀指南.md">閱讀指南</a>、給排水建模、族群與視圖、術語校正、練習與驗收）。</div>
-<div class="note">視圖樣板與雲端檢視：<a href="#batch-vt">批次複製視圖樣板</a>（<a href="#bvt-prereq">前提</a>、<a href="#bvt-steps">False 到 True</a>、<a href="#bvt-accept">驗收</a>）、<a href="#viewer-blank">3D 視圖雲端空白排查</a>（<a href="#vwr-paths">兩種服務</a>、<a href="#vwr-steps">發佈步驟</a>、<a href="#vwr-accept">驗收</a>）。</div>
-<div class="note">實務小技巧：<a href="#layer-front">AutoCAD 圖層顯示在最前面</a>、<a href="#save-rfa">把專案族群轉存成 .rfa</a>。步驟分別寫在 <a href="#mapping">AutoCAD 路由</a>與<a href="#family">族群製作</a>。</div>
-<div class="note">CAD 連結與 Navisworks：<a href="#cad-link-tray">AutoCAD MEP 線槽連結到 Revit 後看不到</a>、<a href="#navis-keys">Navisworks 常用快捷鍵</a>。</div>
-<div class="note">AutoCAD 出圖：<a href="#plot-trouble">出圖疑難排解</a>（<a href="#plot-corner">只出現一角</a>、<a href="#plot-weight">統一線粗</a>、<a href="#plot-mline">多線變粗</a>、<a href="#plot-vscale">視埠比例</a>、<a href="#plot-pwidth">線太細</a>、<a href="#plot-publish">批次出圖</a>、<a href="#plot-missing">線粗不一致</a>、<a href="#plot-check">檢查清單</a>）。</div>
-<div class="bento">
-<div class="b-card b-span-8 orange">
-<div class="k">開始前</div>
-<h3>0. 新建或接手</h3>
-<p>不要一開 Revit 就畫橋架。兩種情境要檢查的東西不一樣。</p>
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px">
-<div style="background:var(--bg-muted); padding:12px; border-radius:12px; font-size:14px"><strong>A. 新建</strong><br>電氣樣板、公司樣板、傳遞專案標準、工作共用</div>
-<div style="background:var(--bg-muted); padding:12px; border-radius:12px; font-size:14px"><strong>B. 接手</strong><br>連結、樓層、網格、共用座標、視圖樣板、篩選、電纜架類型</div>
-</div>
-<div style="margin-top:12px"><a href="#start" class="btn btn-accent">前往判斷 →</a></div>
-</div>
-<div class="b-card b-span-4">
-<div class="k">這份指南</div>
-<div class="big">15</div>
-<p>起手步驟，加上繪製、吊架、標籤、管路、族群與機電品管</p>
-<div style="margin-top:12px; font-size:13px; color:var(--text-faint)">Revit 2025.5 繁體中文<br>免管理員權限<br>教材日期 2026-10-16</div>
-</div>
-<div class="b-card b-span-3 orange"><div class="num">04</div><div class="k">實作</div><h3>電纜架繪製</h3><p>從連結建築畫到橋架</p><a href="#draw">查看 →</a></div>
-<div class="b-card b-span-3"><div class="num">05</div><div class="k">實作</div><h3>梯型吊架</h3><p>吊架(角鐵)，品類是風管附件</p><a href="#hanger">查看 →</a></div>
-<div class="b-card b-span-3"><div class="num">06</div><div class="k">排解</div><h3>放了看不到</h3><p>切割平面與可見性</p><a href="#trouble">查看 →</a></div>
-<div class="b-card b-span-3 orange"><div class="num">07</div><div class="k">實作</div><h3>電纜架標籤</h3><p>廠商標籤與問號</p><a href="#tags">查看 →</a></div>
-<div class="b-card b-span-2 orange"><div class="num">01</div><div class="k">必做</div><h3>專案單位</h3><a href="#step1">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">02</div><div class="k">必做</div><h3>連結模型</h3><a href="#step2">查看 →</a></div>
-<div class="b-card b-span-2 orange"><div class="num">03</div><div class="k">必做</div><h3>共用座標</h3><a href="#step3">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">04</div><div class="k">必做</div><h3>樓層網格</h3><a href="#step4">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">05</div><div class="k">必做</div><h3>工作視圖</h3><a href="#step5">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">06</div><div class="k">必做</div><h3>視圖範圍</h3><a href="#step6">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">07</div><div class="k">建議</div><h3>視圖樣板</h3><a href="#step7">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">08</div><div class="k">建議</div><h3>篩選上色</h3><a href="#step8">查看 →</a></div>
-<div class="b-card b-span-2 orange"><div class="num">09</div><div class="k">必做</div><h3>電纜架類型</h3><a href="#step9">查看 →</a></div>
-<div class="b-card b-span-4 orange"><div class="num">10</div><div class="k">視流程</div><h3>SCADA 參數</h3><p>Route_ID、Status 等。標籤與跨專案用共用參數。</p><a href="#step10">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">11</div><div class="k">建議</div><h3>明細表</h3><a href="#step11">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">12</div><div class="k">協調</div><h3>3D 協調</h3><a href="#step12">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">13</div><div class="k">建議</div><h3>品質檢查</h3><a href="#step13">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">14</div><div class="k">建議</div><h3>瀏覽器</h3><a href="#step14">查看 →</a></div>
-<div class="b-card b-span-2"><div class="num">15</div><div class="k">視流程</div><h3>工作共用</h3><a href="#step15">查看 →</a></div>
-<div class="b-card b-span-12 orange">
-<div class="k">機電入門課</div>
-<h3>從建立專案到管線系統配色</h3>
-<p>10 個單元：樣板、介面、單位、連結模型、樓層與網格、CAD 底圖、配管配色。步驟附時間索引。</p>
-<a href="#mep-intro">查看講義 →</a>
-</div>
-<div class="b-card b-span-12 orange">
-<div class="k">相機、彩現與穿越</div>
-<h3>從靜態構圖到動畫輸出</h3>
-<p>6 段影片：9-1 建立相機、9-2 與 9-3 彩現、9-4 穿越動畫。步驟附各段時間碼。</p>
-<a href="#cam-intro">查看講義 →</a>
-</div>
-<div class="b-card b-span-12 orange">
-<div class="k">電纜線架族群</div>
-<h3>旁側拉下連接片族群製作</h3>
-<p>以廠商提供的垂直三通族群為起點。側偏距、兩片連接片、族內變形與三端接合分開驗收。頁內有等角示意。</p>
-<a href="#side-drop">查看講義 →</a>
-</div>
-<div class="b-card b-span-12 orange">
-<div class="k">教學影片</div>
-<h3>Revit 教學影片操作筆記</h3>
-<p>第 39、40、44、45 片：另存族群、連結 CAD、干涉檢查、視圖篩選。步驟附時間碼。</p>
-<a href="#video-notes">查看筆記 →</a>
-</div>
-<div class="b-card b-span-12 orange">
-<div class="k">給排水與視圖</div>
-<h3>給排水與視圖教材（Revit 2025）</h3>
-<p>給排水建模、族群與電氣、視圖管理。從閱讀指南進入 00–04。</p>
-<a href="#plumbing-guide">查看教材 →</a>
-</div>
-<div class="b-card b-span-6 orange">
-<div class="k">視圖樣板</div>
-<h3>批次複製視圖樣板</h3>
-<p>先傳遞專案標準。已有 Dynamo 圖形時，只對獨立測試檔做 False 乾跑，再 True 一次。覆寫與同步行為未重新實測。</p>
-<a href="#batch-vt">查看教材 →</a>
-</div>
-<div class="b-card b-span-6">
-<div class="k">雲端檢視</div>
-<h3>3D 視圖空白排查</h3>
-<p>先分 Autodesk Viewer 手動上傳，與 Docs／ACC／Forma 發佈。服務未確認時，發佈設定不是通用解法。</p>
-<a href="#viewer-blank">查看教材 →</a>
-</div>
+<p class="paths-intro">我該從哪裡開始？選一條路徑；完整章節仍在左側目錄。</p>
+<div class="paths" role="navigation" aria-label="學習路徑">
+  <a class="path-card" href="#start">
+    <div class="k">路徑 A</div>
+    <h3>新建或接手 → 起手 Steps</h3>
+    <p>先判斷情境，再依 Step 1–15 設單位、連結、樓層、視圖與電纜架類型。</p>
+    <span class="go">前往判斷 →</span>
+  </a>
+  <a class="path-card" href="#draw">
+    <div class="k">路徑 B</div>
+    <h3>電纜架實作教材</h3>
+    <p>繪製、吊架、看不到、標籤、高程與拉線箱。教材日期 2026-10-16。</p>
+    <span class="go">從繪製開始 →</span>
+  </a>
+  <div class="path-card">
+    <div class="k">路徑 C</div>
+    <h3>機電入門 · 相機 · 旁側拉下</h3>
+    <p>專案到管線配色、相機彩現穿越、旁側拉下連接片族群。</p>
+    <p style="margin-top:8px; font-size:13px">
+      <a href="#mep-intro">機電入門課</a> ·
+      <a href="#cam-intro">相機彩現</a> ·
+      <a href="#side-drop">旁側拉下</a> ·
+      <a href="#video-notes">教學影片</a>
+    </p>
+  </div>
+  <a class="path-card" href="#plumbing-guide">
+    <div class="k">路徑 D</div>
+    <h3>給排水與視圖教材</h3>
+    <p>給排水建模、族群與視圖管理。從閱讀指南進入 00–04；側欄另有視圖樣板與雲端排查。</p>
+    <span class="go">查看給排水教材 →</span>
+  </a>
 </div>
 </header>
 
@@ -4191,14 +4216,13 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </div>
 </div>
 <script>
-// Theme + Font + Storage + TOC + Search + Progress + Drawer + Checklist
+// Theme + Font + Storage + TOC accordion + Search + Progress + Drawer + Checklist
 (function(){
   const html = document.documentElement;
   const LS_THEME = 'scada-theme';
   const LS_FONT = 'scada-font';
   const LS_CHECK = 'scada-checklist';
 
-  // Theme
   function applyTheme(t){
     html.setAttribute('data-theme', t);
     localStorage.setItem(LS_THEME, t);
@@ -4214,18 +4238,14 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     applyTheme(cur==='dark' ? 'light' : 'dark');
   });
 
-  // Font
+  // Font: A- 17px, 標準 19px, A+ cycles 22→24
   function applyFont(f){
     html.setAttribute('data-font', f);
     localStorage.setItem(LS_FONT, f);
     document.querySelectorAll('#fontMinus,#fontStd,#fontPlus').forEach(b=>b.classList.remove('active'));
-    const map = {small:'fontMinus', standard:'fontStd', large:'fontStd', xlarge:'fontPlus'};
-    // Actually map correctly
     if(f==='small') document.getElementById('fontMinus').classList.add('active');
     else if(f==='standard') document.getElementById('fontStd').classList.add('active');
-    else if(f==='large') document.getElementById('fontPlus').classList.add('active');
-    else if(f==='xlarge') document.getElementById('fontPlus').classList.add('active');
-    // refine: A- = small (18px), 標準=standard (20px), A+ cycles large->xlarge
+    else document.getElementById('fontPlus').classList.add('active');
   }
   const savedFont = localStorage.getItem(LS_FONT);
   if(savedFont) applyFont(savedFont);
@@ -4238,49 +4258,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     else applyFont('standard');
   });
 
-  // Search
   const search = document.getElementById('tocSearch');
   const tocLinks = Array.from(document.querySelectorAll('#toc a'));
-  search.addEventListener('input', ()=>{
-    const q = search.value.toLowerCase().trim();
-    tocLinks.forEach(a=>{
-      const txt = (a.textContent + ' ' + (a.getAttribute('data-keywords') || '')).toLowerCase();
-      a.parentElement.style.display = (!q || txt.includes(q)) ? '' : 'none';
-    });
-    const items = Array.from(document.querySelectorAll('#toc > li'));
-    items.forEach((li, i)=>{
-      if(!li.classList.contains('toc-group')) return;
-      let visible = false;
-      for(let j = i + 1; j < items.length; j++){
-        if(items[j].classList.contains('toc-group')) break;
-        if(items[j].style.display !== 'none'){ visible = true; break; }
-      }
-      li.style.display = (!q || visible) ? '' : 'none';
-    });
-  });
-
-  // Progress
-  const progress = document.getElementById('progress');
-  window.addEventListener('scroll', ()=>{
-    const h = document.documentElement;
-    const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-    progress.style.width = scrolled + '%';
-  });
-
-  // TOC highlight
-  const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        const id = entry.target.getAttribute('id');
-        tocLinks.forEach(a=>a.classList.remove('active'));
-        const active = document.querySelector('#toc a[href="#'+id+'"]');
-        if(active) active.classList.add('active');
-      }
-    });
-  }, {rootMargin:'-20% 0px -70% 0px'});
-  document.querySelectorAll('section[id], #layer-front, #save-rfa').forEach(s=>observer.observe(s));
-
-  // Drawer
+  const tocAccordions = Array.from(document.querySelectorAll('#toc .toc-acc details'));
   const sidebar = document.getElementById('sidebar');
   const scrim = document.getElementById('scrim');
   const toggle = document.getElementById('navToggle');
@@ -4288,7 +4268,76 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
   function closeDrawer(){ sidebar.classList.remove('open'); scrim.classList.remove('open'); }
   toggle.addEventListener('click', openDrawer);
   scrim.addEventListener('click', closeDrawer);
-  tocLinks.forEach(a=>a.addEventListener('click', ()=>{ if(window.innerWidth<=800) closeDrawer(); }));
+
+  function expandGroupFor(el){
+    const details = el && el.closest ? el.closest('details') : null;
+    if(details) details.open = true;
+  }
+
+  function expandForHash(hash){
+    if(!hash) return;
+    const id = hash.replace(/^#/, '');
+    if(!id) return;
+    const link = document.querySelector('#toc a[href="#'+CSS.escape(id)+'"]');
+    if(link){
+      expandGroupFor(link);
+      tocLinks.forEach(a=>a.classList.remove('active'));
+      link.classList.add('active');
+    }
+  }
+
+  // Search: show matches and auto-open owning groups
+  search.addEventListener('input', ()=>{
+    const q = search.value.toLowerCase().trim();
+    tocLinks.forEach(a=>{
+      const txt = (a.textContent + ' ' + (a.getAttribute('data-keywords') || '')).toLowerCase();
+      const match = !q || txt.includes(q);
+      a.parentElement.style.display = match ? '' : 'none';
+      if(q && match) expandGroupFor(a);
+    });
+    tocAccordions.forEach(details=>{
+      const acc = details.closest('.toc-acc');
+      const links = details.querySelectorAll('a');
+      let anyVisible = false;
+      links.forEach(a=>{ if(a.parentElement.style.display !== 'none') anyVisible = true; });
+      if(acc) acc.style.display = (!q || anyVisible) ? '' : 'none';
+      if(!q){
+        details.open = details.hasAttribute('data-default-open');
+      }
+    });
+  });
+
+  function onHashNavigate(){ expandForHash(location.hash); }
+  window.addEventListener('hashchange', onHashNavigate);
+  tocLinks.forEach(a=>{
+    a.addEventListener('click', ()=>{
+      expandGroupFor(a);
+      if(window.innerWidth<=800) closeDrawer();
+    });
+  });
+  onHashNavigate();
+
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', ()=>{
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    progress.style.width = scrolled + '%';
+  });
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(a=>a.classList.remove('active'));
+        const active = document.querySelector('#toc a[href="#'+CSS.escape(id)+'"]');
+        if(active){
+          active.classList.add('active');
+          expandGroupFor(active);
+        }
+      }
+    });
+  }, {rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('section[id], #layer-front, #save-rfa').forEach(s=>observer.observe(s));
 
   // Checklist localStorage
   const checklist = document.getElementById('checklist');
