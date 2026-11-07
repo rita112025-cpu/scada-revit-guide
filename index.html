@@ -116,9 +116,14 @@ pre{background:var(--code-bg); padding:16px; border-radius:12px; overflow:auto; 
 [data-theme="dark"] .toc-warn a{color:#FBBF24}
 .sidebar-controls{
   display:flex; gap:4px; flex-wrap:wrap; align-items:center;
-  margin-top:12px; padding-top:12px; border-top:1px solid var(--border);
+  margin:8px 0 0;
 }
 .sidebar-controls .btn{padding:4px 9px; font-size:12px; border-radius:8px}
+.toc-empty{
+  display:none; margin:10px 4px 0; padding:10px 12px; border-radius:8px;
+  background:var(--bg-muted); color:var(--text-muted); font-size:14px; line-height:1.45;
+}
+.toc-empty.is-visible{display:block}
 .sidebar-footer{margin-top:12px; padding-top:12px; border-top:1px solid var(--border); font-size:13px}
 /* main */
 #main{flex:1; min-width:0}
@@ -245,6 +250,12 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
   <div class="sidebar-header">
     <p class="sidebar-title">SCADA 電纜架<br>Revit 入門</p>
     <p class="sidebar-version">Revit 2025.5 繁中</p>
+    <div class="sidebar-controls" aria-label="閱讀設定">
+      <button class="btn" id="fontMinus" type="button">A-</button>
+      <button class="btn active" id="fontStd" type="button">標準</button>
+      <button class="btn" id="fontPlus" type="button">A+</button>
+      <button class="btn" id="themeToggle" type="button">🌙 暗版</button>
+    </div>
     <input id="tocSearch" placeholder="搜尋章節 / Step…" aria-label="搜尋章節" />
   </div>
   <ol class="toc" id="toc">
@@ -410,12 +421,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
       </details>
     </li>
   </ol>
-  <div class="sidebar-controls" aria-label="閱讀設定">
-    <button class="btn" id="fontMinus" type="button">A-</button>
-    <button class="btn active" id="fontStd" type="button">標準</button>
-    <button class="btn" id="fontPlus" type="button">A+</button>
-    <button class="btn" id="themeToggle" type="button">🌙 暗版</button>
-  </div>
+  <p id="tocEmpty" class="toc-empty" role="status" aria-live="polite">找不到章節</p>
   <div class="sidebar-footer">
     <a href="SCADA_REVIT_STARTUP_GUIDE.md">完整 Markdown 版 →</a><br>
     <span style="color:var(--text-faint); font-size:12px">技術內容以正式文件為準</span>
@@ -4259,6 +4265,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
   });
 
   const search = document.getElementById('tocSearch');
+  const tocEmpty = document.getElementById('tocEmpty');
   const tocLinks = Array.from(document.querySelectorAll('#toc a'));
   const tocAccordions = Array.from(document.querySelectorAll('#toc .toc-acc details'));
   const sidebar = document.getElementById('sidebar');
@@ -4269,31 +4276,47 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
   toggle.addEventListener('click', openDrawer);
   scrim.addEventListener('click', closeDrawer);
 
-  function expandGroupFor(el){
-    const details = el && el.closest ? el.closest('details') : null;
-    if(details) details.open = true;
+  // Only keep the destination group open; collapse the rest (search uses a different path).
+  function expandOnly(el){
+    const keep = el && el.closest ? el.closest('details') : null;
+    tocAccordions.forEach(d=>{ d.open = (d === keep); });
   }
+
+  let spyLockUntil = 0;
+  function lockScrollSpy(ms){
+    spyLockUntil = Date.now() + (ms || 1200);
+  }
+  function scrollSpyLocked(){ return Date.now() < spyLockUntil; }
 
   function expandForHash(hash){
     if(!hash) return;
     const id = hash.replace(/^#/, '');
     if(!id) return;
     const link = document.querySelector('#toc a[href="#'+CSS.escape(id)+'"]');
+    lockScrollSpy(1400);
     if(link){
-      expandGroupFor(link);
+      expandOnly(link);
       tocLinks.forEach(a=>a.classList.remove('active'));
       link.classList.add('active');
+    } else {
+      expandOnly(null);
     }
   }
 
-  // Search: show matches and auto-open owning groups
+  function setTocEmpty(show){
+    if(!tocEmpty) return;
+    tocEmpty.classList.toggle('is-visible', !!show);
+  }
+
+  // Search: show matches, open owning groups, empty-state when none
   search.addEventListener('input', ()=>{
     const q = search.value.toLowerCase().trim();
+    let visibleCount = 0;
     tocLinks.forEach(a=>{
       const txt = (a.textContent + ' ' + (a.getAttribute('data-keywords') || '')).toLowerCase();
       const match = !q || txt.includes(q);
       a.parentElement.style.display = match ? '' : 'none';
-      if(q && match) expandGroupFor(a);
+      if(match) visibleCount++;
     });
     tocAccordions.forEach(details=>{
       const acc = details.closest('.toc-acc');
@@ -4303,16 +4326,31 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
       if(acc) acc.style.display = (!q || anyVisible) ? '' : 'none';
       if(!q){
         details.open = details.hasAttribute('data-default-open');
+      } else {
+        details.open = anyVisible;
       }
     });
+    setTocEmpty(!!q && visibleCount === 0);
   });
 
   function onHashNavigate(){ expandForHash(location.hash); }
   window.addEventListener('hashchange', onHashNavigate);
   tocLinks.forEach(a=>{
     a.addEventListener('click', ()=>{
-      expandGroupFor(a);
+      lockScrollSpy(1400);
+      expandOnly(a);
       if(window.innerWidth<=800) closeDrawer();
+    });
+  });
+  // Path cards / in-page anchors outside the TOC also jump via hashchange
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    if(a.closest('#toc')) return;
+    a.addEventListener('click', ()=>{
+      const href = a.getAttribute('href');
+      if(href && href.length > 1){
+        // expand destination immediately; hashchange may be a no-op if already on that hash
+        expandForHash(href);
+      }
     });
   });
   onHashNavigate();
@@ -4332,7 +4370,10 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
         const active = document.querySelector('#toc a[href="#'+CSS.escape(id)+'"]');
         if(active){
           active.classList.add('active');
-          expandGroupFor(active);
+          // During long hash jumps, ignore intermediate sections so ~12 groups do not open.
+          if(!scrollSpyLocked() && !search.value.trim()){
+            expandOnly(active);
+          }
         }
       }
     });
