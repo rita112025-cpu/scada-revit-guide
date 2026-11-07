@@ -170,6 +170,21 @@ a.path-card:hover, .path-card:hover{border-color:var(--accent); box-shadow:var(-
 .step-top{display:flex; gap:12px; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap}
 .step-no{font-size:2rem; font-weight:900; color:var(--border-strong); line-height:.95; min-width:48px}
 .step-title{font-size:1.25rem; font-weight:800; line-height:1.3; flex:1; min-width:200px}
+/* Rank 8: collapsible Steps */
+details.step-card{padding:0}
+details.step-card > summary.step-summary{
+  list-style:none; cursor:pointer; display:flex; gap:12px; align-items:flex-start;
+  flex-wrap:wrap; padding:22px 24px 12px; margin:0;
+}
+details.step-card > summary.step-summary::-webkit-details-marker{display:none}
+details.step-card > summary.step-summary::after{
+  content:"▾"; margin-left:auto; align-self:center; color:var(--text-faint); font-size:14px;
+  transition:transform .15s; flex-shrink:0;
+}
+details.step-card:not([open]) > summary.step-summary{padding-bottom:22px}
+details.step-card:not([open]) > summary.step-summary::after{transform:rotate(-90deg)}
+details.step-card > .step-body{padding:0 24px 22px; border-top:1px solid var(--border)}
+details.step-card > .step-body > :first-child{margin-top:14px}
 .step-body p{margin:12px 0}
 .verdict{background:var(--verdict-bg); border:1px solid var(--verdict-border); padding:14px 16px; border-radius:12px; margin-top:16px; font-size:16px}
 .warn{background:var(--warn-bg); border:1px solid var(--warn-border); padding:12px 16px; border-radius:12px; margin:14px 0; font-size:16px}
@@ -207,6 +222,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 .quick10-list li::before{content:counter(q); position:absolute; left:16px; color:var(--accent); font-weight:900}
 .trouble-item{background:var(--bg-card); border:1px solid var(--border); border-radius:16px; margin:0 0 12px; box-shadow:var(--shadow)}
 .trouble-item summary{cursor:pointer; padding:14px 18px; font-weight:800; font-size:18px}
+details.trouble-item[id]{scroll-margin-top:88px}
 .trouble-item .step-body{padding:0 18px 16px}
 .btn-reset{border:1px solid var(--border); background:var(--bg-card); color:var(--text); padding:8px 14px; border-radius:999px; font-weight:700; cursor:pointer}
 .checklist-progress{font-weight:800; color:var(--accent)}
@@ -782,16 +798,16 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p>顏色設在系統類型的圖形取代和材料上。視圖裡還要依系統篩選時，用 <a href="#step8">Step 8</a>，品類記得勾管、管配件、管附件，或電纜架與電管。各系統的法規、試壓、品管與介面，見側欄「機電實務與品管」。</p>
 </section>
 
-<section id="step1" class="section"><div class="step-card"><div class="step-top"><div class="step-no">01</div><div class="step-title">確認專案單位 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<section id="step1" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">01</span><span class="step-title">確認專案單位 <span class="badge badge-must">必做</span></span></summary><div class="step-body">
 <p><strong>目的</strong>：電纜架、電管的寬度、高度、高程、偏移、彎曲半徑都依單位。單位錯，尺寸全錯。</p>
 <p><strong>操作位置</strong>：<code>管理 → 設定 → 專案單位（Project Units）</code>，快捷鍵 <code>UN</code></p>
 <p><strong>設定</strong>：長度（Length）＝公釐；面積（Area）＝平方公尺；角度（Angle）＝十進位度。</p>
 <p><strong>注意</strong>：寬度、高度、高程、偏移（Offset）、彎曲半徑（Bend Radius）和電管尺寸都讀這裡。單位若是英呎，輸入 300 會變成 300 英呎。</p>
 <p><strong>常見錯誤</strong>：用到英制樣板沒發現；只改長度、沒改角度。</p>
 <p class="verdict"><strong>驗收</strong>：畫一段 300 mm 寬的電纜架，性質（Properties）面板的寬度顯示 300，和畫面量測一致。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step2" class="section"><div class="step-card"><div class="step-top"><div class="step-no">02</div><div class="step-title">連結建築、結構、機電模型 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<section id="step2" class="section"><details class="step-card"><summary class="step-summary"><span class="step-no">02</span><span class="step-title">連結建築、結構、機電模型 <span class="badge badge-must">必做</span></span></summary><div class="step-body">
 <p><strong>目的</strong>：橋架要避開梁柱、抓對高程，必須有建築和結構當背景。</p>
 <p><strong>本案點法</strong>：</p>
 <ol>
@@ -815,9 +831,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </div>
 <p>管理連結裡的狀態應為已載入（Loaded），不是找不到（Not Found）或未載入（Unloaded）。</p>
 <p class="verdict"><strong>驗收</strong>：管理連結全部已載入，平面看得到牆、柱、梁。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step3" class="section"><div class="step-card"><div class="step-top"><div class="step-no">03</div><div class="step-title">確認共用座標與位置 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<section id="step3" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">03</span><span class="step-title">確認共用座標與位置 <span class="badge badge-must">必做</span></span></summary><div class="step-body">
 <p><strong>目的</strong>：畫之前先確認連結模型真的對齊，不是看起來對。</p>
 <p><strong>至少看</strong>：1F、典型樓層、屋頂層、地下層。核對柱位、電梯、樓梯、機房、管道間、外牆線。</p>
 <p class="warn"><strong>對不上就停。</strong>不要開始畫電纜架。</p>
@@ -829,9 +845,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </dl>
 <p><strong>常見錯誤</strong>：只看 3D 覺得有對到；地下層和屋頂最容易歪了沒人發現。本案約定用原點到原點，前提是建築檔的原點就是對齊基準。</p>
 <p class="verdict"><strong>驗收</strong>：至少 3 個樓層的柱網、電梯、管道間，誤差在公司 BIM 標準以內。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step4" class="section"><div class="step-card"><div class="step-top"><div class="step-no">04</div><div class="step-title">確認樓層與網格 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<section id="step4" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">04</span><span class="step-title">確認樓層與網格 <span class="badge badge-must">必做</span></span></summary><div class="step-body">
 <p><strong>目的</strong>：電纜架高程＝樓層＋偏移。樓層錯，整條橋架的樓層歸屬就錯。連結模型裡的樓層<strong>不是</strong>自己模型裡的樓層，名稱一樣也是兩個元素。</p>
 <p><strong>複製/監視（Copy/Monitor）</strong>，本案點法：</p>
 <ol>
@@ -847,9 +863,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p>吊架性質用「距離樓層的高程」（Elevation from Level）。電纜架選項列用「中間高程」（Middle Elevation）。</p>
 <p><strong>常見錯誤</strong>：拿連結樓層去設視圖範圍；樓板完成面和結構板厚搞混；沒做複製/監視，建築改標高沒人知道。</p>
 <p class="verdict"><strong>驗收</strong>：能說出這條橋架是哪個樓層、中間高程多少，而且樓層標高和建築一致或有對應。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step5" class="section"><div class="step-card"><div class="step-top"><div class="step-no">05</div><div class="step-title">建立工作視圖 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<section id="step5" class="section"><details class="step-card"><summary class="step-summary"><span class="step-no">05</span><span class="step-title">建立工作視圖 <span class="badge badge-must">必做</span></span></summary><div class="step-body">
 <p><strong>目的</strong>：不要在出圖視圖上試畫。可見性一改，圖就壞了。</p>
 <p><strong>本案</strong>：<code>視圖 → 平面視圖 → 樓板平面圖（Floor Plan）</code> → 選樓層。命名例如 <code>SCADA_樓層_Tray配置</code>。清單是空白時，取消勾選「不要複製現有視圖」。</p>
 <p>建議再留：<code>WIP_SCADA_1F</code>（工作中）、<code>COORD_SCADA_1F</code>（協調）、<code>{3D}_SCADA_COORD</code>（3D 協調）。出圖視圖另外留。</p>
@@ -866,9 +882,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </table>
 </div>
 <p class="verdict"><strong>驗收</strong>：至少一張工作平面、一張協調平面、一張 3D，名稱看得出用途。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step6" class="section"><div class="step-card"><div class="step-top"><div class="step-no">06</div><div class="step-title">設定視圖範圍 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<section id="step6" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">06</span><span class="step-title">設定視圖範圍 <span class="badge badge-must">必做</span></span></summary><div class="step-body">
 <p><strong>目的</strong>：有畫但平面看不到，本案第一個原因就是切割平面太低。</p>
 <p><strong>操作位置</strong>：平面空白處點一下 → 性質面板「範圍」→ 視圖範圍（View Range）→ 編輯…。性質面板不見按 <code>Ctrl+1</code>。數值被切掉時，把面板左邊界往左拖。</p>
 <p>對話框有頂部（Top）、切割平面（Cut Plane）、底部（Bottom）、視景深度（View Depth）。每一列有關聯的樓層（Associated Level）和偏移（Offset），頂部也可以選上方樓層（Level Above）。</p>
@@ -879,9 +895,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </div>
 <p class="note">電纜架和吊架高於切割平面時，樓板平面圖不會畫出來。先把切割平面拉過物件，再懷疑模型壞掉。樓板、坡道等少數品類另有規則；橋架和吊架以這條為準。完整排解見<a href="#trouble">第六節</a>。</p>
 <p class="verdict"><strong>驗收</strong>：切割平面偏移高於這段橋架的高程，平面看得到。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step7" class="section"><div class="step-card"><div class="step-top"><div class="step-no">07</div><div class="step-title">建立視圖樣板 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<section id="step7" class="section"><details class="step-card"><summary class="step-summary"><span class="step-no">07</span><span class="step-title">建立視圖樣板 <span class="badge badge-suggest">建議</span></span></summary><div class="step-body">
 <p><strong>目的</strong>：把「這張視圖顯示什麼」固定下來，多張視圖才一致。</p>
 <p><strong>操作位置</strong>：<code>視圖 → 圖形 → 視圖樣板（View Templates）→ 從目前視圖建立樣板</code>，或「管理視圖樣板」。</p>
 <p>建議：<code>VT_SCADA_ROUTING</code>（日常路由）、<code>VT_SCADA_COORD</code>（協調）。</p>
@@ -904,9 +920,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p class="warn">可見性/圖形取代整個是灰的，就是視圖樣板把可見性鎖住。改法見<a href="#vg-locked">「VG 被樣板鎖住」</a>。不要用暫時隱藏/隔離（Temporary Hide/Isolate）代替樣板，那只是暫時的。</p>
 <p>領域選建築、電氣或協調時，圖面差在哪，見<a href="#discipline">領域與次領域</a>。把篩選顏色存進樣板時要勾哪些「包括」、平面和 3D 為什麼不能共用一個樣板，見<a href="#view-template-color">上色存成視圖樣板</a>。</p>
 <p class="verdict"><strong>驗收</strong>：至少一個樣板套在工作視圖上；電纜架或風管附件被關掉時，在樣板裡打開。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step8" class="section"><div class="step-card"><div class="step-top"><div class="step-no">08</div><div class="step-title">篩選與 3D 上色 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<section id="step8" class="section"><details class="step-card"><summary class="step-summary"><span class="step-no">08</span><span class="step-title">篩選與 3D 上色 <span class="badge badge-suggest">建議</span></span></summary><div class="step-body">
 <p class="kicker">教材第六節</p>
 <p><strong>目的</strong>：用規則上色。手動取代圖形（Override Graphics）只對當下選到的物件，新畫的不會跟上。右鍵「取代視圖中的圖形 → 依元素」（By Element）也不會寫進視圖樣板。要其他視圖同一套顏色，用本節的篩選，再存成樣板，見<a href="#view-template-color">上色存成視圖樣板</a>。篩選只存在這個檔案；別的檔要重建，或用管理 → 傳遞專案標準 → 勾「篩選」。</p>
 <h3>1. 建立篩選</h3>
@@ -929,9 +945,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <h3>3. 只有線變色、表面沒變色</h3>
 <p>視覺型式（Visual Style）若是「隱藏線」（Hidden Line），不會畫表面填滿。左下角比例旁的立方體，改成「塗彩」（Shaded）或「一致色彩」（Consistent Colors）。</p>
 <p class="verdict"><strong>驗收</strong>：3D 裡符合品類的橋架表面有顏色。改回隱藏線時，填滿消失、線色還在，這是正常的。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step9" class="section"><div class="step-card"><div class="step-top"><div class="step-no">09</div><div class="step-title">電纜架類型與配件 <span class="badge badge-must">必做</span></div></div><div class="step-body">
+<section id="step9" class="section"><details class="step-card"><summary class="step-summary"><span class="step-no">09</span><span class="step-title">電纜架類型與配件 <span class="badge badge-must">必做</span></span></summary><div class="step-body">
 <p><strong>目的</strong>：大量畫之前，彎頭、T 型、十字、異徑都要接得起來。電纜架<strong>沒有佈線偏好（Routing Preferences）</strong>，跟水管、風管不同。配件在類型性質裡指定。</p>
 <ol>
 <li>管理 → MEP 設定 → 電氣設定（Electrical Settings）→ 電纜架設定：設尺寸、平面標註樣式。</li>
@@ -953,7 +969,7 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </ul>
 <p>每一項看能不能生成、尺寸、接頭、高程、寬度是否相容。官方說明：<a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-MEPEng/files/GUID-C9FCE20F-32CE-4C96-BB60-DA43E63D6E05.htm">繪製電纜架</a>、<a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-MEPEng/files/GUID-1730B8F3-D877-4A9F-9AC1-6684E4D2ADD2.htm">變更彎曲半徑</a>。</p>
 <p class="verdict"><strong>驗收</strong>：上面 7 項都畫過，能生成、尺寸正確、高程接得上。</p>
-</div></div></section>
+</div></details></section>
 
 
 <section id="tray-types" class="section">
@@ -979,47 +995,47 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <p>命名把外型寫進去，例如 <code>SCADA_LADDER_300x100</code>。同一條路由不要混用看不出差異的類型，明細表才分得開。</p>
 </section>
 
-<section id="step10" class="section"><div class="step-card"><div class="step-top"><div class="step-no">10</div><div class="step-title">SCADA 專用參數 <span class="badge badge-policy">視公司流程而定</span></div></div><div class="step-body">
+<section id="step10" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">10</span><span class="step-title">SCADA 專用參數 <span class="badge badge-policy">視公司流程而定</span></span></summary><div class="step-body">
 <p><strong>操作位置</strong>：<code>管理 → 設定 → 共用參數（Shared Parameters）</code>。只在這個案子用時，也可以用專案參數（Project Parameters）。</p>
 <p><strong>建議自己取的參數名稱</strong>（不是功能區指令）：<code>SCADA_System</code>、<code>Route_ID</code>、<code>From</code>、<code>To</code>、<code>Area</code>、<code>Level</code>、<code>Drawing_No</code>、<code>Status</code>、<code>Remark</code>。</p>
 <p class="note">兩種參數都可以進明細表、也可以做篩選。專案參數只在這個檔。共用參數有固定 GUID，可跨專案、可被標籤讀，之後對 AutoCAD 路由資料也用它。共用參數的 .txt 放在自己寫得進去的資料夾，不要放 <code>Program Files</code>。不確定權限就標【需確認權限】。</p>
 <p class="verdict"><strong>驗收</strong>：至少有 <code>Route_ID</code> 和 <code>Status</code>，性質面板填得到值。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step11" class="section"><div class="step-card"><div class="step-top"><div class="step-no">11</div><div class="step-title">電纜架明細表 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<section id="step11" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">11</span><span class="step-title">電纜架明細表 <span class="badge badge-suggest">建議</span></span></summary><div class="step-body">
 <p><strong>操作位置</strong>：<code>視圖 → 建立 → 明細表 → 明細表/數量（Schedule/Quantities）</code> → 品類選電纜架。</p>
 <p>建議名稱 <code>SCADA_CABLE_TRAY_SCHEDULE</code>。欄位：類型、寬度、高度、樓層、長度、高程或中間高程、<code>Route_ID</code>、<code>From</code>、<code>To</code>、<code>Status</code>。內建欄位顯示中文；自己加的參數用建立時的名稱。</p>
 <p class="warn">明細表數字還不是數量清單（BOQ）。要再看有沒有畫兩次、配件長度算不算、直線被拆成幾段、單位一不一致。</p>
 <p class="verdict"><strong>驗收</strong>：明細表列出模型裡的電纜架，和性質面板一致。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step12" class="section"><div class="step-card"><div class="step-top"><div class="step-no">12</div><div class="step-title">3D 協調視圖 <span class="badge badge-must">必做（多專業協調）</span></div></div><div class="step-body">
+<section id="step12" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">12</span><span class="step-title">3D 協調視圖 <span class="badge badge-must">必做（多專業協調）</span></span></summary><div class="step-body">
 <p>建議名稱 <code>{3D}_SCADA_COORD</code>。用 <code>VG</code> 只留建築、結構、電纜架、電纜架配件、電管、電管配件、電氣設備。要看吊架再加風管附件。</p>
 <p>開 3D → 勾選剖面框（Section Box）→ 拖邊界縮小範圍。線顏色：電纜架、電纜架配件、電管、電管配件的「投影/表面 → 線」。碰撞用協同合作 → 干涉檢查（Interference Check）。左右選哪些品類、怎麼對連結檔、改完按哪裡重新整理，以及要交給別人的 NWC／NWD／NWF，見<a href="#interference">干涉檢查與 Navisworks</a>。Revit 內建的干涉檢查不用另外安裝。</p>
 <p>檢查穿梁、穿牆、穿樓板、撞風管、撞消防、撞其他橋架、空間和維修空間夠不夠。</p>
 <p class="note">這個建議名稱只用在本案的協調視圖。雲端檢視空白時，不要把視圖改名成 <code>{3D}</code> 當成解法，見<a href="#viewer-blank">3D 視圖在雲端檢視空白時的排查</a>。</p>
 <p class="verdict"><strong>驗收</strong>：剖面框縮得到單一區域，畫面只剩要協調的品類。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step13" class="section"><div class="step-card"><div class="step-top"><div class="step-no">13</div><div class="step-title">品質檢查視圖 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<section id="step13" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">13</span><span class="step-title">品質檢查視圖 <span class="badge badge-suggest">建議</span></span></summary><div class="step-body">
 <p>建議名稱 <code>QA_SCADA</code>。建築半色調、結構看得到、電纜架和電管高對比、設備可見。不要拿正式出圖視圖做檢查，避免高對比顏色留在出圖上。</p>
 <p class="verdict"><strong>驗收</strong>：<code>QA_SCADA</code> 的顯示和出圖視圖不同。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step14" class="section"><div class="step-card"><div class="step-top"><div class="step-no">14</div><div class="step-title">瀏覽器組織 <span class="badge badge-suggest">建議</span></div></div><div class="step-body">
+<section id="step14" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">14</span><span class="step-title">瀏覽器組織 <span class="badge badge-suggest">建議</span></span></summary><div class="step-body">
 <p><strong>操作位置</strong>：專案瀏覽器上按右鍵 → 瀏覽器組織（Browser Organization）。</p>
 <p>建議依領域 → 用途（工作中／協調／出圖／品質檢查）→ 樓層。找 <code>SCADA_樓層_Tray配置</code> 不用翻完整份清單。</p>
 <p>次領域（Sub-Discipline）可以自己打字，例如「SCADA電纜架」，瀏覽器會在領域底下再分一層資料夾。次領域不改圖面上的線和顏色。領域會改顯示方式，見<a href="#discipline">領域與次領域</a>。</p>
 <p class="verdict"><strong>驗收</strong>：視圖依用途分得開。</p>
-</div></div></section>
+</div></details></section>
 
-<section id="step15" class="section"><div class="step-card"><div class="step-top"><div class="step-no">15</div><div class="step-title">工作共用與工作集 <span class="badge badge-policy">視公司流程而定</span></div></div><div class="step-body">
+<section id="step15" class="section"><details class="step-card" open><summary class="step-summary"><span class="step-no">15</span><span class="step-title">工作共用與工作集 <span class="badge badge-policy">視公司流程而定</span></span></summary><div class="step-body">
 <p>一個人建模不用開。兩人以上同時改同一個模型才需要。</p>
 <p><strong>操作位置</strong>：協同合作 → 協同合作（Collaborate，用來啟用工作共用）；上傳用與中央同步（Synchronize with Central）；只抓別人的更新用重新載入最新（Reload Latest）。</p>
 <p>中央模型（Central Model）在共用位置。自己電腦上編輯的是本端模型（Local Model）。改完要放開借走的元件時用放棄（Relinquish）。</p>
 <p class="warn">公司已經有中央模型時，不要另外建一個。開啟中央檔後建立新本端（Create New Local）。需要的是網路資料夾讀寫權限，不是系統管理員。不確定就標【需確認權限】。</p>
 <p class="verdict"><strong>驗收</strong>：能完成一次與中央同步，沒有未預期的衝突。</p>
-</div></div></section>
+</div></details></section>
 
 <section id="quick10" class="section">
 <h2><span class="eyebrow">快速版</span>二、起手 10 步</h2>
@@ -1117,12 +1133,16 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>範圍表放進 BMP 附件或專案文件，標版次與日期。範圍有變動就改版，不要口頭更新。</li>
 <li>開始建模前，對照<a href="#checklist">建模檢查清單</a>。</li>
 </ol>
-<h3>常見失敗</h3>
+<details class="trouble-item">
+<summary>常見失敗</summary>
+<div class="step-body">
 <ul>
 <li>細設就把吊架全放，之後路徑一改全部重做。</li>
 <li>以為共同吊支架是自己的，結果尺寸與荷重沒人確認。</li>
 <li>沒有依據的數字（例如箱體尺寸）被當成規定寫進模型。</li>
 </ul>
+</div>
+</details>
 <p class="verdict"><strong>完成檢查</strong>：範圍表每一列都有「畫／不畫」與依據等級；沒有任何「待確認」項被當成已確定；有問題清單。</p>
 </div></div>
 </section>
@@ -1386,7 +1406,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </table>
 </div>
 <p>再用電纜架明細表（<a href="#step11">Step 11</a>）確認樓層與中間高程欄位，三處數字要一致。</p>
-<h3>常見失敗</h3>
+<details class="trouble-item">
+<summary>常見失敗</summary>
+<div class="step-body">
 <ul>
 <li>樓層建在 FFL 或 SFL 沒搞清楚，整條路由差一個裝修層厚。</li>
 <li>把中心當成底：吊架高程差半個橋架高。</li>
@@ -1394,6 +1416,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>對照絕對高程時，一邊是專案基準點、一邊是測量點，差一個固定偏移。</li>
 <li>設計圖與模型單位不同（m 與 mm）。</li>
 </ul>
+</div>
+</details>
 <p class="verdict"><strong>完成檢查</strong>：選一條升降段，平面、剖面、3D 與明細表四處的樓層、中間高程、底高程一致，而且能說出「這個值是距 FFL 還是距 SFL」。穿樓板位置與開口尺寸沒有依據時，標待確認，交給結構與建築確認。</p>
 </div></div>
 </section>
@@ -1433,7 +1457,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>電纜架末端停在箱體旁，間距依設計或型錄；沒有依據標待確認。</li>
 <li>畫電管：從連接件右鍵 → 繪製電管，類型與尺寸沿用<a href="#conduit-size">電管尺寸</a>。簡化箱體則把電管起點對到箱面中心，並在備註欄標「未接連接件」。</li>
 </ol>
-<h3>常見失敗</h3>
+<details class="trouble-item">
+<summary>常見失敗</summary>
+<div class="step-body">
 <ul>
 <li>電管沒有真的接上連接件：選電管看箱體端有沒有連接標記，沒有就拖到連接件上重接。</li>
 <li>族群原點在箱底，卻當成中心放：高程差半個箱高。</li>
@@ -1441,6 +1467,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>箱體尺寸沒依據卻已填進模型：改回待確認，列入問題清單。</li>
 <li>一面進出的電管數量超過箱面能容納的位置：箱體尺寸要回頭確認，不是電管硬塞。</li>
 </ul>
+</div>
+</details>
 <p class="verdict"><strong>完成檢查</strong>：平面、剖面、3D 三處的箱體位置與高程一致；每一條接箱體的電管都接在連接件上，沒有斷點警告；箱體數量在明細表裡能對上範圍表；所有沒有依據的尺寸與間距，都在問題清單裡標待確認。</p>
 </div></div>
 </section>
@@ -1693,13 +1721,17 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>來不及重匯時，暫時在 Navisworks 隱藏<strong>自己這份</strong> NWC 裡的建築，並在碰撞測試的選取集裡排除。</li>
 <li><strong>關掉的是自己匯出來的那一份</strong>，不要動對方的 NWD 內容。</li>
 </ol>
-<h3>常見失敗</h3>
+<details class="trouble-item">
+<summary>常見失敗</summary>
+<div class="step-body">
 <ul>
 <li>匯出範圍沒設目前視圖，連結的建築仍被帶出去。</li>
 <li>只取消勾選連結的「可見性」，沒檢查「轉換連結的 Revit 檔案」，另一個設定仍然開著。</li>
 <li>重匯後忘了在 Navisworks 按重新整理，看到的還是舊檔。</li>
 <li>沒有記錄，下一次又重複同樣的問題。</li>
 </ul>
+</div>
+</details>
 <p class="verdict"><strong>完成檢查</strong>：附加後選集樹只有自己的品類，沒有建築；兩份建築重疊的現象消失，隱藏紀錄已結案；匯出時的座標、匯出範圍、連結設定有寫進匯出紀錄，可以重做一次得到同樣結果。</p>
 </div></div>
 </section>
@@ -3716,19 +3748,29 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </ul>
 
 <h3 id="bvt-trouble">排錯</h3>
-<p><strong>報表出現 <code>[NOT FOUND in source]</code></strong>（訊息文字來自操作紀錄）</p>
+<details class="trouble-item">
+<summary>報表出現 [NOT FOUND in source]（訊息文字來自操作紀錄）</summary>
+<div class="step-body">
 <ul>
 <li>名稱是否正好是「教學樣板」。</li>
 <li>作用中文件是不是含該樣板的來源專案。</li>
 <li>圖形若被重設，重新選資料夾與名稱，Boolean 先維持 False。</li>
 </ul>
-<p><strong><code>NO TARGET</code> 或找不到檔</strong>（訊息文字來自操作紀錄）</p>
+</div>
+</details>
+<details class="trouble-item">
+<summary>NO TARGET 或找不到檔（訊息文字來自操作紀錄）</summary>
+<div class="step-body">
 <ul>
 <li>資料夾裡要有準備處理的 <code>.rvt</code>。</li>
 <li>空資料夾不會有目標。錯誤原文以 Watch 的完整文字為準。</li>
 <li>Watch 常被裁切時，拉大節點或調整縮放。</li>
 </ul>
-<p><strong>執行好像停住，看不出完成或失敗</strong></p>
+</div>
+</details>
+<details class="trouble-item">
+<summary>執行好像停住，看不出完成或失敗</summary>
+<div class="step-body">
 <ol>
 <li>不要再按執行，也不要先改成 True。</li>
 <li>用 Alt+Tab 看有沒有被對話框擋住。</li>
@@ -3737,12 +3779,18 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>等 Dynamo 明確跑完，或明確顯示錯誤，再決定下一步。</li>
 <li>強制結束可能失去尚未儲存的資料。本教材不把結束行程寫成處理步驟。</li>
 </ol>
-<p><strong>寫入後畫面沒有變化</strong></p>
+</div>
+</details>
+<details class="trouble-item">
+<summary>寫入後畫面沒有變化</summary>
+<div class="step-body">
 <ul>
 <li>新增的樣板不會自動套到目前視圖。到性質面板指定。</li>
 <li>覆寫路徑會不會改既有視圖的樣板關聯，尚未實測。</li>
 <li>元件參數不符合篩選時，不會出現你預期的顏色。不要假設圖形會自動填參數。</li>
 </ul>
+</div>
+</details>
 
 <h3 id="bvt-limits">已知限制與未驗證項目</h3>
 <div class="table-scroll">
@@ -7125,7 +7173,9 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </ul>
 </div>
 
-<h3 id="plot-corner">1　出圖只出現一角</h3>
+<details class="trouble-item" id="plot-corner">
+<summary>1　出圖只出現一角</summary>
+<div class="step-body">
 <p><strong>症狀</strong></p>
 <p>預覽或印出的圖裡，內容只佔圖紙的一角，其餘是空白。</p>
 <p><strong>原因</strong></p>
@@ -7144,8 +7194,11 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>按預覽。內容應在圖紙中央，而且不再只剩一角。確認後再出圖。</li>
 </ol>
 <div class="note">若這張配置必須用固定比例：先用上面的步驟確認內容已經在圖紙內，再取消「佈滿圖紙」，把比例改回這張圖要的比例，並保留「置中出圖」。</div>
-
-<h3 id="plot-weight">2　統一線粗</h3>
+</div>
+</details>
+<details class="trouble-item" id="plot-weight">
+<summary>2　統一線粗</summary>
+<div class="step-body">
 <p><strong>症狀</strong></p>
 <p>同一張圖的線條粗細不一，希望出圖時全部用同一種線粗。</p>
 <p><strong>原因</strong></p>
@@ -7161,8 +7214,11 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>勾選「以出圖型式出圖」。</li>
 <li>預覽確認線粗一致後，按「套用至配置」，讓這個配置記住以上設定。</li>
 </ol>
-
-<h3 id="plot-mline">3　某條線特別粗</h3>
+</div>
+</details>
+<details class="trouble-item" id="plot-mline">
+<summary>3　某條線特別粗</summary>
+<div class="step-body">
 <p><strong>症狀</strong></p>
 <p>大部分線條粗細正常，只有某一條在紙上特別粗。</p>
 <p><strong>原因</strong></p>
@@ -7176,8 +7232,11 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>確認是多線之後，不要在出圖型式裡把線粗調細來掩蓋。接著做<a href="#plot-vscale">下一節</a>：把視埠比例放大，或把過長的平面分段，讓兩條線在紙上分開。</li>
 <li>若物件類型不是多線，改查它是不是聚合線，以及 Global width 是否大於 0。比例較大時，大於 0 的寬度也會變成一條粗線，見<a href="#plot-pwidth">某條線細過頭</a>。</li>
 </ol>
-
-<h3 id="plot-vscale">4　視埠比例太小</h3>
+</div>
+</details>
+<details class="trouble-item" id="plot-vscale">
+<summary>4　視埠比例太小</summary>
+<div class="step-body">
 <p><strong>症狀</strong></p>
 <p>配置裡的圖縮得很小。特性面板的比例看起來是 0.0。多線會擠成粗線，有寬度的聚合線則會細到幾乎看不到。</p>
 <p><strong>原因</strong></p>
@@ -7199,8 +7258,11 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 </li>
 <li>比例與位置都確定後，選取視埠框，把 Display locked 設成 Yes。畫面若寫「顯示鎖定」，設成「是」。鎖定之後不要再在視埠內縮放；要改時先設回 No。</li>
 </ol>
-
-<h3 id="plot-pwidth">5　某條線細過頭</h3>
+</div>
+</details>
+<details class="trouble-item" id="plot-pwidth">
+<summary>5　某條線細過頭</summary>
+<div class="step-body">
 <p><strong>症狀</strong></p>
 <p>已經套用統一線粗的 .ctb，大多數線條正常，某幾條卻細到幾乎看不到。把視埠比例放大時，同一條又可能變得很粗。</p>
 <p><strong>原因</strong></p>
@@ -7222,8 +7284,11 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>按 Ctrl+1，把 Global width 改成 0。</li>
 <li>改成 0 之後，這些線才會改走出圖型式的線粗。再預覽一次。</li>
 </ol>
-
-<h3 id="plot-publish">6　用 PUBLISH 批次出圖</h3>
+</div>
+</details>
+<details class="trouble-item" id="plot-publish">
+<summary>6　用 PUBLISH 批次出圖</summary>
+<div class="step-body">
 <p><strong>症狀</strong></p>
 <p>配置很多，要一次出成 PDF。若直接按發佈，可能把模型空間和其他開啟中的圖面一起送出，或全部收成一個 PDF，而且每張的結果和單張預覽不一樣。</p>
 <p><strong>原因</strong></p>
@@ -7241,8 +7306,11 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>先儲存圖面，再把清單另存成 .dsd，例如「出圖清單.dsd」，下次可再載入重用。</li>
 <li>按發佈。</li>
 </ol>
-
-<h3 id="plot-missing">7　批次出圖後線粗不一致</h3>
+</div>
+</details>
+<details class="trouble-item" id="plot-missing">
+<summary>7　批次出圖後線粗不一致</summary>
+<div class="step-body">
 <p><strong>症狀</strong></p>
 <p>單張預覽的線粗是對的，用 PUBLISH 批次出圖之後，線粗和預覽不一樣。出圖對話框裡，ctb 名稱後面顯示「（缺少）」。</p>
 <p><strong>原因</strong></p>
@@ -7257,8 +7325,11 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>每一張要批次出圖的配置都做第 3 到第 5 步。</li>
 <li>批次出圖統一在同一個程式裡執行，不要換到另一套再開 <code>PUBLISH</code>。</li>
 </ol>
-
-<h3 id="plot-check">檢查清單</h3>
+</div>
+</details>
+<details class="trouble-item" id="plot-check" open>
+<summary>檢查清單</summary>
+<div class="step-body">
 <p>出圖前對一次。</p>
 <ul class="check-static">
 <li>出圖內容已選「範圍」或「視窗」，並已勾「佈滿圖紙」「置中出圖」。固定比例的配置在確認內容進入圖紙後，再改回該比例。</li>
@@ -7269,6 +7340,8 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
 <li>PUBLISH 已取消「自動載入所有開啟的圖面」，已移除 Model，只留配置。發佈至 PDF。已在發佈選項設定輸出位置，並取消 Multi-sheet file。Page Setup 為 <code>&lt;Default: None&gt;</code> 的配置都已按「套用至配置」。清單可另存成「出圖清單.dsd」。</li>
 <li>ctb 沒有顯示「（缺少）」。已用 STYLESMANAGER 把 .ctb 複製到目前程式的出圖型式資料夾，並重新選取。已取消「調整線粗比例」，再按「套用至配置」。批次出圖使用同一個程式。</li>
 </ul>
+</div>
+</details>
 </section>
 
 <section id="permissions" class="section">
@@ -7433,15 +7506,31 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
   }
   function scrollSpyLocked(){ return Date.now() < spyLockUntil; }
 
+  function openContentDetails(el){
+    if(!el) return;
+    // Section anchors (#step8): open the collapsible step card inside
+    if(el.querySelectorAll){
+      el.querySelectorAll(':scope > details.step-card, :scope > details.trouble-item').forEach(d=>{ d.open = true; });
+    }
+    let node = el.nodeType === 1 ? el : el.parentElement;
+    while(node && node !== document.body){
+      if(node.tagName === 'DETAILS' && !node.closest('#toc, .toc-acc')){
+        node.open = true;
+      }
+      node = node.parentElement;
+    }
+  }
+
   function expandForHash(hash){
     if(!hash) return;
     const id = hash.replace(/^#/, '');
     if(!id) return;
+    const target = document.getElementById(id);
+    openContentDetails(target);
     let link = document.querySelector('#toc a[href="#'+CSS.escape(id)+'"]');
-    // Deep links (in-lesson h3): keep the owning chapter group open
+    // Deep links (in-lesson h3 / trouble details): keep the owning chapter group open
     if(!link){
-      const el = document.getElementById(id);
-      const section = el && el.closest('section[id]');
+      const section = target && target.closest('section[id]');
       if(section){
         link = document.querySelector('#toc a[href="#'+CSS.escape(section.id)+'"]');
       }
@@ -7589,8 +7678,10 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
     MEGA_LESSONS.forEach(id=>{
       const section = document.getElementById(id);
       if(!section) return;
-      const headings = Array.from(section.querySelectorAll('h3[id]')).filter(h=>{
-        const t = h.textContent.replace(/\s+/g,' ').trim();
+      const headings = Array.from(section.querySelectorAll('h3[id], details.trouble-item[id]')).filter(h=>{
+        const t = (h.tagName === 'DETAILS'
+          ? (h.querySelector('summary') || h).textContent
+          : h.textContent).replace(/\s+/g,' ').trim();
         return t && t !== '單元目錄';
       });
       if(!headings.length) return;
@@ -7611,7 +7702,10 @@ dl.terms dd{margin:0 0 6px; color:var(--text-muted)}
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.href = '#' + h3.id;
-        a.textContent = h3.textContent.replace(/\s+/g,' ').trim();
+        const labelText = (h3.tagName === 'DETAILS'
+          ? (h3.querySelector('summary') || h3).textContent
+          : h3.textContent).replace(/\s+/g,' ').trim();
+        a.textContent = labelText;
         a.title = a.textContent;
         li.appendChild(a);
         list.appendChild(li);
