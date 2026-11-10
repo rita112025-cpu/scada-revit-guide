@@ -492,6 +492,7 @@ details.trouble-item[id]{scroll-margin-top:88px}
       <details>
         <summary class="toc-group">視圖樣板與雲端檢視</summary>
         <ol class="toc-panel">
+          <li><a href="#color-params" data-keywords="篩選上色 參數檢查 可見性覆寫 Override Hierarchy 服務類型 服務內容 備註 Comments FilterStringRule 包含 等於 RGB 教學示例 漏填 視圖樣板 包括 Include">篩選上色與參數檢查</a></li>
           <li><a href="#batch-vt" data-keywords="批次複製 視圖樣板 View Template Dynamo CPython3 手動 Boolean 乾跑 dry-run 傳遞專案標準 Transfer Project Standards 教學樣板 Detach 從中央分離 非工作共用 Save SynchronizeWithCentral">批次複製視圖樣板</a></li>
           <li><a href="#viewer-blank" data-keywords="Autodesk Viewer 發佈設定 Publish Settings Autodesk Docs ACC BIM 360 Forma 3D 空白 剖面框 Section Box 未選取任何集 default 3D view">3D 視圖雲端空白排查</a></li>
         </ol>
@@ -529,7 +530,7 @@ details.trouble-item[id]{scroll-margin-top:88px}
 <span class="badge badge-policy">視公司流程而定</span>
 </div>
 <p class="perm-banner">權限前提：公司電腦、一般使用者權限。必要流程只用 Revit 原生功能，不需要系統管理員、也不依賴 pyRevit、Dynamo、Navisworks Manage。詳見<a href="#permissions">「九、公司電腦權限」</a>。</p>
-<p class="paths-intro">我該從哪裡開始？選一條路徑；完整章節仍在左側目錄。</p>
+<p class="paths-intro">我該從哪裡開始？選一條路徑；完整章節仍在左側目錄。視圖上色另見 <a href="#color-params">篩選上色與參數檢查</a>。</p>
 <div class="paths" role="navigation" aria-label="學習路徑">
   <a class="path-card" href="#start">
     <div class="k">路徑 A</div>
@@ -3587,6 +3588,158 @@ details.trouble-item[id]{scroll-margin-top:88px}
 <p class="note">本頁依教學影片機器逐字稿整理，部分用語依語境推定。</p>
 </section>
 
+<section id="color-params" class="section">
+<h2><span class="eyebrow">視圖上色</span>篩選上色與參數檢查</h2>
+<div class="step-card"><div class="step-body">
+<p>適用 <strong>Revit 2025.5 繁體中文</strong>。這一節只處理「顏色從哪裡來、篩選與參數要檢查什麼」。批次複製樣板的安全步驟在 <a href="#batch-vt">批次複製視圖樣板</a>，不要在這裡再做一次。雲端上看不到 3D，看 <a href="#viewer-blank">3D 視圖在雲端檢視空白時的排查</a>。</p>
+<p class="warn">本節沒有拿到圖形或腳本，也沒有在 Revit 重新操作。來源紀錄裡的試跑結果、檔名與數量都不放進教材。<code>RGB 12-100-47</code> 只是教學示例，不是標準色。</p>
+<h3 id="color-toc">本節目錄</h3>
+<ul>
+<li><a href="#color-goals">學習目標</a></li>
+<li><a href="#color-prereq">必要前提</a></li>
+<li><a href="#color-order">顏色優先順序</a></li>
+<li><a href="#color-include">樣板只控制有勾的項目</a></li>
+<li><a href="#color-rules">篩選規則與文字比對</a></li>
+<li><a href="#color-params-fill">參數先確認再填</a></li>
+<li><a href="#color-steps">單一測試視圖的操作</a></li>
+<li><a href="#color-miss">漏填怎麼查</a></li>
+<li><a href="#color-accept">練習與驗收</a></li>
+<li><a href="#color-trouble">疑難</a></li>
+<li><a href="#color-limits">已知限制</a></li>
+<li><a href="#color-sources">本節對過的官方說明</a></li>
+</ul>
+
+<h3 id="color-goals">學習目標</h3>
+<ol>
+<li>用官方的可見性覆寫順序看顏色，不把一份五層簡表當成所有線、表面與樣式的通用規則。</li>
+<li>知道視圖樣板只鎖住有勾「包括」的項目。</li>
+<li>填參數前先確認這個圖元屬於你要上色的範圍，而且備註若已有內容就不覆蓋。</li>
+<li>分辨官方規則、來源紀錄的說法，以及本頁沒有重測的項目。</li>
+</ol>
+
+<h3 id="color-prereq">必要前提</h3>
+<p>多個檔要批次複製樣板，或你自己已有 Dynamo 圖形時，先做 <a href="#bvt-prereq">批次複製的必要前提</a>：備份、只用非工作共用獨立檔，或正確分離後另存、不連正式中央。檔案總管複製不等於分離。本節的手動檢查可以只在一張測試視圖上做。</p>
+<p>本站不附、也不提供可下載的批次填參數腳本。</p>
+
+<h3 id="color-order">顏色優先順序</h3>
+<p>官方「Element Visibility Override Hierarchy」（Revit 2025）寫：覆寫誰蓋過誰，下面這份<strong>沒有涵蓋每一種情況</strong>。1 最高、10 最低：</p>
+<ol>
+<li>Linework 工具</li>
+<li>依圖元的半色調（By Element Halftone）</li>
+<li>圖形顯示選項的輪廓線（Silhouette Edges）</li>
+<li>在視圖中依圖元取代圖形（Override Graphics in View By Element）</li>
+<li>視圖篩選（View Filters）</li>
+<li>視圖深度的「超出」線樣式（Beyond Line Style）</li>
+<li>階段圖形覆寫（Phasing）</li>
+<li>主體圖層切割線（Override Host Layers）</li>
+<li>可見性/圖形取代的投影線與切割線</li>
+<li>專案的物件樣式（Object Styles）</li>
+</ol>
+<p>同一頁註明：風管與管的<strong>系統類型</strong>也可以另設圖形覆寫。那是系統類型的機制，不是每一種品類的顏色都從系統類型來。材料的著色顏色會在部分視覺型式看得到，官方這份順序沒有把它列進上面十項。因此不能把「圖元取代、篩選、品類、系統類型、材料」這五層，當成所有線、表面與填充都適用的通用順序。</p>
+<p>篩選之間還有自己的順序。官方「About View Filters」寫：同一個視圖可套多個篩選，可見性/圖形取代的篩選頁籤<strong>由上到下</strong>，上面的優先。</p>
+<p>可見性/圖形取代裡，投影線、切割線與表面是不同欄位。只改表面，不等於線的顏色也改了。隱藏線視覺型式下實際看到什麼，本頁沒有在 2025.5 重測。</p>
+
+<h3 id="color-include">樣板只控制有勾的項目</h3>
+<p>視圖套了樣板之後，被樣板控制的性質會變灰。官方疑難排解「Cannot Change a View Property」寫：可以改樣板裡的那個性質，或<strong>取消該項的 Include（包括）</strong>，樣板就不再控制它。沒勾包括的項目，仍由視圖自己決定。</p>
+<p>怎麼建立與指定樣板，見 <a href="#view-template-color">把上色設定存成視圖樣板</a>與 <a href="#step7">Step 7</a>。不要在本節重做。</p>
+
+<h3 id="color-rules">篩選規則與文字比對</h3>
+<p>篩選怎麼建，見 <a href="#step8">Step 8</a>。這裡只補規則。</p>
+<p>官方 Filters 對話框寫：選了多個品類時，規則只能用<strong>這些品類都有的參數</strong>。所以不能假設「服務類型」「服務內容」或「備註（Comments）」在每個品類都看得到。2025.5 繁中的參數名稱，本頁沒有實機核對。</p>
+<p>兩份操作紀錄的用詞不一樣：一份寫篩選看「服務類型」，另一份寫「服務內容」，也都提到「備註」。本頁不把其中一個寫成已經核對的欄位。請打開圖元的性質面板，看畫面上實際的參數名稱。</p>
+<p>文字比對：Revit 2026 API 的 <code>FilterStringRule</code> 備註寫，這個類別的字串比較是<strong>不區分大小寫</strong>。因此不要把「小寫一定對不到大寫」教成規則。前後空白、全形字元會不會讓「等於」失敗，本頁沒有重測。</p>
+<p>「包含（contains）」會命中更長的句子，可能把不該上色的圖元算進去。沒有先在測試視圖看過命中結果之前，不要把「等於」改成「包含」當成預設。</p>
+<p>教學用的規則文字可以用 <code>SCADA</code>。這是示例，不是專案代號，也不是必須採用的值。顏色若要舉例，<code>RGB 12-100-47</code> 同樣只是教學示例，不是標準色。</p>
+
+<h3 id="color-params-fill">參數先確認再填</h3>
+<p>填值之前先確認這個圖元就是你要標成這套規則的對象。確認方式是你自己選到它，或一份你檢查過的清單。<strong>檔名裡有某個字，不能證明檔案裡每個圖元都屬於這套系統。</strong></p>
+<p>備註若已經有別的內容，不要覆蓋。先讀出現有文字，再決定要不要改。</p>
+<p>不要把所有品類的空白參數一次填成同一個值。來源紀錄描述過「空白就填、已有其他內容就保留」的意圖，但本站沒有程式可讀，<strong>不能把「不會破壞資料」當成已驗證</strong>。無此參數、唯讀、失敗、被略過的數量都要分開看。「將填是 0」只表示這次報表的那一欄是 0，不能單獨當成沒有漏填。</p>
+<p>兩份紀錄對乾跑的說法不同，不能併成同一句：</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>紀錄</th><th>它怎麼描述 False</th></tr></thead>
+<tbody>
+<tr><td>複製視圖樣板</td><td>寫成不開啟、不修改目標。本站未重測</td></tr>
+<tr><td>填參數</td><td>寫成會開啟每個檔、計數後關閉、不存檔。本站未重測</td></tr>
+</tbody>
+</table>
+</div>
+<p>填參數那份紀錄還寫，工作共用檔在寫入時會同步中央並釋放。本站沒有程式，不教你對正式中央做批次同步或釋放。儲存與同步的差別見 <a href="#bvt-save">批次複製的儲存與同步</a>。</p>
+
+<h3 id="color-steps">單一測試視圖的操作</h3>
+<p>在<strong>一個</strong>測試視圖上手動檢查。數量多到要跨檔時，回到批次複製那一節的前提，不要在正式中央上試。</p>
+<ol>
+<li>打開已經看得到模型的 3D 或平面。若視圖套了樣板且可見性是灰的，改樣板裡有勾包括的項目，見上一節。</li>
+<li>只選你已確認要檢查的圖元。性質面板下方若有篩選選取（漏斗），只留下這次要看的品類。</li>
+<li>讀參數名稱與現值。空白、而且你確定該填的，才填教學示例 <code>SCADA</code> 或你這次約定的值。已有其他文字的備註留著。</li>
+<li>結束進行中的指令時按 <code>Esc</code>。</li>
+<li>看篩選是否生效。沒有顏色時，先查這張視圖的篩選有沒有啟用、線與表面是否分開設定、以及這個圖元的參數是否真的符合規則。</li>
+</ol>
+<p>同名篩選或同名樣板不要一律覆寫。覆寫會不會改既有視圖的指定，見 <a href="#bvt-filters">批次複製的篩選說明</a>，狀態是未驗證。</p>
+
+<h3 id="color-miss">漏填怎麼查</h3>
+<ol>
+<li>在測試視圖暫時關掉該篩選的可見性，看還留在畫面上、但你認為應該被這條規則涵蓋的圖元。</li>
+<li>做一張明細表，欄位放你實際在性質面板看到的那個參數，依品類看空值。</li>
+<li>選一個已符合規則的圖元，用「選取全部實例」看範圍是否合理。這不是數量驗收標準。</li>
+<li>若你自己的圖形有乾跑報表，要同時看將填、修正、保留、無此參數或唯讀、失敗、略過，以及這次範圍是不是你要的那些圖元。將填為 0 不能單獨當成沒有漏填。</li>
+</ol>
+
+<h3 id="color-accept">練習與驗收</h3>
+<ul class="check-static">
+<li>能指出官方順序裡，視圖篩選上面至少還有依圖元取代，而五層簡表不是全部情況</li>
+<li>能指出樣板沒勾「包括」的項目不會被樣板鎖住</li>
+<li>在測試視圖讀到實際參數名稱，沒有把「服務類型」和「服務內容」當成已經同一欄</li>
+<li>沒有覆蓋已有內容的備註，也沒有依檔名把整個檔的空白參數填滿</li>
+<li>線與表面有沒有分開設定，已在該視圖看過；隱藏線下的實際顏色未當成已重測</li>
+<li>跨檔批次若要做，已改走批次複製那一節的測試檔前提</li>
+</ul>
+
+<h3 id="color-trouble">疑難</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>現象</th><th>先查</th></tr></thead>
+<tbody>
+<tr><td>改了篩選，這張視圖沒變</td><td>樣板是否鎖住「V/G 取代篩選」。見樣板那一節</td></tr>
+<tr><td>表面有顏色，線沒有</td><td>投影線與表面是不同欄位。隱藏線模式的結果本頁未重測</td></tr>
+<tr><td>規則寫了等於，有的圖元沒中</td><td>先看參數名稱對不對、值是否多空白。不要直接改成包含</td></tr>
+<tr><td>明細表很多空值</td><td>先確認那些圖元是不是這次要標的。空值不等於都要填</td></tr>
+<tr><td>乾跑將填是 0，畫面仍有沒上色的</td><td>同時看失敗、略過、唯讀、缺參數，以及範圍是不是選錯</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="color-limits">已知限制</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>項目</th><th>狀態</th></tr></thead>
+<tbody>
+<tr><td>五層簡表適用於所有線、表面、樣式</td><td>不採用。官方順序自己也寫未涵蓋每一種情況</td></tr>
+<tr><td>服務類型、服務內容、備註在每個品類都存在</td><td>未在 2025.5 實機確認。多品類篩選只能用共同參數</td></tr>
+<tr><td>等於是否區分大小寫</td><td>API 的 FilterStringRule 寫不區分大小寫。視圖篩選對話框本頁未逐項點過</td></tr>
+<tr><td>空白與全形字元</td><td>未重測</td></tr>
+<tr><td>填參數圖形不會覆蓋、不會改到不該改的值</td><td>未驗證。本站沒有該程式</td></tr>
+<tr><td>兩種乾跑是否真的不存檔、或不開檔</td><td>來源敘述不同，都未重測</td></tr>
+<tr><td>版本不符時比對大版本還是點版本</td><td>未知。不能說不是 2025.5 存的就一律略過</td></tr>
+<tr><td>繁中「服務類型／服務內容／備註／包括」與畫面是否一字不差</td><td>未實機核對</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="color-sources">本節對過的官方說明</h3>
+<ul>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Revit-DocumentPresent/files/GUID-67D3D6DB-E78D-4711-B9C3-4D30F1C22205.htm">Element Visibility Override Hierarchy（Revit 2025）</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-DocumentPresent/files/GUID-87A63C25-99A6-428D-A0FF-112E4FC9C3D7.htm">About View Filters（Revit 2026）</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-DocumentPresent/files/GUID-745313E6-93F6-4FA2-A7D0-7D45242F5520.htm">Filters Dialog（Revit 2026）</a>：多品類時只用共同參數</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-API-MainReference/files/html/166d75f9-1088-3275-2219-867c1142d8da.htm">FilterStringRule（Revit 2026 API）</a>：字串比較不區分大小寫</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-Troubleshooting/files/GUID-3FD6E8C6-AA45-4A46-814C-859278455FD9.htm">Cannot Change a View Property（Revit 2026）</a>：取消 Include 後樣板不再控制該項</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-DocumentPresent/files/GUID-A2FC119B-51D7-4C2E-84ED-CD51983EC532.htm">Visibility and Graphic Display in Project Views（Revit 2026）</a>：投影、切割與表面分開覆寫</li>
+</ul>
+<p class="note">同一節的 Markdown：<a href="SCADA_REVIT_STARTUP_GUIDE.md#color-params-md">篩選上色與參數檢查</a>。</p>
+</div></div>
+</section>
+
 <section id="batch-vt" class="section">
 <h2><span class="eyebrow">進階，非必要流程</span>批次複製視圖樣板</h2>
 <div class="step-card"><div class="step-body">
@@ -3720,11 +3873,12 @@ details.trouble-item[id]{scroll-margin-top:88px}
 <li>目視是否和你在來源看過的顯示一致。操作紀錄提到該次樣板有綠色圖形覆寫；那是該次內容的描述，不是每份樣板都應該是綠色。</li>
 <li>確認之後再儲存這個測試檔。這是你打開測試檔、手動指定樣板之後的儲存，不是在執行狀態不明時去存檔。</li>
 </ol>
-<p class="note">操作紀錄另寫：目標若已有同名樣板，程式意圖會重指向既有視圖的樣板關聯。<strong>覆寫路徑尚未實測。</strong>仍以性質面板上的視圖樣板為準。</p>
+<p class="note">操作紀錄另寫：目標若已有同名樣板，程式意圖會重指向既有視圖的樣板關聯。<strong>覆寫路徑尚未實測。</strong>遇到同名樣板或同名篩選，不要一律覆寫。仍以性質面板上的視圖樣板為準。傳遞專案標準若問同名項目，先停下來核對。</p>
+<p class="note">另有紀錄出現「版本不符就略過」。大版本與點版本不同。沒有程式可讀，不能把「不是 2025.5 存的就一律略過」寫成規則。備份檔若出現在目標資料夾，確認之前不要刪。</p>
 
 <h3 id="bvt-filters">樣板、篩選與參數</h3>
 <p>操作紀錄記載「教學樣板」當時看得到，而且「此樣板指定的視圖數目」可以是 0。還沒指定給任何視圖時，這個數字是 0 屬正常。本文沒有重新打開該樣板。</p>
-<p>紀錄提到兩個已啟用的篩選名稱範例：「教學樣板」與「教學樣板_電氣設備」，以及綠色圖形覆寫。篩選的類別、謂詞與比對值，紀錄標為未深入檢查。<strong>本文不補寫條件，也不把這些名稱當成每個專案的必要欄位。</strong>紀錄曾提到使用者參數如「服務內容」「備註」，同樣只是該次文字裡出現過的例子。</p>
+<p>紀錄提到兩個已啟用的篩選名稱範例：「教學樣板」與「教學樣板_電氣設備」，以及綠色圖形覆寫。篩選的類別、謂詞與比對值，紀錄標為未深入檢查。<strong>本文不補寫條件，也不把這些名稱當成每個專案的必要欄位。</strong>這份紀錄寫的參數例子是「服務內容」「備註」。另一份紀錄寫「服務類型」。兩份沒有在 2025.5 重查，不能併成同一個欄位。上色、不要覆蓋既有備註、以及兩種乾跑敘述的差別，見 <a href="#color-params">篩選上色與參數檢查</a>。</p>
 <p>依操作紀錄、程式行為仍待核對的兩點：</p>
 <ul>
 <li>目標元件要已有對應參數，篩選才有機會命中。紀錄寫圖形不會替元件填參數值。</li>
@@ -3807,7 +3961,9 @@ details.trouble-item[id]{scroll-margin-top:88px}
 <tr><td>正式中央</td><td>禁止測試，未執行</td></tr>
 <tr><td>嚴重錯誤時的 rollback、對話框能否無人值守</td><td>未驗證</td></tr>
 <tr><td>該圖形的儲存或同步行為</td><td>未核對。Save 與 SynchronizeWithCentral 是不同 API</td></tr>
-<tr><td>篩選的類別、謂詞與比對值</td><td>未驗證。本文不臆測</td></tr>
+<tr><td>篩選的類別、謂詞與比對值</td><td>未驗證。本文不臆測。參數名稱的兩種說法見 <a href="#color-params">上色與參數檢查</a></td></tr>
+<tr><td>版本不符比對的是大版本還是點版本</td><td>未知。不能說不是 2025.5 存檔就一律略過</td></tr>
+<tr><td>目標資料夾裡的備份檔</td><td>確認之前不要刪。本站沒有重測備份會不會出現</td></tr>
 </tbody>
 </table>
 </div>
@@ -3888,7 +4044,7 @@ details.trouble-item[id]{scroll-margin-top:88px}
 <li>只勾預設視圖，空白就會解決。</li>
 </ul>
 <p>這三句不是已證實的普遍規則。官方寫的是「default 3D view」這個預設 3D 視圖，會在沒有另選時一併發佈。說明沒有要求名稱必須維持大括號，也沒有寫不能改名。專案裡若已經有看得到模型的 3D 視圖，就用那個視圖，依這次的發佈流程去選。其他視圖保留。</p>
-<p class="note">操作紀錄裡某次清單出現過數個 3D 視圖。那是該次畫面，不是教材的必要條件。本頁不列出必須存在的視圖名稱。本站 <a href="#step12">Step 12</a> 的 <code>{3D}_SCADA_COORD</code> 只是協調視圖的建議名稱，同樣不是雲端檢視的必要條件。</p>
+<p class="note">操作紀錄裡某次清單出現過數個 3D 視圖。那是該次畫面，不是教材的必要條件。本頁不列出必須存在的視圖名稱。本站 <a href="#step12">Step 12</a> 的 <code>{3D}_SCADA_COORD</code> 只是協調視圖的建議名稱，同樣不是雲端檢視的必要條件。後來的紀錄仍把「只勾名為 {3D} 的視圖、不要改名」寫成做法。本節不採用，也不把「未選取任何集」的視窗文字當成已驗收的雲端結果。</p>
 
 <h3 id="vwr-steps">雲端協作發佈時的步驟</h3>
 <p>只有在已經確認服務是 Docs、BIM 360、ACC 或 Forma 這類雲端協作時，才走這一段。</p>
@@ -7657,7 +7813,7 @@ details.trouble-item[id]{scroll-margin-top:88px}
   }
 
   // Rank 4: sticky in-lesson sub-nav from h3 + prev/next section pager
-  const MEGA_LESSONS = ['mep-intro','cam-intro','side-drop','batch-vt','viewer-blank','plot-trouble','plumbing-01','plumbing-02','plumbing-07'];
+  const MEGA_LESSONS = ['mep-intro','cam-intro','side-drop','color-params','batch-vt','viewer-blank','plot-trouble','plumbing-01','plumbing-02','plumbing-07'];
 
   function sectionLabel(section){
     const h2 = section && section.querySelector('h2');
