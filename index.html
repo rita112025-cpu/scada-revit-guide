@@ -417,6 +417,7 @@ details.trouble-item[id]{scroll-margin-top:88px}
           <li><a href="#pipe-setup" data-keywords="配管系統設定 佈線偏好 管區段 給水 排水 PVC 斜度 配件 管系統 圖形取代 材料 細緻 粗略 粗糙 SP WP VP CW HW 存水彎 清潔口">管路設定</a></li>
           <li><a href="#pipe-draw" data-keywords="管段繪製技巧 立管 斜T 空白鍵 建立類似 佈線解決方案 佈線解法 衛工 衛浴 對齊 排水 套用 線架構 線框">管段繪製技巧</a></li>
           <li><a href="#family" data-keywords="族群製作 族群樣板 參考平面 參考線 掃掠 連接件 管接點 斜T 標籤 類型目錄 載入族群 轉存 rfa 另存新檔 資源庫">族群製作</a></li>
+          <li><a href="#family-identity" data-keywords="族群參數 共用參數 識別資料 Identity Data 參數性質 Parameter Properties 參數組成群組條件 Group parameter under 族群類型 Family Types 新增參數 新參數 編輯參數 預設 (預設) 類型 實體 設備型號 SCADA_站點 載入至專案 覆寫現有版本及其參數值 明細表 明細表/數量 電氣設備 檢視 標籤 ODBC 編輯共用參數 瀏覽 建立 製造商 模型 類型備註 描述">在族群新增自訂參數到「識別資料」</a></li>
           <li><a href="#save-rfa" data-keywords="實務小技巧 轉存 rfa 另存新檔 Save As 資源庫 Library 族群 Family 所有族群 專案瀏覽器 右鍵儲存 可載入族群 系統族群 電纜架配件 儲存族群">轉存成 .rfa</a></li>
           <li><a href="#sheets" data-keywords="圖紙與出圖 圖紙出圖 圖框 視圖樣板 明細表 定點高程 修訂 圖紙">圖紙與出圖</a></li>
           <li><a href="#arch-model" data-keywords="建築建模基礎 網格 結構柱 結構梁 樓板 牆 門窗 樓梯 屋頂 地形 彩現 篩選">建築建模基礎</a></li>
@@ -1000,6 +1001,7 @@ details.trouble-item[id]{scroll-margin-top:88px}
 <p><strong>操作位置</strong>：<code>管理 → 設定 → 共用參數（Shared Parameters）</code>。只在這個案子用時，也可以用專案參數（Project Parameters）。</p>
 <p><strong>建議自己取的參數名稱</strong>（不是功能區指令）：<code>SCADA_System</code>、<code>Route_ID</code>、<code>From</code>、<code>To</code>、<code>Area</code>、<code>Level</code>、<code>Drawing_No</code>、<code>Status</code>、<code>Remark</code>。</p>
 <p class="note">兩種參數都可以進明細表、也可以做篩選。專案參數只在這個檔。共用參數有固定 GUID，可跨專案、可被標籤讀，之後對 AutoCAD 路由資料也用它。共用參數的 .txt 放在自己寫得進去的資料夾，不要放 <code>Program Files</code>。不確定權限就標【需確認權限】。</p>
+<p>上面是加在專案裡的參數。要在某個可載入族群的識別資料新增欄位，見<a href="#family-identity">在族群新增自訂參數到「識別資料」</a>。</p>
 <p class="verdict"><strong>驗收</strong>：至少有 <code>Route_ID</code> 和 <code>Status</code>，性質面板填得到值。</p>
 </div></details></section>
 
@@ -1951,7 +1953,7 @@ details.trouble-item[id]{scroll-margin-top:88px}
 
 <section id="family" class="section">
 <h2><span class="eyebrow">族群</span>族群製作</h2>
-<p>能用現成可載入族群就不要重做。要自己做時，先選對族群樣板（.rft），再定品類。品類選錯，以後載入專案不會出現在對的指令底下，標籤和明細表也對不上。專案裡已經載入的族群要存成 .rfa，見下面「<a href="#save-rfa">把專案裡的族群轉存成 .rfa</a>」。</p>
+<p>能用現成可載入族群就不要重做。要自己做時，先選對族群樣板（.rft），再定品類。品類選錯，以後載入專案不會出現在對的指令底下，標籤和明細表也對不上。專案裡已經載入的族群要存成 .rfa，見下面「<a href="#save-rfa">把專案裡的族群轉存成 .rfa</a>」。要在族群裡把自訂參數加到識別資料，見「<a href="#family-identity">在族群新增自訂參數到「識別資料」</a>」。</p>
 <h3>樣板怎麼選</h3>
 <ul>
 <li>門：公制門。</li>
@@ -1979,6 +1981,192 @@ details.trouble-item[id]{scroll-margin-top:88px}
 <p><strong>在族群編輯器中做的族群。</strong>直接另存新檔 → 族群。</p>
 <div class="note"><strong>補充</strong>：只有可載入族群（Loadable Family，例如電纜架配件）能存出 .rfa。系統族群（System Family，例如電纜架本身的類型）不會被存出。內建族群（In-Place Family）同樣留在這個專案裡。用 Revit 2025 存出的 .rfa，舊版 Revit 打不開。</div>
 <p class="verdict"><strong>驗收</strong>：族群品類正確，載入後出現在預期的指令裡；改一個尺寸參數，幾何和連接件一起變。</p>
+</section>
+
+<section id="family-identity" class="section">
+<h2><span class="eyebrow">族群參數</span>在族群新增自訂參數到「識別資料」</h2>
+<div class="step-card"><div class="step-body">
+<p>適用 <strong>Revit 2025.5 繁體中文</strong>。這一節只處理可載入族群：在族群編輯器把自訂參數放到「識別資料」（Identity Data）。專案檔裡用管理頁籤加的共用參數或專案參數，見 <a href="#step10">Step 10</a>。參數兩種分類的另一份整理在 <a href="#r01">給排水教材 R01</a>。</p>
+<p class="warn">本節尚未在 Revit 2025.5 實機走完。說明頁與畫面差一個字時，以畫面上的文字為準，再回寫本節。</p>
+<h3 id="fid-toc">本節目錄</h3>
+<ul>
+<li><a href="#fid-goals">學習目標</a></li>
+<li><a href="#fid-diff">族群參數與共用參數</a></li>
+<li><a href="#fid-family">族群參數做法</a></li>
+<li><a href="#fid-concept">識別資料區塊由群組決定</a></li>
+<li><a href="#fid-type">類型還是實體</a></li>
+<li><a href="#fid-shared-file">建立共用參數清單</a></li>
+<li><a href="#fid-shared">把共用參數加進族群</a></li>
+<li><a href="#fid-edit">查看現有參數怎麼設</a></li>
+<li><a href="#fid-builtin">內建欄位直接填</a></li>
+<li><a href="#fid-schedule">明細表只列共用參數</a></li>
+<li><a href="#fid-accept">練習與驗收</a></li>
+<li><a href="#fid-trouble">疑難</a></li>
+<li><a href="#fid-limits">已知限制</a></li>
+<li><a href="#fid-sources">本節對過的官方說明</a></li>
+</ul>
+
+<h3 id="fid-goals">學習目標</h3>
+<ol>
+<li>從族群編輯器的「族群類型」新增參數，並讓它出現在「識別資料」。</li>
+<li>需要上標籤、進明細表或匯出 ODBC 時，選共用參數；只留在這個族群裡看的欄位，才用族群參數。</li>
+<li>記住識別資料是「參數組成群組條件」決定的區塊，預設常停在「尺寸」，要改過來。</li>
+<li>每台相同的值用類型，每台不同的值用實體。</li>
+<li>製造商、模型、類型備註、描述、URL 已在識別資料裡，直接填值。</li>
+</ol>
+
+<h3 id="fid-diff">族群參數與共用參數</h3>
+<p>「參數性質」（Parameter Properties）的參數類型有兩種。這和後面的「類型／實體」是兩組選擇：參數類型決定定義能不能跨族群、進標籤；類型或實體決定改一個值會影響整批，還是只影響這一台。</p>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th></th><th>族群參數（Family Parameter）</th><th>共用參數（Shared Parameter）</th></tr></thead>
+<tbody>
+<tr><td>定義放哪</td><td>只在這個族群</td><td>在共用參數檔。多個族群、多個專案可以選同一個定義。官方寫：某一檔填的值不會自動抄到另一個檔</td></tr>
+<tr><td>標籤</td><td>不能。官方寫：要進標籤的資訊必須是共用參數</td><td>可以。標籤族群也要選到同一個共用參數</td></tr>
+<tr><td>明細表</td><td>不能。欄位清單裡不會出現族群參數</td><td>可以。只有共用參數能加進明細表，見<a href="#fid-schedule">明細表只列共用參數</a></td></tr>
+<tr><td>匯出 ODBC</td><td>自訂欄位要匯出時改用共用參數</td><td>可以。官方「匯出至 ODBC」寫的是已指定給品類的參數會進資料庫。本節未重新匯出</td></tr>
+</tbody>
+</table>
+</div>
+<p>只在這個族群裡看的文字，用族群參數，教學名稱用「設備型號」。要給標籤、明細表、多個族群共用，或之後要匯出，一開始就用共用參數，教學名稱用 <code>SCADA_站點</code>。兩個都是通用參數名。</p>
+
+<h3 id="fid-family">族群參數做法</h3>
+<ol>
+<li>開啟要改的可載入族群，進入族群編輯器。系統族群（例如電纜架類型本身）沒有族群編輯器這條路，那種欄位用 <a href="#step10">Step 10</a>。</li>
+<li>建立（Create）頁籤 → 族群類型（Family Types）。已選取物件時，2025 繁中說明頁「在族群中加入共用參數」寫的是「修改」頁籤 → 性質面板 → 族群類型。兩條都是打開同一個「族群類型」對話方塊。按鈕在頁籤的哪一格，本節未實機核對。</li>
+<li>在對話方塊左下按「新增參數」圖示，開啟「參數性質」。同一頁說明把這個按鈕寫成「新參數」。圖示的工具提示以畫面為準。</li>
+<li>參數類型選「族群參數」。</li>
+<li>名稱輸入「設備型號」。</li>
+<li>資料類型選「文字」。建立共用參數的說明頁把這一欄寫成「類型」，並列出「文字」。</li>
+<li>「參數組成群組條件」選「識別資料」。預設常停在「尺寸」（英文 Dimensions；畫面也可能寫「尺寸標註」），要改掉。</li>
+<li>每台相同選「類型」，每台不同選「實體」。見下面「類型還是實體」。</li>
+<li>按確定。參數出現在「族群類型」對話方塊的識別資料區塊。</li>
+<li>填測試值，儲存族群。</li>
+<li>「載入至專案」（Load into Project）。這個族群已經在專案裡、而且要用族群裡剛填的值蓋過專案裡的舊值時，選「覆寫現有版本及其參數值」。要留專案裡已經改過的參數值時，選「覆寫現有版本」。兩個選項的實際差異本節未重測。單獨開啟的族群，改由專案用插入 → 載入族群；按鈕差異本節未重測。</li>
+</ol>
+
+<h3 id="fid-concept">識別資料區塊由群組決定</h3>
+<p>性質面板和類型性質裡的「識別資料」是區塊標題。Revit 不能在這個區塊裡直接新增欄位。欄位落在哪一塊，由建立參數時的「參數組成群組條件」決定。預設常是「尺寸」。忘記改，參數會出現在尺寸區塊。</p>
+<p>加錯區塊時，回到「族群類型」，選那個參數按修改，把「參數組成群組條件」改成「識別資料」，再載入。2025 繁中說明頁註記：非共用的族群參數，重新載入後群組會跟著變。共用參數第一次載入後，群組定義存在專案裡；之後只在族群改群組再載入，說明頁寫不會取代專案裡的群組，以免影響其他用到同一個共用參數的族群。這段本節未重測。</p>
+
+<h3 id="fid-type">類型還是實體</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>選項</th><th>什麼時候用</th><th>例子</th></tr></thead>
+<tbody>
+<tr><td>類型（Type）</td><td>同一個類型的每一台都一樣。改一筆，這個類型全部跟著改</td><td>型號、製造商。教學名「設備型號」若代表整型相同，選類型</td></tr>
+<tr><td>實體（Instance）</td><td>每一台可以不同</td><td>站點、房間、編號。教學名 <code>SCADA_站點</code> 選實體</td></tr>
+</tbody>
+</table>
+</div>
+<p>選錯時要改的是類型或實體，不是群組。已建立的參數能不能在「參數性質」裡直接改這項，本節未重測。必要時刪除後重建，或依官方「取代共用或族群參數」另建再替換。</p>
+
+<h3 id="fid-shared-file">建立共用參數清單</h3>
+<p>族群裡按「選取」之前，參數要先寫進共用參數檔。清單是空的，代表這一步還沒做，或開到另一份檔。</p>
+<ol>
+<li>管理（Manage）頁籤 → 共用參數（Shared Parameters）。</li>
+<li>要沿用現有清單，按「瀏覽」選那份 .txt。要新開一份清單，按「建立」。這裡的「建立」是確定要新檔時才用。路徑指錯、群組卻是空的時候，改按「瀏覽」，不要按「建立」。</li>
+<li>在「群組」按「新建」，做出一個群組。已有群組就從清單選它。</li>
+<li>選好群組後，在「參數」按「新建」。名稱用通用例子 <code>SCADA_站點</code>，領域「通用」，資料類型「文字」，確定。</li>
+</ol>
+<p>做完再回族群編輯器。參數類型選「共用參數」→「選取」，才看得到剛建的參數。說明頁寫：寫進清單時還不能指定類型或實體，要等加進族群再決定。</p>
+
+<h3 id="fid-shared">把共用參數加進族群</h3>
+<ol>
+<li>同樣從「族群類型」按「新增參數」，打開「參數性質」。</li>
+<li>參數類型選「共用參數」，按「選取」。清單沒有要的名稱時，先做上一節，再回來選。</li>
+<li>要換參數檔或新建定義時，進入「編輯共用參數」對話方塊。說明頁寫：按「編輯」可回到這個對話方塊，用來開啟其他共用參數檔或新增參數。</li>
+<li>參數檔指到下載資料夾，或群組是空白的，代表開錯檔。按「瀏覽」改選正確的共用參數 .txt。這次要換檔時不要按「建立」。「建立」會新開一個空檔，原來的定義不會跟著過來。本節不寫本機路徑，也不寫真實檔名。</li>
+<li>檔案正確、這個群組還沒有參數時：先在「群組」按「新建」（已有群組就從「參數群組」選它），再在「參數」按「新建」。</li>
+<li>在「參數性質」填名稱，例如 <code>SCADA_站點</code>；領域選「通用」；資料類型選「文字」，確定。說明頁寫：在「編輯共用參數」裡還不能指定實體或類型，要等加回族群時再決定。</li>
+<li>回到族群的「參數性質」，確認選到剛建的參數。「參數組成群組條件」選「識別資料」，再選類型或實體，確定。</li>
+<li>儲存後「載入至專案」。要用族群裡的值蓋過專案舊值時，選「覆寫現有版本及其參數值」。</li>
+</ol>
+<p class="note">一個 Revit 工作階段只參考一個共用參數檔。參數定義在「編輯共用參數」裡改。檔案放在自己寫得進去的資料夾，見<a href="#permissions">第九節</a>。</p>
+
+<h3 id="fid-edit">查看現有參數怎麼設</h3>
+<ol>
+<li>打開「族群類型」。</li>
+<li>在參數表點要看的那一列。</li>
+<li>按左下的鉛筆圖示「編輯參數」（Edit Parameter），打開「參數性質」。</li>
+</ol>
+<p>若這是共用參數，名稱和資料類型是灰色，不能在這裡改。要改名稱或資料類型，得回共用參數清單另外處理；本節未重測改名後舊值會不會斷開。</p>
+<p>群組可以在這個對話方塊改。「參數組成群組條件」例如從「文字」改成「識別資料」，確定後該列會換區塊。這裡的「文字」是群組名稱，和資料類型的「文字」不是同一個欄位。</p>
+<p>參數名稱後面若標「(預設)」，代表它是實體參數。類型參數的名稱後面沒有這個標記。</p>
+
+<h3 id="fid-builtin">內建欄位直接填</h3>
+<p>識別資料裡已經有的欄位，直接填值，不必再新增同名參數。常用的有：製造商（Manufacturer）、模型（Model）、類型備註（Type Comments）、描述（Description）、URL。繁中說明有時把 Description 寫成「說明」。畫面若顯示「說明」，就是這一欄，填它。</p>
+<p>這些內建欄位可以進明細表。自訂欄位要上表，先做成共用參數。</p>
+
+<h3 id="fid-schedule">明細表只列共用參數</h3>
+<ol>
+<li>檢視（View）→ 明細表 → 明細表/數量（Schedule/Quantities）。功能區若顯示「視圖」，就是同一個頁籤，Step 11 用的是這個寫法。</li>
+<li>類別選「電氣設備」（Electrical Equipment）。這是教學用的品類，換別的品類時同樣只看該品類有的欄位。</li>
+<li>在欄位清單把要的欄加進明細表。</li>
+</ol>
+<p>只有共用參數能上明細表。族群參數不會出現在可加的欄位裡。表上沒有 <code>SCADA_站點</code> 時，先確認它是共用參數，而且已經加進這個品類的族群。</p>
+
+<h3 id="fid-accept">練習與驗收</h3>
+<ul class="check-static">
+<li>「設備型號」出現在識別資料區塊</li>
+<li>能指出要上標籤或明細表時改用共用參數</li>
+<li><code>SCADA_站點</code> 若每台不同，是實體參數</li>
+<li>參數檔開錯時按的是「瀏覽」；要新開清單時才按「建立」，然後群組新建、參數新建</li>
+<li>知道共用參數的名稱與資料類型在「編輯參數」裡是灰色；群組可以改成「識別資料」</li>
+<li>名稱後面的「(預設)」看成實體參數</li>
+<li>電氣設備明細表加得到共用參數，加不到族群參數</li>
+<li>製造商、模型、類型備註、描述、URL 沒有再新增一欄同名參數</li>
+<li>知道「覆寫現有版本及其參數值」會用族群裡的值蓋過專案裡已填的值</li>
+</ul>
+
+<h3 id="fid-trouble">疑難</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>現象</th><th>先查</th></tr></thead>
+<tbody>
+<tr><td>參數在尺寸區塊，識別資料沒有</td><td>「參數組成群組條件」仍是尺寸。修改後改成識別資料再載入</td></tr>
+<tr><td>性質面板的識別資料裡沒有新增按鈕</td><td>這個區塊不能直接新增。回到「族群類型」左下的「新增參數」</td></tr>
+<tr><td>共用參數的群組是空的</td><td>先看參數檔是不是指到下載資料夾。指錯就按「瀏覽」</td></tr>
+<tr><td>標籤選不到這個欄位，或顯示問號</td><td>族群參數不能進標籤。改成共用參數，標籤也選同一個定義。問號的其他原因見<a href="#tags">第七節</a></td></tr>
+<tr><td>「選取」裡沒有要加的參數</td><td>先在管理 → 共用參數把參數寫進清單，再回族群選取</td></tr>
+<tr><td>想改共用參數的名稱，欄位是灰的</td><td>名稱與資料類型在族群裡不能改。群組仍可改，例如從「文字」改成「識別資料」</td></tr>
+<tr><td>明細表沒有這個欄位</td><td>族群參數不會出現。確認它是共用參數，類別與明細表一致，例如電氣設備</td></tr>
+<tr><td>重新載入後，共用參數仍在舊區塊</td><td>說明頁寫共用參數的群組存在專案裡，重新載入不會取代。族群參數則會更新。本節未重測</td></tr>
+<tr><td>載入後專案裡手填的值被蓋掉</td><td>選過「覆寫現有版本及其參數值」。要留專案裡的值時改選「覆寫現有版本」。本節未重測兩個選項</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="fid-limits">已知限制</h3>
+<div class="table-scroll">
+<table class="compare">
+<thead><tr><th>項目</th><th>狀態</th></tr></thead>
+<tbody>
+<tr><td>「新增參數」與說明頁的「新參數」是否同一顆按鈕</td><td>未實機核對。說明頁寫「新參數」</td></tr>
+<tr><td>「參數組成群組條件」「資料類型」「領域」與 2025.5 畫面是否一字不差</td><td>未實機核對。英文介面對應 Group parameter under、Data Type／Type of Parameter、Discipline</td></tr>
+<tr><td>預設群組是不是「尺寸」或「尺寸標註」</td><td>未逐項核對。教學上記得改成「識別資料」</td></tr>
+<tr><td>明細表是否只列得出共用參數</td><td>教材依此教學。尚未在 2025.5 實機重測</td></tr>
+<tr><td>名稱後「(預設)」是否一定代表實體參數</td><td>教材依此教學。尚未在 2025.5 實機重測</td></tr>
+<tr><td>鉛筆圖示是「編輯參數」還是說明頁的「修改」</td><td>未實機核對</td></tr>
+<tr><td>族群裡的共用參數匯出 ODBC 前，要不要再到專案參數指定品類</td><td>未重測。官方匯出頁寫已指定給品類的參數會進資料庫</td></tr>
+<tr><td>「覆寫現有版本」與「覆寫現有版本及其參數值」的差異</td><td>未重測</td></tr>
+<tr><td>共用參數重新載入後群組不更新</td><td>依 2025 繁中說明頁，未重測</td></tr>
+<tr><td>描述與說明是不是同一欄</td><td>未在 2025.5 核對。以性質面板既有欄位為準，不另建同義參數</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="fid-sources">本節對過的官方說明</h3>
+<ul>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/CHT/Revit-Model/files/GUID-B70B059A-66B1-4E35-A143-F9C1DB8FBA55.htm">在族群中加入共用參數（Revit 2025 繁中）</a>：族群類型、新參數、選取、編輯、依實體或依類型；重新載入不取代共用參數的群組</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/CHT/Revit-Model/files/GUID-94EA2B8E-2C00-4D29-8D5A-C7C6664DE9CE.htm">建立共用參數檔案、群組以及參數（Revit 2025 繁中）</a>：瀏覽或建立、群組新建、參數新建、領域與類型；此時還不能指定實體或類型</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Revit-Model/files/GUID-E7D12B71-C50D-46D8-886B-8E0C2B285988.htm">Shared Parameters（Revit 2025）</a>：標籤必須是共用參數；多品類明細表需要共用參數。值不會自動抄到另一個檔</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/CHT/Revit-Model/files/GUID-18575F0E-A0F3-4032-8BAF-205991E3F3A4.htm">取代共用或族群參數（Revit 2025 繁中）</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/CHT/Revit-Model/files/GUID-1929027A-B304-401E-BCDC-11ED3D3E67CE.htm">關於設置共用參數檔案（Revit 2025 繁中）</a>：一個工作階段只參考一個檔</li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Revit-DocumentPresent/files/GUID-57CE0EAA-A33B-4DB9-A5F2-81A66F68353B.htm">Exporting to ODBC（Revit 2025）</a>：已指定給品類的參數可匯出</li>
+</ul>
+<p class="note">同一節的 Markdown：<a href="SCADA_REVIT_STARTUP_GUIDE.md#family-identity-md">在族群新增自訂參數到「識別資料」</a>。</p>
+</div></div>
 </section>
 
 <section id="sheets" class="section">
@@ -7813,7 +8001,7 @@ details.trouble-item[id]{scroll-margin-top:88px}
   }
 
   // Rank 4: sticky in-lesson sub-nav from h3 + prev/next section pager
-  const MEGA_LESSONS = ['mep-intro','cam-intro','side-drop','color-params','batch-vt','viewer-blank','plot-trouble','plumbing-01','plumbing-02','plumbing-07'];
+  const MEGA_LESSONS = ['mep-intro','cam-intro','side-drop','color-params','batch-vt','viewer-blank','plot-trouble','plumbing-01','plumbing-02','plumbing-07','family-identity'];
 
   function sectionLabel(section){
     const h2 = section && section.querySelector('h2');
