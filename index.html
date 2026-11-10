@@ -68,7 +68,7 @@ html[data-font="xlarge"] body{font-size:24px}
 a{color:var(--accent); text-decoration:none}
 a:hover{text-decoration:underline}
 code{font-family:Consolas,"Cascadia Mono",monospace; background:var(--code-bg); padding:2px 8px; border-radius:6px; font-size:.9em}
-pre{background:var(--code-bg); padding:16px; border-radius:12px; overflow:auto; font-size:16px; border:1px solid var(--border)}
+pre{background:var(--code-bg); padding:16px; border-radius:12px; overflow:visible; white-space:pre-wrap; overflow-wrap:anywhere; font-size:16px; border:1px solid var(--border)}
 /* progress */
 #progress{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:100; transition:width .1s}
 /* layout */
@@ -228,7 +228,8 @@ details.trouble-item[id]{scroll-margin-top:88px}
 .checklist-progress{font-weight:800; color:var(--accent)}
 .kicker{display:inline-block; font-size:13px; font-weight:800; letter-spacing:0; color:var(--accent); margin-bottom:8px}
 .step-body li{margin:6px 0}
-.table-scroll{overflow-x:auto; margin:14px 0}
+.table-scroll{overflow-x:visible; margin:14px 0}
+.table-scroll table, .table-scroll td, .table-scroll th{overflow-wrap:anywhere; word-break:normal}
 .table-scroll table{margin:0}
 .fig{margin:16px 0; padding:16px; background:var(--bg-muted); border:1px solid var(--border); border-radius:16px}
 .fig figcaption{font-size:14px; color:var(--text-muted); margin-top:10px}
@@ -273,16 +274,14 @@ details.trouble-item[id]{scroll-margin-top:88px}
 }
 .lesson-subnav-list{
   list-style:none; margin:0; padding:0;
-  display:flex; gap:6px; flex-wrap:nowrap;
-  overflow-x:auto; -webkit-overflow-scrolling:touch;
-  scrollbar-width:thin;
+  display:flex; gap:6px; flex-wrap:wrap;
 }
-.lesson-subnav-list li{flex:0 0 auto}
+.lesson-subnav-list li{flex:0 1 auto; min-width:0; max-width:100%}
 .lesson-subnav a{
-  display:block; padding:5px 10px; border-radius:999px;
+  display:block; padding:4px 10px; border-radius:14px;
   border:1px solid var(--border); background:var(--bg-card);
   color:var(--text-muted); font-size:13px; font-weight:700; line-height:1.35;
-  white-space:nowrap; max-width:220px; overflow:hidden; text-overflow:ellipsis;
+  white-space:normal; overflow-wrap:anywhere;
 }
 .lesson-subnav a:hover{color:var(--text); border-color:var(--border-strong); text-decoration:none}
 .lesson-subnav a.active{
@@ -308,8 +307,9 @@ details.trouble-item[id]{scroll-margin-top:88px}
 @media(max-width:640px){
   .section-pager{grid-template-columns:1fr}
   .section-pager .pager-next{text-align:left}
-  .lesson-subnav a{max-width:160px}
 }
+/* 換行後太高（超過視窗約 22%）就不釘在上方，避免佔掉閱讀空間 */
+.lesson-subnav.is-tall{position:static}
 
 /* Rank 5: in-site 給排水教材 */
 .unit-nav{
@@ -7721,6 +7721,12 @@ details.trouble-item[id]{scroll-margin-top:88px}
         section.insertBefore(nav, section.firstChild);
       }
 
+      const fitSticky = ()=>{
+        nav.classList.toggle('is-tall', nav.getBoundingClientRect().height > window.innerHeight * 0.22);
+      };
+      fitSticky();
+      window.addEventListener('resize', fitSticky);
+
       const subObserver = new IntersectionObserver((entries)=>{
         entries.forEach(entry=>{
           if(!entry.isIntersecting) return;
@@ -7728,9 +7734,6 @@ details.trouble-item[id]{scroll-margin-top:88px}
           subLinks.forEach(a=>{
             const on = a.getAttribute('href') === '#' + hid;
             a.classList.toggle('active', on);
-            if(on){
-              try{ a.scrollIntoView({block:'nearest', inline:'nearest'}); }catch(e){}
-            }
           });
         });
       }, {rootMargin:'-15% 0px -70% 0px', threshold:0});
