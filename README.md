@@ -16,6 +16,15 @@
 - [3D 視圖在雲端檢視空白時的排查](SCADA_REVIT_STARTUP_GUIDE.md#viewer-blank-3d) — 指南內的排查節。網頁版同一節在 [index.html#viewer-blank](index.html#viewer-blank)。先分手動上傳與雲端發佈，再看步驟、驗收與已知限制。
 - [在族群新增自訂參數到「識別資料」](SCADA_REVIT_STARTUP_GUIDE.md#family-identity-md) — 指南內的族群參數節。網頁版同一節在 [index.html#family-identity](index.html#family-identity)。尚未在 Revit 實機走完。
 
+## MEP 錄音實作教材
+
+- [網頁版：電氣、視圖與族群](index.html#recording-mep) — 插座與盤體接點、電壓與配電、迴路與 2D 電線、跨樓層複製、視圖樣板兩種套用、匯出與碰撞檢查、族群五種造型。已加入首頁路徑、側欄搜尋與章內導覽。
+- [Markdown 原文](錄音教學/MEP_電氣視圖與族群實作.md) — 含 SRC-001 時間索引、完成檢查、綜合練習、自我測驗、排查表及來源紀錄。
+
+依 2026-11-16 產出的機器逐字稿整理，來源影片檔名含 20261104，授課日期與使用版本未確認。逐字稿止於 01:43:18，並未涵蓋清單記錄的約 3 小時 41 分全片。未取得原影片／模型，Revit 與 Navisworks 步驟尚未實機重走；課堂暫設電壓與辨識不清處均有標示。
+
+維護：修改上述 Markdown 後，安裝 Python `markdown` 套件並執行 `python scripts/embed_recording.py`，即可重建內嵌章節。本站 CSS／JS 仍以 `index.html` 為準。
+
 ## 文件架構
 
 側欄分成「Revit 操作」與「機電實務與品管」，避免一長串沒有分組。
